@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@null" >
+    
+    
+    <SurfaceView 
+        android:id="@+id/sv_camera"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <de.droidspirit.camera.TextViewRotate 
+        android:id="@+id/aufloesung"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/orange"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:padding="20sp"
+        android:background="@color/dunkelgrau"/>
+    
+	<ImageButton
+		android:id="@+id/takepicture"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_margin="20sp" 
+		android:background="@drawable/camshutter" />
+	
+	<ImageButton
+	    android:id="@+id/flashlight"
+	    android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:background="@drawable/bt_login_default" />
+	
+	<ImageButton
+	    android:id="@+id/zoomIn"
+	    android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:background="@drawable/camplushdpi" />
+
+	<ImageButton
+	    android:id="@+id/zoomOut"
+	    android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:background="@drawable/camminushdpi" />
+		
+	
+</FrameLayout>

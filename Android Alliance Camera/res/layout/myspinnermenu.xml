@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+ <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:background="@drawable/sal_round_border_aussen">
+
+     
+		<TableLayout 
+		     android:id="@+id/umrandungAussen"
+		     android:layout_width="fill_parent" 
+			 android:layout_height="fill_parent"
+			 android:background="@drawable/sal_round_border_innen">
+			
+			<TableRow>
+			    
+			     <LinearLayout 
+			         android:id="@+id/radarAbstandLinksZumRand"
+			         android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:orientation="horizontal">
+						    
+			         <ImageView
+		              android:id="@+id/backImage"
+		               android:src="@drawable/bt_back"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"/>
+			         
+				    <ImageView 
+				        android:id="@+id/radarImage"
+				        android:src="@drawable/radar"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+				        />
+						    
+				    <TextView
+				        android:id="@+id/title"
+				        android:layout_weight="1"
+				        android:layout_width="match_parent"
+				        android:layout_height="wrap_content"
+				        android:gravity="center_vertical|left"
+				        android:textColor="@color/orange"/>
+				    
+			    </LinearLayout>
+			    
+			</TableRow>
+		    
+			 <TableRow>
+			     
+					<View
+			        style="@style/MyActionBar_Trennstrich"/>  
+			</TableRow>
+			
+		    <TableRow>
+
+		        <ScrollView 
+		            android:layout_width="fill_parent"
+				    android:layout_height="wrap_content"
+				    android:fillViewport="true">
+				    
+		        <RadioGroup
+		            android:id="@+id/customRadioGroup"
+		            android:layout_width="fill_parent"
+   					android:layout_height="wrap_content"
+   					android:orientation="vertical"
+   					android:gravity="center_vertical|left">
+		        </RadioGroup>
+		        
+		        </ScrollView>
+		    
+   		    </TableRow>
+			
+		</TableLayout>
+</LinearLayout>
