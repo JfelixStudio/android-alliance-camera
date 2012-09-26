@@ -39,6 +39,7 @@ import android.view.WindowManager;
 import android.view.SurfaceHolder.Callback;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -46,7 +47,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ZoomControls;
 
-public class DroidspiritCamera extends Activity implements Callback {
+public class AllianceCamera extends Activity implements Callback {
 
 	public Camera camera;
 	private WindowManager wm = null;
@@ -59,6 +60,7 @@ public class DroidspiritCamera extends Activity implements Callback {
 	private Display display = null;
 	private WidgetScaler ws = null;
 	private ImageButton btTakePhoto;
+	private float lastRotation = 0.0f;
 	
 	private CameraHelper cameraHelper = CameraHelper.getInstance();
 	private CameraTarget targetAufloesung = CameraTarget.AUFLOESUNG;
@@ -77,7 +79,7 @@ public class DroidspiritCamera extends Activity implements Callback {
 		// Muß aufgerufen werden, bevor Inhalte der Kamera zugewiesen werden
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		
-		setContentView(R.layout.droidspiritcamera);
+		setContentView(R.layout.alliancecamera);
 		
 		ws = WidgetScaler.getInstance(this);
 		
@@ -95,11 +97,11 @@ public class DroidspiritCamera extends Activity implements Callback {
 	  	    public void onOrientationChanged(int paramAnonymousInt){
 	  	    	// Hier wird die Orientation geupdated
 	  	  		
-	  	    	int angle = getOrientation().getAngle();
+	  	    	int angle = orientation.getAngle();
 	  	    	
-	  	    	getOrientation().update(paramAnonymousInt);	  
+	  	    	orientation.update(paramAnonymousInt);	  
 	  	  		
-	  	    	if(angle != getOrientation().getAngle()){
+	  	    	if(angle != orientation.getAngle()){
 	  	    		if(btTakePhoto != null){
 	  	    			btTakePhoto.setLayoutParams(ws.get_camera_shutterbutton_layout());
 		  	  		}	
@@ -110,6 +112,11 @@ public class DroidspiritCamera extends Activity implements Callback {
 	  	    		
 	  	    		if(btFlashlight != null) {
 	  	    			btFlashlight.setLayoutParams(ws.get_camera_flashlight_layout());
+	  	    			
+	  	    			Log.d("#", String.valueOf(angle));
+	  	    			
+	  	    			animationX(btFlashlight, angle);
+						    
 	  	    		}
 	  	    		
 	  	    		if(zoomIn != null){
@@ -147,7 +154,7 @@ public class DroidspiritCamera extends Activity implements Callback {
 	    				// Camera wird released. Ansonsten würde der Background des Dialogs gedreht erscheinen.
 	    				camRelease();
 	    				
-	    				Intent x = new Intent(DroidspiritCamera.this, LayerActivity.class);
+	    				Intent x = new Intent(AllianceCamera.this, LayerActivity.class);
 	    				x.putExtra(CameraHelper.CameraTarget.CAMERATARGET.getName(), targetAufloesung.getName());
 	    				startActivityForResult(x, targetAufloesung.getId());
 	    			}
@@ -163,7 +170,7 @@ public class DroidspiritCamera extends Activity implements Callback {
     			
     			// Rotation wird aktualisiert
     			Camera.Parameters localParameters = camera.getParameters();
-    			localParameters.setRotation(getOrientation().getAngle());
+    			localParameters.setRotation(orientation.getAngle());
     			camera.setParameters(localParameters);
     				
     			// Stummschalten des Auslösetons
@@ -175,6 +182,7 @@ public class DroidspiritCamera extends Activity implements Callback {
         
     	btFlashlight = (ImageButton) findViewById(R.id.flashlight);
 		btFlashlight.setLayoutParams(ws.get_camera_flashlight_layout());
+		animationX(btFlashlight, orientation.getAngle());
     	btFlashlight.setOnClickListener(new OnClickListener(){
 
     		@Override
@@ -368,15 +376,10 @@ public class DroidspiritCamera extends Activity implements Callback {
 	
 	 public void updateCameraOrientation() {
 	    Camera.Parameters localParameters = this.camera.getParameters();
-	    localParameters.setRotation(getOrientation().getAngle());
+	    localParameters.setRotation(orientation.getAngle());
 	    this.camera.setParameters(localParameters);
 	  }
 
-	 public Orientation getOrientation() {
-	    return this.orientation;
-	 }
-
-	 
 	 private class PhotoCallback implements Camera.PictureCallback {
 	
 		 public void onPictureTaken(byte[] jpeg, Camera paramCamera) {
@@ -400,12 +403,12 @@ public class DroidspiritCamera extends Activity implements Callback {
 				      localFileOutputStream.flush();
 				      localFileOutputStream.close();
 				    
-				      Toast.makeText(DroidspiritCamera.this, "Bild wurde gespeichert!", Toast.LENGTH_SHORT).show();
+				      Toast.makeText(AllianceCamera.this, "Bild wurde gespeichert!", Toast.LENGTH_SHORT).show();
 				      
 				      startPreview();
 				      
 				    } catch (IOException localIOException) {
-				    	Toast.makeText(DroidspiritCamera.this, "Fehler!", Toast.LENGTH_SHORT).show();
+				    	Toast.makeText(AllianceCamera.this, "Fehler!", Toast.LENGTH_SHORT).show();
 				    	Log.d("#", "PhotoCallback");
 				    }		
 		 }			 
@@ -465,5 +468,46 @@ public class DroidspiritCamera extends Activity implements Callback {
 		sv.getHolder().addCallback(this);
 		sv.getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 		
+	}
+	
+	private void animationX(View target, int angle){
+
+			 Animation an = null;
+ 	      
+ 	      if(angle == 270){
+//	        	 canvas.rotate(90);
+//	        	 canvas.translate(0, -getWidth());
+ 	    	an = new RotateAnimation(0.0f, 90.0f, target.getWidth()/2, target.getHeight()/2);
+	         } else if(angle == 180){
+//	        	 canvas.translate(0,  getHeight());
+	        	 an = new RotateAnimation(0.0f, 180.0f, target.getWidth()/2, target.getHeight()/2);
+//	        	 canvas.rotate(180);
+//	        	 canvas.translate(-getWidth(), -getHeight());
+	        	 
+	         } else if(angle == 90){
+	        	an = new RotateAnimation(lastRotation, 0.0f, target.getWidth()/2, target.getHeight()/2);
+	        	lastRotation = 0.0f;
+//	        	 canvas.rotate(-90);
+//	        	 canvas.translate(-getHeight(), 0);
+	        	 
+	         } else if(angle == 0){
+	        	
+	        	an = new RotateAnimation(lastRotation, -90.0f, target.getWidth()/2, target.getHeight()/2);
+	        	lastRotation = -0.90f;
+	        	
+	         }
+ 	      
+
+
+ 	      if(an != null){
+ 	    	 // Set the animation's parameters
+			    an.setDuration(1000);               // duration in ms
+			    an.setRepeatCount(0);                // -1 = infinite repeated
+			    an.setRepeatMode(Animation.REVERSE); // reverses each repeat
+			    an.setFillAfter(true);               // keep rotation after animation
+
+			    // Aply animation to image view
+			    target.setAnimation(an);
+ 	      }
 	}
 }

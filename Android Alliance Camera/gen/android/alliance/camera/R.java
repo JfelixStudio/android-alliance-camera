@@ -73,7 +73,7 @@ public final class R {
         public static final int zoomOut=0x7f070005;
     }
     public static final class layout {
-        public static final int droidspiritcamera=0x7f030000;
+        public static final int alliancecamera=0x7f030000;
         public static final int myspinnermenu=0x7f030001;
     }
     public static final class string {
