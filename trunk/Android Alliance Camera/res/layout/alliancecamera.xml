@@ -45,5 +45,9 @@
 		android:layout_height="wrap_content"
 		android:background="@drawable/camminushdpi" />
 		
-	
+	 <android.alliance.camera.MyFocusRectangle
+                    android:id="@+id/focus_rectangle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+	 
 </FrameLayout>

@@ -430,7 +430,13 @@ public class WidgetScaler {
 		return params;
 	}
 
-	
+
+	public FrameLayout.LayoutParams get_camera_fokus_layout(){
+		int size = (int) (displayHeight * 0.3);
+		FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(size, size);
+		params.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
+		return params;
+	}
 }
 
 
