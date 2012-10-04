@@ -278,10 +278,6 @@ public class WidgetScaler {
 	
 	
 	
-	
-	/**
-	 * droidspiritcamera.xml
-	 */
 	public FrameLayout.LayoutParams get_camera_shutterbutton_layout(){
 		int size = (int) (displayHeight * 0.15);
 		FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(size, size);
@@ -394,8 +390,8 @@ public class WidgetScaler {
 		
 		int angle = Orientation.getInstance().getAngle();
 		
-		int width = (int) (displayHeight * 0.35);
-		int height = (int) (displayHeight * 0.23);
+		int width = (int) (displayHeight * 0.15);
+		int height = (int) (displayHeight * 0.15);
 		
 		int newWidth = 0;
 		int newHeight = 0;
@@ -411,38 +407,26 @@ public class WidgetScaler {
 		
 		
 		FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(newWidth, newHeight);
-		
-		/**
-		 *  Möchte man den Auflösungs-Button zentriert in der Bildschirm-Mitte haben enabled man diese Zeile
-		 */
-//		params.gravity = Gravity.CENTER | Gravity.CENTER;
-		
-		/**
-		 * Möchte man den Auflösungs-Button immer rechts unten haben, oben die Zeile disablen, dafür die unteren hier enablen
-		 */
-//		
+
 		if(angle == 0){
 			params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
-			params.bottomMargin = 10;
-			params.rightMargin = 10;
+			params.bottomMargin = (int) (displayHeight * 0.02);
 			
 		} else if(angle == 90){
 			params.gravity = Gravity.RIGHT | Gravity.TOP;
-			params.topMargin = 10;
-			params.rightMargin = 10;
+			params.rightMargin = (int) (displayHeight * 0.02);
 		
 		} else if(angle == 180){
 			params.gravity = Gravity.TOP | Gravity.LEFT;
-			params.leftMargin = 10;
-			params.topMargin = 10;
+			params.topMargin = (int) (displayHeight * 0.02);
 		
 		} else if(angle == 270){
 			params.gravity = Gravity.LEFT | Gravity.BOTTOM;
-			params.bottomMargin = 10;
-			params.leftMargin = 10;
+			params.leftMargin = (int) (displayHeight * 0.02);
 		
 		}
-		
+
+				
 		return params;
 	}
 

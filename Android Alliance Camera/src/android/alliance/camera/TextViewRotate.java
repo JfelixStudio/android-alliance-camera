@@ -30,61 +30,33 @@ public class TextViewRotate extends TextView{
 
     @Override
     protected void onDraw(Canvas canvas) {
-//    	setGravity(Gravity.CENTER);
-
     	int angle = Orientation.getInstance().getAngle();
     	
-    	
-    	
-    	 TextPaint textPaint = getPaint();
-         textPaint.setColor( getCurrentTextColor() );
-         textPaint.drawableState = getDrawableState();
-         
-         
-         canvas.save();
-  
-         
-//    	 Log.d("#", String.valueOf(angle));
-    	 
-         
-         
-         if(angle == 270){
-        	 canvas.rotate(90);
-        	 canvas.translate(0, -getWidth());
-         
-         } else if(angle == 180){
-//        	 canvas.translate(0,  getHeight());
-//        	 
-        	 canvas.rotate(180);
-        	 canvas.translate(-getWidth(), -getHeight());
-        	 
-         } else if(angle == 90){
-        	 canvas.rotate(-90);
-        	 canvas.translate(-getHeight(), 0);
-        	 
-         } else if(angle == 0){
-//        	 canvas.translate(0,  getHeight());
-//        	 canvas.rotate(0);
-//        	 canvas.translate( getHeight(), 0 );
-        	 
-//        	 
-         }
-//         canvas.translate( getCompoundPaddingLeft(), getExtendedPaddingTop() );
-  
-         getLayout().draw( canvas );
-         
-         Paint p = new Paint();
-         p.setColor(getResources().getColor(R.color.android_green));
-         canvas.drawLine(5, 5, 400, 5, p);
-         
-         canvas.restore();
-    }
-    
-    @Override
-    protected void onMeasure( int widthMeasureSpec, int heightMeasureSpec ){
-        super.onMeasure( heightMeasureSpec, widthMeasureSpec );
+   	 TextPaint textPaint = getPaint();
+        textPaint.setColor( getCurrentTextColor() );
+        textPaint.drawableState = getDrawableState();
         
-//        setMeasuredDimension(getMeasuredHeight(), getMeasuredWidth());
-    }
+        canvas.save();
+ 
+        if(angle == 270){
+       	 canvas.rotate(90);	
+       	 canvas.translate(0, ((float) -getWidth() * 0.37f)); // kleiner = tiefer
+        
+        } else if(angle == 180){
+       	 canvas.rotate(180);
+       	 canvas.translate(-getWidth(), ((float) -getHeight() * 0.4f)); // kleiner = tiefer
+       	 
+        } else if(angle == 90){
+       	 canvas.rotate(-90);
+       	 canvas.translate(-getHeight(), ((float) getHeight() * 0.6f)); // größer = tiefer
+       	 
+        } else if(angle == 0){
+       	 canvas.translate(0, ((float) getHeight() * 0.55f)); // größer = tiefer
+        }
+        
+        getLayout().draw( canvas );
+        
+        canvas.restore();
+   }
 
 }
