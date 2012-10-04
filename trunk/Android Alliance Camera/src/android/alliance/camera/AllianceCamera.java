@@ -245,23 +245,41 @@ public class AllianceCamera extends Activity implements Callback {
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
+		
+		boolean cam = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
+		boolean camfront = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FRONT);
+
 		if(camera == null){
 			
 			try{
-				camera = Camera.open();
-				
-			} catch(Exception e){
-				
-				try{
-					Thread.sleep(500);
+				// Wenn die normale Kamera nicht verfügbar ist
+				if(!cam) {
+					
+					// Prüfe ob die Frontkamera verfügbar ist
+					if(camfront){
+						
+						// Hier werden die Kameras ausgelesen und die Frontkamera initialisiert
+						Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
+					    int cameraCount = Camera.getNumberOfCameras();
+					    for ( int camIdx = 0; camIdx < cameraCount; camIdx++ ) {
+					        Camera.getCameraInfo( camIdx, cameraInfo );
+					        if ( cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT  ) {
+					            try {
+					                camera = Camera.open( camIdx );
+					            } catch (RuntimeException e) {
+					            }
+					        }
+					    }
+					}
+					
+				} else {
 					
 					camera = Camera.open();
-				
-				} catch (Exception sube) {
-					Log.e("#", "fail to open camera");
-					sube.printStackTrace();
-					camRelease();
 				}
+				
+			} catch(Exception e){
+				camera.release();
+	            camera = null;
 			}
 			
 			
@@ -296,16 +314,19 @@ public class AllianceCamera extends Activity implements Callback {
 		
 		lSupportedPictureSizes = parameters.getSupportedPictureSizes();
 
-		if(preSelection == null){
-			preSelection = get3MegaPixelSize(lSupportedPictureSizes);	
+		if(lSupportedPictureSizes != null){
+			if(preSelection == null){
+				preSelection = get3MegaPixelSize(lSupportedPictureSizes);	
+			}
+
+			txAufloesung.setText(preSelection.width + "x" + preSelection.height);
+			
+			parameters.setPictureSize(preSelection.width, preSelection.height);
+
 		}
 		
 		initZoom(parameters); 
 		initFlashlight();
-		
-		txAufloesung.setText(preSelection.width + "x" + preSelection.height);
-		
-		parameters.setPictureSize(preSelection.width, preSelection.height);
 		
 		camera.setParameters(parameters);
 		
@@ -360,18 +381,21 @@ public class AllianceCamera extends Activity implements Callback {
 	
 	private Size get3MegaPixelSize(List<Size> sizes){
 		
-		List<Size> lx = new ArrayList<Size>();
-		
-		for(Size s : sizes){
-			int result = s.width * s.height;
+		if(sizes != null){
+			List<Size> lx = new ArrayList<Size>();
 			
-			if(result < 1500000){
-				lx.add(s);
+			for(Size s : sizes){
+				int result = s.width * s.height;
+				
+				if(result < 1500000){
+					lx.add(s);
+				}
 			}
+			
+			return lx.get(0);
 		}
 		
-		return lx.get(0);
-		
+		return null;
 	}
 	
 	 public void updateCameraOrientation() {
