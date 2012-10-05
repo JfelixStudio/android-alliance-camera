@@ -24,26 +24,22 @@
 		android:id="@+id/takepicture"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_margin="20sp" 
-		android:background="@drawable/camshutter" />
+		android:layout_margin="20sp"  />
 	
 	<ImageButton
 	    android:id="@+id/flashlight"
 	    android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:background="@drawable/bt_login_default" />
+		android:layout_height="wrap_content" />
 	
 	<ImageButton
 	    android:id="@+id/zoomIn"
 	    android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:background="@drawable/camplushdpi" />
+		android:layout_height="wrap_content" />
 
 	<ImageButton
 	    android:id="@+id/zoomOut"
 	    android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:background="@drawable/camminushdpi" />
+		android:layout_height="wrap_content" />
 		
 	 <android.alliance.camera.MyFocusRectangle
                     android:id="@+id/focus_rectangle"

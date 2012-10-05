@@ -23,8 +23,13 @@ import android.content.DialogInterface.OnDismissListener;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.ImageFormat;
 import android.graphics.PixelFormat;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.PreviewCallback;
@@ -83,6 +88,10 @@ public class AllianceCamera extends Activity implements Callback, SensorEventLis
 	int maxZoomLevel = 0;
 	private ImageButton zoomIn;
 	private ImageButton zoomOut;
+	private Bitmap bmpFlashlight = null;
+	private Bitmap bmpZoomIn = null;
+	private Bitmap bmpShutter = null;
+	private Bitmap bmpZoomOut = null;
 	
 	private AutoFocusCallBackImpl autoFocusCallBack = new AutoFocusCallBackImpl();
 	
@@ -132,6 +141,11 @@ public class AllianceCamera extends Activity implements Callback, SensorEventLis
 		wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
 		display = wm.getDefaultDisplay();
 		 
+		bmpFlashlight = BitmapFactory.decodeResource(this.getResources(), R.drawable.bt_login_default);
+		bmpZoomIn = BitmapFactory.decodeResource(this.getResources(), R.drawable.camplushdpi);
+		bmpZoomOut = BitmapFactory.decodeResource(this.getResources(), R.drawable.camminushdpi);
+		bmpShutter = BitmapFactory.decodeResource(this.getResources(), R.drawable.camshutter);
+		
 		audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
 		
 		sv = (SurfaceView) findViewById(R.id.sv_camera);
@@ -150,6 +164,7 @@ public class AllianceCamera extends Activity implements Callback, SensorEventLis
 	  	    	if(angle != orientation.getAngle()){
 	  	    		if(btTakePhoto != null){
 	  	    			btTakePhoto.setLayoutParams(ws.get_camera_shutterbutton_layout());
+	  	    			btTakePhoto.setBackgroundDrawable(rotateBitmap(bmpShutter, btTakePhoto));
 		  	  		}	
 	  	    		
 	  	    		if(txAufloesung != null){
@@ -158,19 +173,18 @@ public class AllianceCamera extends Activity implements Callback, SensorEventLis
 	  	    		
 	  	    		if(btFlashlight != null) {
 	  	    			btFlashlight.setLayoutParams(ws.get_camera_flashlight_layout());
-	  	    			
-	  	    			Log.d("#", String.valueOf(angle));
-	  	    			
-	  	    			animationX(btFlashlight, angle);
+	  	    			btFlashlight.setBackgroundDrawable(rotateBitmap(bmpFlashlight, btFlashlight));
 						    
 	  	    		}
 	  	    		
 	  	    		if(zoomIn != null){
 	  	    			zoomIn.setLayoutParams(ws.get_camera_zoom_in_layout());
+	  	    			zoomIn.setBackgroundDrawable(rotateBitmap(bmpZoomIn, zoomIn));
 	  	    		}
 	  	    		
 	  	    		if(zoomOut != null){
 	  	    			zoomOut.setLayoutParams(ws.get_camera_zoom_out_layout());
+	  	    			zoomOut.setBackgroundDrawable(rotateBitmap(bmpZoomOut, zoomOut));
 	  	    		}
 	  	    	}
 	  	    }
@@ -209,6 +223,7 @@ public class AllianceCamera extends Activity implements Callback, SensorEventLis
 	  	
 	  	btTakePhoto = (ImageButton) findViewById(R.id.takepicture);
 	  	btTakePhoto.setLayoutParams(ws.get_camera_shutterbutton_layout());
+	  	btTakePhoto.setBackgroundDrawable(rotateBitmap(bmpShutter, btTakePhoto));
         btTakePhoto.setOnClickListener(new OnClickListener(){
 
     		@Override
@@ -228,7 +243,7 @@ public class AllianceCamera extends Activity implements Callback, SensorEventLis
         
     	btFlashlight = (ImageButton) findViewById(R.id.flashlight);
 		btFlashlight.setLayoutParams(ws.get_camera_flashlight_layout());
-		animationX(btFlashlight, orientation.getAngle());
+		btFlashlight.setBackgroundDrawable(rotateBitmap(bmpFlashlight, btFlashlight));
     	btFlashlight.setOnClickListener(new OnClickListener(){
 
     		@Override
@@ -251,6 +266,7 @@ public class AllianceCamera extends Activity implements Callback, SensorEventLis
     	
     	zoomIn = (ImageButton) findViewById(R.id.zoomIn);
     	zoomIn.setLayoutParams(ws.get_camera_zoom_in_layout());
+    	zoomIn.setBackgroundDrawable(rotateBitmap(bmpZoomIn, zoomIn));
     	zoomIn.setOnClickListener(new OnClickListener(){
 
     		@Override
@@ -267,6 +283,7 @@ public class AllianceCamera extends Activity implements Callback, SensorEventLis
     		
     	zoomOut = (ImageButton) findViewById(R.id.zoomOut);
     	zoomOut.setLayoutParams(ws.get_camera_zoom_out_layout());
+    	zoomOut.setBackgroundDrawable(rotateBitmap(bmpZoomOut, zoomOut));
     	zoomOut.setOnClickListener(new OnClickListener(){
 
     		@Override
@@ -621,7 +638,7 @@ public class AllianceCamera extends Activity implements Callback, SensorEventLis
 
  	      if(an != null){
  	    	 // Set the animation's parameters
-			    an.setDuration(1000);               // duration in ms
+//			    an.setDuration(1000);               // duration in ms
 			    an.setRepeatCount(0);                // -1 = infinite repeated
 			    an.setRepeatMode(Animation.REVERSE); // reverses each repeat
 			    an.setFillAfter(true);               // keep rotation after animation
@@ -739,5 +756,36 @@ public class AllianceCamera extends Activity implements Callback, SensorEventLis
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
 		
+	}
+	
+	private Drawable rotateBitmap(Bitmap target, ImageButton widget){
+		int angle = orientation.getAngle();
+		
+		// Muß man nochmal erzeugne, da target immutable ist
+		Bitmap bmResult = Bitmap.createBitmap(target.getWidth(), target.getHeight(), Bitmap.Config.ARGB_8888);
+		Canvas canvas = new Canvas(bmResult); 
+		
+		 if(angle == 270){
+        	 canvas.rotate(90);	
+        	 canvas.translate(0, -target.getWidth()); 
+         
+         } else if(angle == 180){
+        	 canvas.rotate(180);
+        	 canvas.translate(-target.getWidth(), -target.getHeight()); // kleiner = tiefer
+        	 
+         } else if(angle == 90){
+        	
+        	 canvas.rotate(-90);
+        	 canvas.translate(-target.getHeight(), 0); // größer = tiefer
+        	 
+         } else if(angle == 0){
+//        	 canvas.translate(0, widget.getHeight()); // größer = tiefer
+         }
+		
+		 canvas.drawBitmap(target, 0, 0, null);
+
+		 BitmapDrawable bitmapDrawable = new BitmapDrawable(getResources(), bmResult);
+		 
+		 return (Drawable) bitmapDrawable;
 	}
 }
