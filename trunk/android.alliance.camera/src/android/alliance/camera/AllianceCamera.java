@@ -81,19 +81,19 @@ public class AllianceCamera extends Activity implements Callback, SensorEventLis
 	private Bitmap bmpShutter = null;
 	private Bitmap bmpZoomOut = null;
 	
-	private AutoFocusCallBackImpl autoFocusCallBack = new AutoFocusCallBackImpl();
+//	private AutoFocusCallBackImpl autoFocusCallBack = new AutoFocusCallBackImpl();
 	
-	private static final int FOCUS_NOT_STARTED = 0;
-    private static final int FOCUSING = 1;
-    private static final int FOCUSING_SNAP_ON_FINISH = 2;
-    private static final int FOCUS_SUCCESS = 3;
-    private static final int FOCUS_FAIL = 4;
-    private int mFocusState = FOCUS_NOT_STARTED;
-    
-	private long mFocusStartTime;
-    private long mFocusCallbackTime;
-    private long mAutoFocusTime;
-    
+//	private static final int FOCUS_NOT_STARTED = 0;
+//    private static final int FOCUSING = 1;
+//    private static final int FOCUSING_SNAP_ON_FINISH = 2;
+//    private static final int FOCUS_SUCCESS = 3;
+//    private static final int FOCUS_FAIL = 4;
+//    private int mFocusState = FOCUS_NOT_STARTED;
+//    
+//	private long mFocusStartTime;
+//    private long mFocusCallbackTime;
+//    private long mAutoFocusTime;
+//    
     private MyFocusRectangle mFocusRectangle;
     private GestureDetector mGestureDetector;
 		
@@ -304,7 +304,7 @@ public class AllianceCamera extends Activity implements Callback, SensorEventLis
 		 
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-		doFocus(true);
+//		doFocus(true);
 	}
 
 	@Override
@@ -646,73 +646,73 @@ public class AllianceCamera extends Activity implements Callback, SensorEventLis
 	
 	
 	
-	public class AutoFocusCallBackImpl implements Camera.AutoFocusCallback {
-		
-		@Override
-	    public void onAutoFocus(boolean focused, Camera camera) {
-	            
-			mFocusCallbackTime = System.currentTimeMillis();
-            mAutoFocusTime = mFocusCallbackTime - mFocusStartTime;
-            
-        	if(focused){
-            	mFocusState = FOCUS_SUCCESS;	
-            	
-            	mGravityOnLastFocus = mGravity;
-            	mGeomagneticOnLastFocus = mGeomagnetic;
-            	mOrientationOnLastFocus = mOrientation;
-            	    
-            } else {
-            	mFocusState = FOCUS_FAIL;
-            }
-            
-            updateFocusIndicator();
-	    }
-	}
-
-	private void updateFocusIndicator() {
-        if (mFocusRectangle == null){
-        	return;
-        }
-
-        if (mFocusState == FOCUSING || mFocusState == FOCUSING_SNAP_ON_FINISH) {
-            mFocusRectangle.showStart();
-        } else if (mFocusState == FOCUS_SUCCESS) {
-            mFocusRectangle.showSuccess();
-        } else if (mFocusState == FOCUS_FAIL) {
-            mFocusRectangle.showFail();
-        } else {
-            mFocusRectangle.clear();
-        }
-    }
-
-    
-    private void doFocus(boolean value) {
-        if (value) { 
-            autoFocus();
-        } else {  
-            cancelAutoFocus();
-        }
-    }
-    
-    private void autoFocus() {
-    	mFocusStartTime = System.currentTimeMillis();
-        mFocusState = FOCUSING;
-        updateFocusIndicator();
-        camera.autoFocus(autoFocusCallBack);
-    }
-    
-    private void cancelAutoFocus() {
-        camera.cancelAutoFocus();
-        
-        if (mFocusState != FOCUSING_SNAP_ON_FINISH) {
-            clearFocusState();
-        }
-    }
-    
-    private void clearFocusState() {
-        mFocusState = FOCUS_NOT_STARTED;
-        updateFocusIndicator();
-    }
+//	public class AutoFocusCallBackImpl implements Camera.AutoFocusCallback {
+//		
+//		@Override
+//	    public void onAutoFocus(boolean focused, Camera camera) {
+//	            
+//			mFocusCallbackTime = System.currentTimeMillis();
+//            mAutoFocusTime = mFocusCallbackTime - mFocusStartTime;
+//            
+//        	if(focused){
+//            	mFocusState = FOCUS_SUCCESS;	
+//            	
+//            	mGravityOnLastFocus = mGravity;
+//            	mGeomagneticOnLastFocus = mGeomagnetic;
+//            	mOrientationOnLastFocus = mOrientation;
+//            	    
+//            } else {
+//            	mFocusState = FOCUS_FAIL;
+//            }
+//            
+//            updateFocusIndicator();
+//	    }
+//	}
+//
+//	private void updateFocusIndicator() {
+//        if (mFocusRectangle == null){
+//        	return;
+//        }
+//
+//        if (mFocusState == FOCUSING || mFocusState == FOCUSING_SNAP_ON_FINISH) {
+//            mFocusRectangle.showStart();
+//        } else if (mFocusState == FOCUS_SUCCESS) {
+//            mFocusRectangle.showSuccess();
+//        } else if (mFocusState == FOCUS_FAIL) {
+//            mFocusRectangle.showFail();
+//        } else {
+//            mFocusRectangle.clear();
+//        }
+//    }
+//
+//    
+//    private void doFocus(boolean value) {
+//        if (value) { 
+//            autoFocus();
+//        } else {  
+//            cancelAutoFocus();
+//        }
+//    }
+//    
+//    private void autoFocus() {
+//    	mFocusStartTime = System.currentTimeMillis();
+//        mFocusState = FOCUSING;
+//        updateFocusIndicator();
+//        camera.autoFocus(autoFocusCallBack);
+//    }
+//    
+//    private void cancelAutoFocus() {
+//        camera.cancelAutoFocus();
+//        
+//        if (mFocusState != FOCUSING_SNAP_ON_FINISH) {
+//            clearFocusState();
+//        }
+//    }
+//    
+//    private void clearFocusState() {
+//        mFocusState = FOCUS_NOT_STARTED;
+//        updateFocusIndicator();
+//    }
 
     // Wird für den Touch-Event benötigt, wenn man den Fokus manuell setzen möchte
     @Override
