@@ -26,10 +26,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
-import android.hardware.Camera.PreviewCallback;
 import android.hardware.Camera.Size;
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Environment;
@@ -44,8 +41,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.RotateAnimation;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -85,10 +80,6 @@ public class AllianceCamera extends Activity implements Callback {
 	private Parameters parameters = null;
 	private boolean mSmoothZoomSupported;
 	
-	private SensorManager mySensorManager;
-	private Sensor sensorAccelerometer;
-	private Sensor sensorMagnetometer;
-
 	private Bitmap bmpAufloesung;
     
     private IntervalAutoFocus intervalAutoFocus;
@@ -271,15 +262,6 @@ public class AllianceCamera extends Activity implements Callback {
     	
     	mFocusRectangle = (MyFocusRectangle) findViewById(R.id.focus_rectangle);
     	mFocusRectangle.setLayoutParams(ws.get_camera_fokus_layout());
-    	
-    	// Initialisieren der Sensoren für den Autofokus
-    	mySensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
-    	
-        sensorAccelerometer = mySensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        sensorMagnetometer = mySensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-        
-      
-//    	updateFocusIndicator();
 	}
 
 		 
@@ -409,11 +391,8 @@ public class AllianceCamera extends Activity implements Callback {
 		if(sensorAutoFocus != null) {
 			sensorAutoFocus.setCamera(camera);
 		} else {
-			sensorAutoFocus = new SensorAutoFocus(camera, mFocusRectangle);
+			sensorAutoFocus = new SensorAutoFocus(camera, mFocusRectangle, this);
 			sensorAutoFocus.startAutoFocus();
-			
-			mySensorManager.registerListener(sensorAutoFocus, sensorAccelerometer, SensorManager.SENSOR_DELAY_UI);
-			mySensorManager.registerListener(sensorAutoFocus, sensorMagnetometer, SensorManager.SENSOR_DELAY_UI);
 		}
 	}
 
@@ -545,8 +524,6 @@ public class AllianceCamera extends Activity implements Callback {
 	protected void onPause() {
 		super.onPause();
 		this.orientationListener.disable();
-//		mySensorManager.unregisterListener(this);
-		mySensorManager.unregisterListener(sensorAutoFocus);
 		
 //		intervalAutoFocus.stopAutoFocus();
 		sensorAutoFocus.stopAutoFocus();
@@ -558,8 +535,6 @@ public class AllianceCamera extends Activity implements Callback {
 		this.orientationListener.enable();
 		
 		if(sensorAutoFocus != null) {
-			mySensorManager.registerListener(sensorAutoFocus, sensorAccelerometer, SensorManager.SENSOR_DELAY_UI);
-			mySensorManager.registerListener(sensorAutoFocus, sensorMagnetometer, SensorManager.SENSOR_DELAY_UI);
 			sensorAutoFocus.startAutoFocus();
 		}
 //	    intervalAutoFocus.startAutoFocus();

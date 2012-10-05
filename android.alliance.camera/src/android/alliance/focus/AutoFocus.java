@@ -1,6 +1,7 @@
 package android.alliance.focus;
 
 import android.hardware.Camera;
+import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.util.Log;
 
