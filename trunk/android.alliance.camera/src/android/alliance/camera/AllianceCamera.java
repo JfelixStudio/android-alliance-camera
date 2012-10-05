@@ -1,33 +1,26 @@
 package android.alliance.camera;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
 
-import android.alliance.camera.R;
 import android.alliance.camera.CameraHelper.CameraTarget;
 import android.alliance.data.VOContextMenu;
-import android.alliance.dialoge.MySpinnerMenuDialog;
+import android.alliance.focus.IntervalAutoFocus;
+import android.alliance.focus.MyFocusRectangle;
 import android.alliance.helper.WidgetScaler;
-
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnDismissListener;
-import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.ImageFormat;
-import android.graphics.PixelFormat;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
@@ -39,30 +32,24 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
-import android.media.ToneGenerator;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.OrientationEventListener;
 import android.view.SurfaceHolder;
+import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.SurfaceHolder.Callback;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ZoomControls;
 
 public class AllianceCamera extends Activity implements Callback, SensorEventListener {
 
@@ -126,6 +113,7 @@ public class AllianceCamera extends Activity implements Callback, SensorEventLis
     float[] mGeomagneticOnLastFocus;
     float[] mOrientationOnLastFocus;
     
+    private IntervalAutoFocus intervalAutoFocus;
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -309,7 +297,7 @@ public class AllianceCamera extends Activity implements Callback, SensorEventLis
         sensorMagnetometer = mySensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         
       
-    	updateFocusIndicator();
+//    	updateFocusIndicator();
 	}
 
 		 
@@ -414,12 +402,12 @@ public class AllianceCamera extends Activity implements Callback, SensorEventLis
 
         		// Hier der Autofokus alle 3 Sekunden neu angesteuert
 //                if(mFocusState == FOCUS_FAIL || mFocusState == FOCUSING || mFocusState == FOCUSING_SNAP_ON_FINISH){
-                	long x1 = System.currentTimeMillis() - mFocusStartTime;
-                    long x2 = mAutoFocusTime + 3000;
-                    if(x1 > x2){
-                    	
-                    	doFocus(true);
-                    }
+//                	long x1 = System.currentTimeMillis() - mFocusStartTime;
+//                    long x2 = mAutoFocusTime + 3000;
+//                    if(x1 > x2){
+//                    	
+//                    	doFocus(true);
+//                    }
                   
                 
         		
@@ -442,6 +430,9 @@ public class AllianceCamera extends Activity implements Callback, SensorEventLis
         });
 		
 		camera.startPreview();
+		
+		intervalAutoFocus = new IntervalAutoFocus(camera, mFocusRectangle);
+		intervalAutoFocus.startAutoFocus();
 	}
 
 	
@@ -572,6 +563,8 @@ public class AllianceCamera extends Activity implements Callback, SensorEventLis
 		super.onPause();
 		this.orientationListener.disable();
 		mySensorManager.unregisterListener(this);
+		
+		intervalAutoFocus.stopAutoFocus();
 	}
 
 	@Override
@@ -581,6 +574,8 @@ public class AllianceCamera extends Activity implements Callback, SensorEventLis
 		
 		mySensorManager.registerListener(this, sensorAccelerometer, SensorManager.SENSOR_DELAY_UI);
 	    mySensorManager.registerListener(this, sensorMagnetometer, SensorManager.SENSOR_DELAY_UI);
+	    
+//	    intervalAutoFocus.startAutoFocus();
 	}
 
 	public void startPreview(){
@@ -650,7 +645,7 @@ public class AllianceCamera extends Activity implements Callback, SensorEventLis
 	
 	
 	
-	private class AutoFocusCallBackImpl implements Camera.AutoFocusCallback {
+	public class AutoFocusCallBackImpl implements Camera.AutoFocusCallback {
 		
 		@Override
 	    public void onAutoFocus(boolean focused, Camera camera) {

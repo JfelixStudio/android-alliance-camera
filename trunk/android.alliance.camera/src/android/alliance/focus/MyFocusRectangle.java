@@ -1,11 +1,12 @@
-package android.alliance.camera;
+package android.alliance.focus;
 
 import android.alliance.camera.R;
+import android.alliance.focus.FocusView;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 
-public class MyFocusRectangle extends View {
+public class MyFocusRectangle extends View implements FocusView {
 
     private int xActual, yActual;
 
