@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    
+    
+    <style name="MyActionBar_Trennstrich">
+    	<item name="android:layout_height">2sp</item>
+    	<item name="android:layout_width">match_parent</item>
+    	<item name="android:background">@color/orange</item>
+    </style>
+    
+    
+   <!-- MY STANDARD DIALOG -->
+    <style name="MyStandardAlertDialog" parent="@android:style/Theme.Dialog">
+		<item name="android:windowBackground">@null</item>
+		<item name="android:windowIsFloating">true</item>
+		<item name="android:windowNoTitle">true</item>
+	    <item name="android:textColor">@color/orange</item>
+	    <item name="android:gravity">center_horizontal</item>
+	    <item name="android:minWidth">100sp</item>
+	</style>	
+</resources>
