@@ -11,6 +11,7 @@ import java.util.List;
 import android.alliance.camera.CameraHelper.CameraTarget;
 import android.alliance.data.VOContextMenu;
 import android.alliance.focus.IntervalAutoFocus;
+import android.alliance.focus.IntervalAutoFocusAsyncTask;
 import android.alliance.focus.MyFocusRectangle;
 import android.alliance.helper.WidgetScaler;
 import android.app.Activity;
