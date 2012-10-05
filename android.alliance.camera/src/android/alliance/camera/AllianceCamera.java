@@ -11,7 +11,6 @@ import java.util.List;
 import android.alliance.camera.CameraHelper.CameraTarget;
 import android.alliance.data.VOContextMenu;
 import android.alliance.focus.IntervalAutoFocus;
-import android.alliance.focus.IntervalAutoFocusAsyncTask;
 import android.alliance.focus.MyFocusRectangle;
 import android.alliance.focus.SensorAutoFocus;
 import android.alliance.helper.WidgetScaler;
@@ -30,16 +29,12 @@ import android.hardware.Camera.Parameters;
 import android.hardware.Camera.PreviewCallback;
 import android.hardware.Camera.Size;
 import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
-import android.view.MotionEvent;
 import android.view.OrientationEventListener;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
@@ -53,7 +48,7 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-public class AllianceCamera extends Activity implements Callback { //, SensorEventListener {
+public class AllianceCamera extends Activity implements Callback {
 
 	public Camera camera;
 	private WindowManager wm = null;
@@ -82,19 +77,6 @@ public class AllianceCamera extends Activity implements Callback { //, SensorEve
 	private Bitmap bmpShutter = null;
 	private Bitmap bmpZoomOut = null;
 	
-//	private AutoFocusCallBackImpl autoFocusCallBack = new AutoFocusCallBackImpl();
-	
-//	private static final int FOCUS_NOT_STARTED = 0;
-//    private static final int FOCUSING = 1;
-//    private static final int FOCUSING_SNAP_ON_FINISH = 2;
-//    private static final int FOCUS_SUCCESS = 3;
-//    private static final int FOCUS_FAIL = 4;
-//    private int mFocusState = FOCUS_NOT_STARTED;
-//    
-//	private long mFocusStartTime;
-//    private long mFocusCallbackTime;
-//    private long mAutoFocusTime;
-//    
     private MyFocusRectangle mFocusRectangle;
     private GestureDetector mGestureDetector;
 		
@@ -106,15 +88,6 @@ public class AllianceCamera extends Activity implements Callback { //, SensorEve
 	private Sensor sensorAccelerometer;
 	private Sensor sensorMagnetometer;
 
-	
-//    float[] mGravity;
-//    float[] mGeomagnetic;
-//    float[] mOrientation;
-//	
-//    float[] mGravityOnLastFocus;
-//    float[] mGeomagneticOnLastFocus;
-//    float[] mOrientationOnLastFocus;
-    
     private IntervalAutoFocus intervalAutoFocus;
     private SensorAutoFocus sensorAutoFocus;
     
@@ -403,17 +376,6 @@ public class AllianceCamera extends Activity implements Callback { //, SensorEve
             @Override
             public void onPreviewFrame(byte[] data, Camera arg1) {
 
-        		// Hier der Autofokus alle 3 Sekunden neu angesteuert
-//                if(mFocusState == FOCUS_FAIL || mFocusState == FOCUSING || mFocusState == FOCUSING_SNAP_ON_FINISH){
-//                	long x1 = System.currentTimeMillis() - mFocusStartTime;
-//                    long x2 = mAutoFocusTime + 3000;
-//                    if(x1 > x2){
-//                    	
-//                    	doFocus(true);
-//                    }
-                  
-                
-        		
                 /**
                  * TODO: Anstatt den Autofokus alle 3 Sekunden neu zu machen könnte man die ausgelesenen Sensorenwerte nehmen:
                  * 
@@ -583,13 +545,13 @@ public class AllianceCamera extends Activity implements Callback { //, SensorEve
 		super.onResume();
 		this.orientationListener.enable();
 		
-//		mySensorManager.registerListener(this, sensorAccelerometer, SensorManager.SENSOR_DELAY_UI);
-//	    mySensorManager.registerListener(this, sensorMagnetometer, SensorManager.SENSOR_DELAY_UI);
 		if(sensorAutoFocus != null) {
 			mySensorManager.registerListener(sensorAutoFocus, sensorAccelerometer, SensorManager.SENSOR_DELAY_UI);
 			mySensorManager.registerListener(sensorAutoFocus, sensorMagnetometer, SensorManager.SENSOR_DELAY_UI);
+			sensorAutoFocus.startAutoFocus();
 		}
 //	    intervalAutoFocus.startAutoFocus();
+		
 	}
 
 	public void startPreview(){
@@ -656,116 +618,6 @@ public class AllianceCamera extends Activity implements Callback { //, SensorEve
 			    target.setAnimation(an);
  	      }
 	}
-	
-	
-	
-//	public class AutoFocusCallBackImpl implements Camera.AutoFocusCallback {
-//		
-//		@Override
-//	    public void onAutoFocus(boolean focused, Camera camera) {
-//	            
-//			mFocusCallbackTime = System.currentTimeMillis();
-//            mAutoFocusTime = mFocusCallbackTime - mFocusStartTime;
-//            
-//        	if(focused){
-//            	mFocusState = FOCUS_SUCCESS;	
-//            	
-//            	mGravityOnLastFocus = mGravity;
-//            	mGeomagneticOnLastFocus = mGeomagnetic;
-//            	mOrientationOnLastFocus = mOrientation;
-//            	    
-//            } else {
-//            	mFocusState = FOCUS_FAIL;
-//            }
-//            
-//            updateFocusIndicator();
-//	    }
-//	}
-//
-//	private void updateFocusIndicator() {
-//        if (mFocusRectangle == null){
-//        	return;
-//        }
-//
-//        if (mFocusState == FOCUSING || mFocusState == FOCUSING_SNAP_ON_FINISH) {
-//            mFocusRectangle.showStart();
-//        } else if (mFocusState == FOCUS_SUCCESS) {
-//            mFocusRectangle.showSuccess();
-//        } else if (mFocusState == FOCUS_FAIL) {
-//            mFocusRectangle.showFail();
-//        } else {
-//            mFocusRectangle.clear();
-//        }
-//    }
-//
-//    
-//    private void doFocus(boolean value) {
-//        if (value) { 
-//            autoFocus();
-//        } else {  
-//            cancelAutoFocus();
-//        }
-//    }
-//    
-//    private void autoFocus() {
-//    	mFocusStartTime = System.currentTimeMillis();
-//        mFocusState = FOCUSING;
-//        updateFocusIndicator();
-//        camera.autoFocus(autoFocusCallBack);
-//    }
-//    
-//    private void cancelAutoFocus() {
-//        camera.cancelAutoFocus();
-//        
-//        if (mFocusState != FOCUSING_SNAP_ON_FINISH) {
-//            clearFocusState();
-//        }
-//    }
-//    
-//    private void clearFocusState() {
-//        mFocusState = FOCUS_NOT_STARTED;
-//        updateFocusIndicator();
-//    }
-
-    // Wird für den Touch-Event benötigt, wenn man den Fokus manuell setzen möchte
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent m) {
-        if (!super.dispatchTouchEvent(m) && mGestureDetector != null) {
-            return mGestureDetector.onTouchEvent(m);
-        }
-        return true;
-    }
-
-    
-//    public void onSensorChanged(SensorEvent event) {
-//    
-//    	if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER){
-//    		mGravity = event.values;
-//    	}
-//    		
-//      
-//    	if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD){
-//    		mGeomagnetic = event.values;
-//    	}
-//    		
-//      
-//    	if (mGravity != null && mGeomagnetic != null) {
-//    		float R[] = new float[9];
-//    		float I[] = new float[9];
-//    		boolean success = SensorManager.getRotationMatrix(R, I, mGravity, mGeomagnetic);
-//        
-//    		if (success) {
-//    			float orientation[] = new float[3];
-//    			mOrientation = SensorManager.getOrientation(R, orientation);
-//    		}
-//    	}
-//    }
-
-
-//	@Override
-//	public void onAccuracyChanged(Sensor sensor, int accuracy) {
-//		
-//	}
 	
 	private Drawable rotateBitmap(Bitmap target, ImageButton widget){
 		int angle = orientation.getAngle();
