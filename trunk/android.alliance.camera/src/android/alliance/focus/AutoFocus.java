@@ -40,8 +40,10 @@ public abstract class AutoFocus implements Camera.AutoFocusCallback {
 	public void autoFocus() {
 		mFocusState = FOCUSING;
 		updateFocusIndicator();
-		
-		camera.autoFocus(this);
+
+		if(camera != null) {
+			camera.autoFocus(this);
+		}
 	}
 
 	public void updateFocusIndicator() {
@@ -60,6 +62,10 @@ public abstract class AutoFocus implements Camera.AutoFocusCallback {
         }
     }
 	
+	public void setCamera(Camera camera) {
+		this.camera = camera;
+	}
+	
 	// Camera.AutoFocusCallback //////////////
 
 		@Override
@@ -76,4 +82,5 @@ public abstract class AutoFocus implements Camera.AutoFocusCallback {
 	        
 			updateFocusIndicator();
 		}
+		
 }
