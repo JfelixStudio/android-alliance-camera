@@ -591,47 +591,6 @@ public class AllianceCamera extends Activity implements Callback {
 		
 	}
 	
-	private void animationX(View target, int angle){
-
-			 Animation an = null;
- 	      
- 	      if(angle == 270){
-//	        	 canvas.rotate(90);
-//	        	 canvas.translate(0, -getWidth());
- 	    	an = new RotateAnimation(0.0f, 90.0f, target.getWidth()/2, target.getHeight()/2);
-	         } else if(angle == 180){
-//	        	 canvas.translate(0,  getHeight());
-	        	 an = new RotateAnimation(0.0f, 180.0f, target.getWidth()/2, target.getHeight()/2);
-//	        	 canvas.rotate(180);
-//	        	 canvas.translate(-getWidth(), -getHeight());
-	        	 
-	         } else if(angle == 90){
-	        	an = new RotateAnimation(lastRotation, 0.0f, target.getWidth()/2, target.getHeight()/2);
-	        	lastRotation = 0.0f;
-//	        	 canvas.rotate(-90);
-//	        	 canvas.translate(-getHeight(), 0);
-	        	 
-	         } else if(angle == 0){
-	        	
-	        	an = new RotateAnimation(lastRotation, -90.0f, target.getWidth()/2, target.getHeight()/2);
-	        	lastRotation = -0.90f;
-	        	
-	         }
- 	      
-
-
- 	      if(an != null){
- 	    	 // Set the animation's parameters
-//			    an.setDuration(1000);               // duration in ms
-			    an.setRepeatCount(0);                // -1 = infinite repeated
-			    an.setRepeatMode(Animation.REVERSE); // reverses each repeat
-			    an.setFillAfter(true);               // keep rotation after animation
-
-			    // Aply animation to image view
-			    target.setAnimation(an);
- 	      }
-	}
-	
 	private Drawable rotateBitmap(Bitmap target, View widget){
 		int angle = orientation.getAngle();
 		
@@ -653,7 +612,7 @@ public class AllianceCamera extends Activity implements Callback {
         	 canvas.translate(-target.getHeight(), 0); // größer = tiefer
         	 
          } else if(angle == 0){
-//        	 canvas.translate(0, widget.getHeight()); // größer = tiefer
+        	 // do nothing
          }
 		
 		 canvas.drawBitmap(target, 0, 0, null);
