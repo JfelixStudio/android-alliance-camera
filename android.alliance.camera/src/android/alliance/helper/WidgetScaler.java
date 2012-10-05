@@ -286,20 +286,15 @@ public class WidgetScaler {
 		
 		if(angle == 0){
 			params.gravity = Gravity.BOTTOM | Gravity.CENTER;
-			params.bottomMargin = (int) (displayHeight * 0.02);
 			
 		} else if(angle == 90){
 			params.gravity = Gravity.RIGHT | Gravity.CENTER;
-			params.rightMargin = (int) (displayHeight * 0.02);
 		
 		} else if(angle == 180){
 			params.gravity = Gravity.TOP | Gravity.CENTER;
-			params.topMargin = (int) (displayHeight * 0.02);
 		
 		} else if(angle == 270){
 			params.gravity = Gravity.LEFT | Gravity.CENTER;
-			params.leftMargin = (int) (displayHeight * 0.02);
-		
 		}
 		
 		return params;
@@ -313,19 +308,15 @@ public class WidgetScaler {
 		
 		if(angle == 0){
 			params.gravity = Gravity.BOTTOM | Gravity.LEFT;
-			params.bottomMargin = (int) (displayHeight * 0.02);
 			
 		} else if(angle == 90){
 			params.gravity = Gravity.RIGHT | Gravity.BOTTOM;
-			params.rightMargin = (int) (displayHeight * 0.02);
 		
 		} else if(angle == 180){
 			params.gravity = Gravity.TOP | Gravity.RIGHT;
-			params.topMargin = (int) (displayHeight * 0.02);
 		
 		} else if(angle == 270){
 			params.gravity = Gravity.LEFT | Gravity.TOP;
-			params.leftMargin = (int) (displayHeight * 0.02);
 		
 		}
 		
@@ -340,19 +331,15 @@ public class WidgetScaler {
 		
 		if(angle == 0){
 			params.gravity = Gravity.TOP | Gravity.RIGHT;
-//			params.topMargin = (int) (displayHeight * 0.02);
 			
 		} else if(angle == 90){
 			params.gravity = Gravity.LEFT | Gravity.TOP;
-//			params.rightMargin = (int) (displayHeight * 0.02);
 		
 		} else if(angle == 180){
 			params.gravity = Gravity.BOTTOM | Gravity.LEFT;
-//			params.topMargin = (int) (displayHeight * 0.02);
 		
 		} else if(angle == 270){
 			params.gravity = Gravity.RIGHT | Gravity.BOTTOM;
-//			params.leftMargin = (int) (displayHeight * 0.02);
 		
 		}
 		
@@ -367,19 +354,15 @@ public class WidgetScaler {
 		
 		if(angle == 0){
 			params.gravity = Gravity.TOP | Gravity.LEFT;
-//			params.bottomMargin = (int) (displayHeight * 0.02);
 			
 		} else if(angle == 90){
 			params.gravity = Gravity.BOTTOM | Gravity.LEFT;
-//			params.rightMargin = (int) (displayHeight * 0.02);
 		
 		} else if(angle == 180){
 			params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
-//			params.topMargin = (int) (displayHeight * 0.02);
 		
 		} else if(angle == 270){
 			params.gravity = Gravity.RIGHT | Gravity.TOP;
-//			params.leftMargin = (int) (displayHeight * 0.02);
 		
 		}
 		
@@ -390,8 +373,8 @@ public class WidgetScaler {
 		
 		int angle = Orientation.getInstance().getAngle();
 		
-		int width = (int) (displayHeight * 0.15);
-		int height = (int) (displayHeight * 0.15);
+		int width = (int) (displayHeight * 0.2);
+		int height = (int) (displayHeight * 0.2);
 		
 		int newWidth = 0;
 		int newHeight = 0;
@@ -410,19 +393,15 @@ public class WidgetScaler {
 
 		if(angle == 0){
 			params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
-			params.bottomMargin = (int) (displayHeight * 0.02);
 			
 		} else if(angle == 90){
 			params.gravity = Gravity.RIGHT | Gravity.TOP;
-			params.rightMargin = (int) (displayHeight * 0.02);
 		
 		} else if(angle == 180){
 			params.gravity = Gravity.TOP | Gravity.LEFT;
-			params.topMargin = (int) (displayHeight * 0.02);
 		
 		} else if(angle == 270){
 			params.gravity = Gravity.LEFT | Gravity.BOTTOM;
-			params.leftMargin = (int) (displayHeight * 0.02);
 		
 		}
 
