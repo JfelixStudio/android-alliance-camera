@@ -88,6 +88,16 @@ public class AllianceCamera extends Activity implements Callback {
 	private Sensor sensorAccelerometer;
 	private Sensor sensorMagnetometer;
 
+	
+    float[] mGravity;
+    float[] mGeomagnetic;
+    float[] mOrientation;
+	
+    float[] mGravityOnLastFocus;
+    float[] mGeomagneticOnLastFocus;
+    float[] mOrientationOnLastFocus;
+	private Bitmap bmpAufloesung;
+    
     private IntervalAutoFocus intervalAutoFocus;
     private SensorAutoFocus sensorAutoFocus;
     
@@ -105,10 +115,11 @@ public class AllianceCamera extends Activity implements Callback {
 		wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
 		display = wm.getDefaultDisplay();
 		 
-		bmpFlashlight = BitmapFactory.decodeResource(this.getResources(), R.drawable.bt_login_default);
-		bmpZoomIn = BitmapFactory.decodeResource(this.getResources(), R.drawable.camplushdpi);
-		bmpZoomOut = BitmapFactory.decodeResource(this.getResources(), R.drawable.camminushdpi);
+		bmpFlashlight = BitmapFactory.decodeResource(this.getResources(), R.drawable.bt_flashlight);
+		bmpZoomIn = BitmapFactory.decodeResource(this.getResources(), R.drawable.bt_zoomin);
+		bmpZoomOut = BitmapFactory.decodeResource(this.getResources(), R.drawable.bt_zoomout);
 		bmpShutter = BitmapFactory.decodeResource(this.getResources(), R.drawable.camshutter);
+		bmpAufloesung = BitmapFactory.decodeResource(this.getResources(), R.drawable.bt_aufloesung);
 		
 		audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
 		
@@ -133,6 +144,7 @@ public class AllianceCamera extends Activity implements Callback {
 	  	    		
 	  	    		if(txAufloesung != null){
 	  	    	        txAufloesung.setLayoutParams(ws.get_camera_aufloesung_layout());
+	  	    	        txAufloesung.setBackgroundDrawable(rotateBitmap(bmpAufloesung, txAufloesung));
 	  	    		}
 	  	    		
 	  	    		if(btFlashlight != null) {
@@ -156,6 +168,7 @@ public class AllianceCamera extends Activity implements Callback {
 		
 	  	txAufloesung = (android.alliance.camera.TextViewRotate) findViewById(R.id.aufloesung);
 	  	txAufloesung.setLayoutParams(ws.get_camera_aufloesung_layout());
+	  	txAufloesung.setBackgroundDrawable(rotateBitmap(bmpAufloesung, txAufloesung));
 	  	txAufloesung.setOnClickListener(new OnClickListener(){
 
 	    		@Override
@@ -619,7 +632,7 @@ public class AllianceCamera extends Activity implements Callback {
  	      }
 	}
 	
-	private Drawable rotateBitmap(Bitmap target, ImageButton widget){
+	private Drawable rotateBitmap(Bitmap target, View widget){
 		int angle = orientation.getAngle();
 		
 		// Muﬂ man nochmal erzeugne, da target immutable ist
