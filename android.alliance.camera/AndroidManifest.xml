@@ -1,0 +1,50 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="android.alliance.camera"
+     android:versionCode="1"
+    android:versionName="1.0"
+    android:installLocation="auto" >
+
+    <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="15" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+	<uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.CAMERA" />
+ 	<uses-permission android:name="android.permission.FLASHLIGHT" android:permissionGroup="android.permission-group.HARDWARE_CONTROLS" android:protectionLevel="normal" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.front" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+ 	
+    
+    <application
+        android:icon="@drawable/radar"
+        android:label="@string/app_name" >
+        
+        <activity
+            android:name=".AllianceCamera"
+             android:screenOrientation="landscape"
+            android:configChanges="keyboardHidden|orientation" 
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+            
+            <intent-filter>
+                
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+		<activity android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:name=".LayerActivity" android:configChanges="keyboardHidden|orientation"></activity>
+			
+        
+    </application>
+    
+    
+   
+    
+</manifest>
