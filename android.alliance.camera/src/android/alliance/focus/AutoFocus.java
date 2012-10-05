@@ -28,10 +28,13 @@ public abstract class AutoFocus implements Camera.AutoFocusCallback {
 		startTask();
 	}
 	
+	/** Create a AsyncTask and execute it. */
 	public abstract void startTask();
 	
 	public void stopAutoFocus() {
-		task.cancel(true);
+		if(task != null) {
+			task.cancel(true);
+		}
 	}
 	
 	public void autoFocus() {
