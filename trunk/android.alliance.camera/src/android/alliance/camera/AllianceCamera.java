@@ -13,6 +13,7 @@ import android.alliance.data.VOContextMenu;
 import android.alliance.focus.IntervalAutoFocus;
 import android.alliance.focus.IntervalAutoFocusAsyncTask;
 import android.alliance.focus.MyFocusRectangle;
+import android.alliance.focus.SensorAutoFocus;
 import android.alliance.helper.WidgetScaler;
 import android.app.Activity;
 import android.content.Context;
@@ -52,7 +53,7 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-public class AllianceCamera extends Activity implements Callback, SensorEventListener {
+public class AllianceCamera extends Activity implements Callback { //, SensorEventListener {
 
 	public Camera camera;
 	private WindowManager wm = null;
@@ -106,15 +107,16 @@ public class AllianceCamera extends Activity implements Callback, SensorEventLis
 	private Sensor sensorMagnetometer;
 
 	
-    float[] mGravity;
-    float[] mGeomagnetic;
-    float[] mOrientation;
-	
-    float[] mGravityOnLastFocus;
-    float[] mGeomagneticOnLastFocus;
-    float[] mOrientationOnLastFocus;
+//    float[] mGravity;
+//    float[] mGeomagnetic;
+//    float[] mOrientation;
+//	
+//    float[] mGravityOnLastFocus;
+//    float[] mGeomagneticOnLastFocus;
+//    float[] mOrientationOnLastFocus;
     
     private IntervalAutoFocus intervalAutoFocus;
+    private SensorAutoFocus sensorAutoFocus;
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -432,8 +434,14 @@ public class AllianceCamera extends Activity implements Callback, SensorEventLis
 		
 		camera.startPreview();
 		
-		intervalAutoFocus = new IntervalAutoFocus(camera, mFocusRectangle);
-		intervalAutoFocus.startAutoFocus();
+//		intervalAutoFocus = new IntervalAutoFocus(camera, mFocusRectangle);
+//		intervalAutoFocus.startAutoFocus();
+		
+		sensorAutoFocus = new SensorAutoFocus(camera, mFocusRectangle);
+		sensorAutoFocus.startAutoFocus();
+		
+		mySensorManager.registerListener(sensorAutoFocus, sensorAccelerometer, SensorManager.SENSOR_DELAY_UI);
+		mySensorManager.registerListener(sensorAutoFocus, sensorMagnetometer, SensorManager.SENSOR_DELAY_UI);
 	}
 
 	
@@ -563,9 +571,11 @@ public class AllianceCamera extends Activity implements Callback, SensorEventLis
 	protected void onPause() {
 		super.onPause();
 		this.orientationListener.disable();
-		mySensorManager.unregisterListener(this);
+//		mySensorManager.unregisterListener(this);
+		mySensorManager.unregisterListener(sensorAutoFocus);
 		
-		intervalAutoFocus.stopAutoFocus();
+//		intervalAutoFocus.stopAutoFocus();
+		sensorAutoFocus.stopAutoFocus();
 	}
 
 	@Override
@@ -573,9 +583,12 @@ public class AllianceCamera extends Activity implements Callback, SensorEventLis
 		super.onResume();
 		this.orientationListener.enable();
 		
-		mySensorManager.registerListener(this, sensorAccelerometer, SensorManager.SENSOR_DELAY_UI);
-	    mySensorManager.registerListener(this, sensorMagnetometer, SensorManager.SENSOR_DELAY_UI);
-	    
+//		mySensorManager.registerListener(this, sensorAccelerometer, SensorManager.SENSOR_DELAY_UI);
+//	    mySensorManager.registerListener(this, sensorMagnetometer, SensorManager.SENSOR_DELAY_UI);
+		if(sensorAutoFocus != null) {
+			mySensorManager.registerListener(sensorAutoFocus, sensorAccelerometer, SensorManager.SENSOR_DELAY_UI);
+			mySensorManager.registerListener(sensorAutoFocus, sensorMagnetometer, SensorManager.SENSOR_DELAY_UI);
+		}
 //	    intervalAutoFocus.startAutoFocus();
 	}
 
@@ -724,35 +737,35 @@ public class AllianceCamera extends Activity implements Callback, SensorEventLis
     }
 
     
-    public void onSensorChanged(SensorEvent event) {
-    
-    	if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER){
-    		mGravity = event.values;
-    	}
-    		
-      
-    	if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD){
-    		mGeomagnetic = event.values;
-    	}
-    		
-      
-    	if (mGravity != null && mGeomagnetic != null) {
-    		float R[] = new float[9];
-    		float I[] = new float[9];
-    		boolean success = SensorManager.getRotationMatrix(R, I, mGravity, mGeomagnetic);
-        
-    		if (success) {
-    			float orientation[] = new float[3];
-    			mOrientation = SensorManager.getOrientation(R, orientation);
-    		}
-    	}
-    }
+//    public void onSensorChanged(SensorEvent event) {
+//    
+//    	if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER){
+//    		mGravity = event.values;
+//    	}
+//    		
+//      
+//    	if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD){
+//    		mGeomagnetic = event.values;
+//    	}
+//    		
+//      
+//    	if (mGravity != null && mGeomagnetic != null) {
+//    		float R[] = new float[9];
+//    		float I[] = new float[9];
+//    		boolean success = SensorManager.getRotationMatrix(R, I, mGravity, mGeomagnetic);
+//        
+//    		if (success) {
+//    			float orientation[] = new float[3];
+//    			mOrientation = SensorManager.getOrientation(R, orientation);
+//    		}
+//    	}
+//    }
 
 
-	@Override
-	public void onAccuracyChanged(Sensor sensor, int accuracy) {
-		
-	}
+//	@Override
+//	public void onAccuracyChanged(Sensor sensor, int accuracy) {
+//		
+//	}
 	
 	private Drawable rotateBitmap(Bitmap target, ImageButton widget){
 		int angle = orientation.getAngle();
