@@ -385,27 +385,27 @@ public class AllianceCamera extends Activity implements Callback {
 		
 		camera.setParameters(parameters);
 		
-		camera.setPreviewCallback(new PreviewCallback() {
-            @Override
-            public void onPreviewFrame(byte[] data, Camera arg1) {
-
-                /**
-                 * TODO: Anstatt den Autofokus alle 3 Sekunden neu zu machen könnte man die ausgelesenen Sensorenwerte nehmen:
-                 * 
-                 *  float[] mGravity;
-				    float[] mGeomagnetic;
-				    float[] mOrientation;
-					
-				    float[] mGravityOnLastFocus;
-				    float[] mGeomagneticOnLastFocus;
-				    float[] mOrientationOnLastFocus;
-    
-    			   und einen Toleranzbereich festlegen. Wenn sich das Device innerhalb des Toleranzbereichs befindet, wird der
-    			   Autofokus nicht neu gesetzt. Wenn sich das Device außerhalb des Bereichs befindet, wir der Autofokus neu gesetzt
-    
-                 */
-            }
-        });
+//		camera.setPreviewCallback(new PreviewCallback() {
+//            @Override
+//            public void onPreviewFrame(byte[] data, Camera arg1) {
+//
+//                /**
+//                 * TODO: Anstatt den Autofokus alle 3 Sekunden neu zu machen könnte man die ausgelesenen Sensorenwerte nehmen:
+//                 * 
+//                 *  float[] mGravity;
+//				    float[] mGeomagnetic;
+//				    float[] mOrientation;
+//					
+//				    float[] mGravityOnLastFocus;
+//				    float[] mGeomagneticOnLastFocus;
+//				    float[] mOrientationOnLastFocus;
+//    
+//    			   und einen Toleranzbereich festlegen. Wenn sich das Device innerhalb des Toleranzbereichs befindet, wird der
+//    			   Autofokus nicht neu gesetzt. Wenn sich das Device außerhalb des Bereichs befindet, wir der Autofokus neu gesetzt
+//    
+//                 */
+//            }
+//        });
 		
 		camera.startPreview();
 		
