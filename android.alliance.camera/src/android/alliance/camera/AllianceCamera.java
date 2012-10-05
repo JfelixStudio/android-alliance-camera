@@ -33,6 +33,7 @@ import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
 import android.view.OrientationEventListener;
@@ -88,14 +89,6 @@ public class AllianceCamera extends Activity implements Callback {
 	private Sensor sensorAccelerometer;
 	private Sensor sensorMagnetometer;
 
-	
-    float[] mGravity;
-    float[] mGeomagnetic;
-    float[] mOrientation;
-	
-    float[] mGravityOnLastFocus;
-    float[] mGeomagneticOnLastFocus;
-    float[] mOrientationOnLastFocus;
 	private Bitmap bmpAufloesung;
     
     private IntervalAutoFocus intervalAutoFocus;
@@ -297,6 +290,7 @@ public class AllianceCamera extends Activity implements Callback {
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
+		Log.d("#", "surfaceCreated()");
 		
 		boolean cam = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
 		boolean camfront = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FRONT);
@@ -412,11 +406,15 @@ public class AllianceCamera extends Activity implements Callback {
 //		intervalAutoFocus = new IntervalAutoFocus(camera, mFocusRectangle);
 //		intervalAutoFocus.startAutoFocus();
 		
-		sensorAutoFocus = new SensorAutoFocus(camera, mFocusRectangle);
-		sensorAutoFocus.startAutoFocus();
-		
-		mySensorManager.registerListener(sensorAutoFocus, sensorAccelerometer, SensorManager.SENSOR_DELAY_UI);
-		mySensorManager.registerListener(sensorAutoFocus, sensorMagnetometer, SensorManager.SENSOR_DELAY_UI);
+		if(sensorAutoFocus != null) {
+			sensorAutoFocus.setCamera(camera);
+		} else {
+			sensorAutoFocus = new SensorAutoFocus(camera, mFocusRectangle);
+			sensorAutoFocus.startAutoFocus();
+			
+			mySensorManager.registerListener(sensorAutoFocus, sensorAccelerometer, SensorManager.SENSOR_DELAY_UI);
+			mySensorManager.registerListener(sensorAutoFocus, sensorMagnetometer, SensorManager.SENSOR_DELAY_UI);
+		}
 	}
 
 	
@@ -530,6 +528,7 @@ public class AllianceCamera extends Activity implements Callback {
 			camera.setPreviewCallback(null);
 			camera.release(); // Speicher freigeben
 			camera = null;
+			sensorAutoFocus.setCamera(null);
 		}
 	}
 
