@@ -46,7 +46,8 @@ public class SensorAutoFocus extends AutoFocus implements SensorEventListener {
 	
 	@Override
 	public void stopAutoFocus() {
-		mySensorManager.unregisterListener(this);
+		mySensorManager.unregisterListener(this, sensorAccelerometer);
+		mySensorManager.unregisterListener(this, sensorMagnetometer);
 		
 		super.stopAutoFocus();
 	}
