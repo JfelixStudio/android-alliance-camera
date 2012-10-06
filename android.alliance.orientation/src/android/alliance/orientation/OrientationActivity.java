@@ -83,6 +83,10 @@ public class OrientationActivity extends Activity {
             		break;
             	}
             	
+            	
+            	/*
+            	 * The size is adjusted based on the current rotation of the display.
+            	 */
             	DisplayMetrics dm = new DisplayMetrics();
                 getWindowManager().getDefaultDisplay().getMetrics(dm);
                 int wPix = dm.widthPixels;
