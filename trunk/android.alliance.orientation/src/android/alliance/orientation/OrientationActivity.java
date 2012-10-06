@@ -1,22 +1,30 @@
 package android.alliance.orientation;
 
 import android.app.Activity;
-import android.content.res.Configuration;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.OrientationEventListener;
 import android.view.Surface;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+/**
+ * Inspirations: <br>
+ * http://android-developers.blogspot.de/2010/09/one-screen-turn-deserves-another.html
+ * http://stackoverflow.com/questions/4553650/how-to-check-device-natural-default-orientation-on-android-i-e-get-landscape
+ * 
+ * @author strangeoptics
+ *
+ */
 public class OrientationActivity extends Activity {
 
 	private TextView tvOnOrientationChanged;
 	private TextView tvDeviceRotation;
+	private TextView tvDisplayMetrics;
 	
 	private OrientationEventListener orientationEventListener;
-	
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -25,6 +33,7 @@ public class OrientationActivity extends Activity {
         
         tvOnOrientationChanged = (TextView) findViewById(R.id.tvOnOrientationChanged);
         tvDeviceRotation = (TextView) findViewById(R.id.tvDeviceRotation);
+        tvDisplayMetrics = (TextView) findViewById(R.id.tvDisplayMetrics);
         
         /* Helper class for receiving notifications from the SensorManager when the orientation of the device has changed.
 		 * Used sensor type:			Sensor.TYPE_ACCELEROMETER
@@ -74,6 +83,11 @@ public class OrientationActivity extends Activity {
             		break;
             	}
             	
+            	DisplayMetrics dm = new DisplayMetrics();
+                getWindowManager().getDefaultDisplay().getMetrics(dm);
+                int wPix = dm.widthPixels;
+                int hPix = dm.heightPixels;
+            	tvDisplayMetrics.setText("w: " + wPix + "    h: " + hPix);
         	}
         };
         orientationEventListener.enable();
