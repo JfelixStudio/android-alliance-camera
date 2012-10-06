@@ -1,7 +1,9 @@
 package android.alliance.orientation;
 
 import android.app.Activity;
+import android.hardware.Camera;
 import android.hardware.SensorManager;
+import android.hardware.Camera.CameraInfo;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -15,6 +17,7 @@ public class OrientationLandscapeActivity extends Activity {
 	private TextView tvOnOrientationChanged;
 	private TextView tvDeviceRotation;
 	private TextView tvDisplayMetrics;
+	private TextView tvCameraInfoOrientation;
 	private TextView tvConsole;
 
 	private OrientationEventListener orientationEventListener;
@@ -27,6 +30,7 @@ public class OrientationLandscapeActivity extends Activity {
 		tvOnOrientationChanged = (TextView) findViewById(R.id.tvOnOrientationChanged);
 		tvDeviceRotation = (TextView) findViewById(R.id.tvDeviceRotation);
 		tvDisplayMetrics = (TextView) findViewById(R.id.tvDisplayMetrics);
+        tvCameraInfoOrientation = (TextView) findViewById(R.id.tvCameraInfoOrientation);
 		tvConsole = (TextView) findViewById(R.id.tvConsole);
 
 		OrientationApplication.getInstance().addConsoleLine("onCreate()", tvConsole);
@@ -96,6 +100,10 @@ public class OrientationLandscapeActivity extends Activity {
 				int wPix = dm.widthPixels;
 				int hPix = dm.heightPixels;
 				tvDisplayMetrics.setText("w: " + wPix + "    h: " + hPix);
+				
+				CameraInfo info = new android.hardware.Camera.CameraInfo();
+                Camera.getCameraInfo(0, info);
+                tvCameraInfoOrientation.setText(Integer.toString(info.orientation));
 			}
 		};
 		orientationEventListener.enable();
