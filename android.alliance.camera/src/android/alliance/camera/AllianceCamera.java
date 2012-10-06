@@ -25,8 +25,10 @@ import android.graphics.ImageFormat;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
+import android.hardware.Sensor;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.Size;
+import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Environment;
@@ -74,7 +76,7 @@ public class AllianceCamera extends Activity implements Callback {
 	private Bitmap bmpZoomOut = null;
 	
     private MyFocusRectangle mFocusRectangle;
-    private GestureDetector mGestureDetector;
+//    private GestureDetector mGestureDetector;
 		
 	
 	private Parameters parameters = null;
@@ -111,44 +113,58 @@ public class AllianceCamera extends Activity implements Callback {
 		sv.getHolder().addCallback(this);
 		sv.getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 		
-		// Wird aufgerufen, wenn man von Portrait zu Landscape wechselt.
-		this.orientationListener = new OrientationEventListener(this, 1){
-	  	    public void onOrientationChanged(int paramAnonymousInt){
-	  	    	// Hier wird die Orientation geupdated
-	  	  		
-	  	    	int angle = orientation.getAngle();
-	  	    	
-	  	    	orientation.update(paramAnonymousInt);	  
-	  	  		
-	  	    	if(angle != orientation.getAngle()){
-	  	    		if(btTakePhoto != null){
-	  	    			btTakePhoto.setLayoutParams(ws.get_camera_shutterbutton_layout());
-	  	    			btTakePhoto.setBackgroundDrawable(rotateBitmap(bmpShutter, btTakePhoto));
-		  	  		}	
-	  	    		
-	  	    		if(txAufloesung != null){
-	  	    	        txAufloesung.setLayoutParams(ws.get_camera_aufloesung_layout());
-	  	    	        txAufloesung.setBackgroundDrawable(rotateBitmap(bmpAufloesung, txAufloesung));
-	  	    		}
-	  	    		
-	  	    		if(btFlashlight != null) {
-	  	    			btFlashlight.setLayoutParams(ws.get_camera_flashlight_layout());
-	  	    			btFlashlight.setBackgroundDrawable(rotateBitmap(bmpFlashlight, btFlashlight));
-						    
-	  	    		}
-	  	    		
-	  	    		if(zoomIn != null){
-	  	    			zoomIn.setLayoutParams(ws.get_camera_zoom_in_layout());
-	  	    			zoomIn.setBackgroundDrawable(rotateBitmap(bmpZoomIn, zoomIn));
-	  	    		}
-	  	    		
-	  	    		if(zoomOut != null){
-	  	    			zoomOut.setLayoutParams(ws.get_camera_zoom_out_layout());
-	  	    			zoomOut.setBackgroundDrawable(rotateBitmap(bmpZoomOut, zoomOut));
-	  	    		}
-	  	    	}
-	  	    }
-	  	};
+		/* Helper class for receiving notifications from the SensorManager when the orientation of the device has changed.
+		 * Used sensor type:			Sensor.TYPE_ACCELEROMETER
+		 * SENSOR_DELAY_FASTEST = 0;	get sensor data as fast as possible
+		 * SENSOR_DELAY_GAME = 1;		rate suitable for games
+		 * SENSOR_DELAY_UI = 2;			rate suitable for the user interface
+		 * SENSOR_DELAY_NORMAL = 3;		rate (default) suitable for screen orientation changes
+		 */
+		this.orientationListener = new OrientationEventListener(this, SensorManager.SENSOR_DELAY_NORMAL){
+	  	    
+		    /* Called when the orientation of the device has changed.
+		     * Orientation parameter is in degrees, ranging from 0 to 359.
+		     *   0 degrees when the device is oriented in its natural position.   !!! what ist the device's natural position?  http://stackoverflow.com/questions/4553650/how-to-check-device-natural-default-orientation-on-android-i-e-get-landscape
+		     *   90 degrees when its left side is at the top. 
+		     *   180 degrees when it is upside down. 
+		     *   270 degrees when its right side is to the top.
+		     * ORIENTATION_UNKNOWN is returned when the device is close to flat and the orientation cannot be determined.
+		     */
+			public void onOrientationChanged(int paramAnonymousInt) {
+				
+				int angle = orientation.getAngle();
+
+				orientation.update(paramAnonymousInt);
+
+				if (angle != orientation.getAngle()) {
+					if (btTakePhoto != null) {
+						btTakePhoto.setLayoutParams(ws.get_camera_shutterbutton_layout());
+						btTakePhoto.setBackgroundDrawable(rotateBitmap(bmpShutter, btTakePhoto));
+					}
+
+					if (txAufloesung != null) {
+						txAufloesung.setLayoutParams(ws.get_camera_aufloesung_layout());
+						txAufloesung.setBackgroundDrawable(rotateBitmap(bmpAufloesung, txAufloesung));
+					}
+
+					if (btFlashlight != null) {
+						btFlashlight.setLayoutParams(ws.get_camera_flashlight_layout());
+						btFlashlight.setBackgroundDrawable(rotateBitmap(bmpFlashlight, btFlashlight));
+
+					}
+
+					if (zoomIn != null) {
+						zoomIn.setLayoutParams(ws.get_camera_zoom_in_layout());
+						zoomIn.setBackgroundDrawable(rotateBitmap(bmpZoomIn, zoomIn));
+					}
+
+					if (zoomOut != null) {
+						zoomOut.setLayoutParams(ws.get_camera_zoom_out_layout());
+						zoomOut.setBackgroundDrawable(rotateBitmap(bmpZoomOut, zoomOut));
+					}
+				}
+			}
+		};
 		
 	  	txAufloesung = (android.alliance.camera.TextViewRotate) findViewById(R.id.aufloesung);
 	  	txAufloesung.setLayoutParams(ws.get_camera_aufloesung_layout());
