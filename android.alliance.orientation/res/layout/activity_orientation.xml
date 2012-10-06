@@ -15,7 +15,7 @@
             android:id="@+id/tvOnOrientationChanged"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
+            android:text="0"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <TextView
@@ -29,7 +29,7 @@
             android:id="@+id/tvDeviceRotation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
+            android:text="0"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <TextView
@@ -43,7 +43,30 @@
             android:id="@+id/tvDisplayMetrics"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
+            android:text="0"
             android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="console:"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        
+
+        <ScrollView
+            android:id="@+id/scrollView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+            android:id="@+id/tvConsole"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:singleLine="false"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+        </ScrollView>
 
     </LinearLayout>
