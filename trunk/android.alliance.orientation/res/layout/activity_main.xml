@@ -15,5 +15,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="orientation landscape" />
+    
+    <Button
+        android:id="@+id/btConfigurationChanged"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="configuration changed" />
 
 </LinearLayout>

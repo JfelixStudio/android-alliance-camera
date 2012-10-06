@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.OrientationEventListener;
 import android.view.Surface;
@@ -23,6 +24,7 @@ public class OrientationActivity extends Activity {
 	private TextView tvOnOrientationChanged;
 	private TextView tvDeviceRotation;
 	private TextView tvDisplayMetrics;
+	private TextView tvConsole;
 	
 	private OrientationEventListener orientationEventListener;
 	
@@ -34,6 +36,9 @@ public class OrientationActivity extends Activity {
         tvOnOrientationChanged = (TextView) findViewById(R.id.tvOnOrientationChanged);
         tvDeviceRotation = (TextView) findViewById(R.id.tvDeviceRotation);
         tvDisplayMetrics = (TextView) findViewById(R.id.tvDisplayMetrics);
+        tvConsole = (TextView) findViewById(R.id.tvConsole);
+        
+        OrientationApplication.getInstance().addConsoleLine("onCreate()", tvConsole);
         
         /* Helper class for receiving notifications from the SensorManager when the orientation of the device has changed.
 		 * Used sensor type:			Sensor.TYPE_ACCELEROMETER
@@ -83,7 +88,6 @@ public class OrientationActivity extends Activity {
             		break;
             	}
             	
-            	
             	/*
             	 * The size is adjusted based on the current rotation of the display.
             	 */
@@ -102,4 +106,40 @@ public class OrientationActivity extends Activity {
         getMenuInflater().inflate(R.menu.activity_orientation, menu);
         return true;
     }
+    
+    @Override
+    protected void onStart() {
+    	Log.d("#", "onStart()");
+		OrientationApplication.getInstance().addConsoleLine("onStart()", tvConsole);
+    	super.onStart();
+    }
+    
+    @Override
+	protected void onPause() {
+		Log.d("#", "onPause()");
+		OrientationApplication.getInstance().addConsoleLine("onPause()", tvConsole);
+		super.onPause();
+	}
+    
+    @Override
+    protected void onStop() {
+    	Log.d("#", "onStop()");
+		OrientationApplication.getInstance().addConsoleLine("onStop()", tvConsole);
+    	super.onStop();
+    }
+	
+    @Override
+    protected void onRestart() {
+    	Log.d("#", "onRestart()");
+		OrientationApplication.getInstance().addConsoleLine("onRestart()", tvConsole);
+    	super.onRestart();
+    }
+    
+	@Override
+	protected void onResume() {
+		Log.d("#", "onResume()");
+		OrientationApplication.getInstance().addConsoleLine("onResume()", tvConsole);
+		super.onResume();
+	}
+	
 }
