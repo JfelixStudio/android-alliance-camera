@@ -511,16 +511,19 @@ public class AllianceCamera extends Activity implements Callback {
 			 * the orientation in the EXIF header will be missing or 1
 			 */
 			try {
-				// ExifInterface reads only files no byte[] therefor we rely on 3th party library  http://code.google.com/p/metadata-extractor/
+				// The android native ExifInterface reads only files no byte[] therefore we rely on a 3th party library  http://code.google.com/p/metadata-extractor/
 				Metadata metadata = ImageMetadataReader.readMetadata(new BufferedInputStream(new ByteArrayInputStream(jpeg)), true);
 				Iterable<Directory> directories = metadata.getDirectories();
 				JpegDirectory jpegDirectory = metadata.getDirectory(JpegDirectory.class);
 				int imageHeight = jpegDirectory.getImageHeight();
 				int imageWidth = jpegDirectory.getImageWidth();
 				ExifIFD0Directory exifIFD0Directory = metadata.getDirectory(ExifIFD0Directory.class);
-				String orient = exifIFD0Directory.getString(ExifIFD0Directory.TAG_ORIENTATION);
+				String exifOrientation = exifIFD0Directory.getString(ExifIFD0Directory.TAG_ORIENTATION);
+				if(exifOrientation == null) {
+					exifOrientation = "missing";
+				}
 				
-				System.out.println();
+				Log.d("#", "orientation=" + exifOrientation);
 			} catch (ImageProcessingException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
