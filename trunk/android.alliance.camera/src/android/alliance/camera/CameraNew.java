@@ -63,6 +63,8 @@ public class CameraNew extends Activity implements Callback {
 
 	}
 
+	// TODO: Auswahl des Facings
+	// TODO: berücksichtigen das es keine front_facing gibt oder
 	private void initCamera(SurfaceHolder holder) {
 		try {
 
@@ -71,13 +73,14 @@ public class CameraNew extends Activity implements Callback {
 			if (backCamAvailable) {
 
 				if (camera == null) {
+					// Returns the number of physical cameras available on this device.
 					int numberOfCameras = Camera.getNumberOfCameras();
-					// TODO: Auswahl des Facings
-					// TODO: berücksichtigen das es keine front_facing gibt oder
+					
 					// nur eine front_facing(nexus)!
 					// numberOfCameras doesn't indicates the facing -
 					// http://digitaldumptruck.jotabout.com/?p=797
 					for (int cameraIdx = 0; cameraIdx < numberOfCameras; cameraIdx++) {
+						// Returns the information about a particular camera.
 						Camera.getCameraInfo(cameraIdx, cameraInfo);
 						if (cameraInfo.facing == cameraFacing) {
 							try {
