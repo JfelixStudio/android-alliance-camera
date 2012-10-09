@@ -14,9 +14,11 @@ import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 public class CameraNew extends Activity implements Callback {
 
+	private Context ctx;
 	private Camera camera;
 	private Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
 	private SurfaceView surfaceView;
@@ -31,6 +33,7 @@ public class CameraNew extends Activity implements Callback {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		ctx = this;
 		Log.d("#", "onCreate()");
 
 		// Muß aufgerufen werden, bevor Inhalte der Kamera zugewiesen werden
@@ -63,8 +66,8 @@ public class CameraNew extends Activity implements Callback {
 
 	}
 
-	// TODO: Auswahl des Facings
-	// TODO: berücksichtigen das es keine front_facing gibt oder
+	// TODO: Auswahl des Facings - über Intent?
+	// TODO: berücksichtigen das es keine front_facing gibt oder nur eine front_facing(nexus)!
 	private void initCamera(SurfaceHolder holder) {
 		try {
 
@@ -73,20 +76,20 @@ public class CameraNew extends Activity implements Callback {
 			if (backCamAvailable) {
 
 				if (camera == null) {
-					// Returns the number of physical cameras available on this device.
+					// doc: Returns the number of physical cameras available on this device.
 					int numberOfCameras = Camera.getNumberOfCameras();
 					
-					// nur eine front_facing(nexus)!
-					// numberOfCameras doesn't indicates the facing -
-					// http://digitaldumptruck.jotabout.com/?p=797
+					// numberOfCameras doesn't indicates the facing - http://digitaldumptruck.jotabout.com/?p=797
 					for (int cameraIdx = 0; cameraIdx < numberOfCameras; cameraIdx++) {
-						// Returns the information about a particular camera.
+						// doc: Returns the information about a particular camera.
 						Camera.getCameraInfo(cameraIdx, cameraInfo);
 						if (cameraInfo.facing == cameraFacing) {
 							try {
+								// doc: Creates a new Camera object to access a particular hardware camera. If the same camera is opened by other applications, this will throw a RuntimeException.
 								camera = Camera.open(cameraIdx);
 							} catch (RuntimeException e) {
 								Log.e("#", "Camera failed to open: " + e.getLocalizedMessage());
+								Toast.makeText(ctx, e.getLocalizedMessage(), Toast.LENGTH_LONG);
 							}
 						}
 					}
