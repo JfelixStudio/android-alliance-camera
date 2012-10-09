@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.ImageFormat;
 import android.hardware.Camera;
-import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +18,7 @@ import android.view.WindowManager;
 public class CameraNew extends Activity implements Callback {
 
 	private Camera camera;
+	private Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
 	private SurfaceView surfaceView;
 	private Parameters parameters;
 	private Display display = null;
@@ -27,7 +27,7 @@ public class CameraNew extends Activity implements Callback {
      * CameraInfo.CAMERA_FACING_BACK = 0 <br>
      * CameraInfo.CAMERA_FACING_FRONT = 1 <br>
      */
-	private int cameraFacing = 0;
+	private int cameraFacing = cameraInfo.CAMERA_FACING_BACK;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +66,19 @@ public class CameraNew extends Activity implements Callback {
 				
 				if(camera == null) {
 					int numberOfCameras = Camera.getNumberOfCameras();
-					// TODO: berücksichtigen das es keine front_facing gibt oder nur eine front_facing!
-					camera = Camera.open();	
+					// TODO: Auswahl des Facings
+					// TODO: berücksichtigen das es keine front_facing gibt oder nur eine front_facing(nexus)!
+					// numberOfCameras doesn't indicates the facing - http://digitaldumptruck.jotabout.com/?p=797
+					for(int cameraIdx=0; cameraIdx<numberOfCameras; cameraIdx++) {
+						Camera.getCameraInfo( cameraIdx, cameraInfo );
+						if(cameraInfo.facing == cameraFacing) {
+							try {
+								camera = Camera.open(cameraIdx);
+							} catch (RuntimeException e) {
+								Log.e("#", "Camera failed to open: " + e.getLocalizedMessage());
+							}
+						}
+					}
 				}
 				
 				camera.setPreviewDisplay(holder);					
