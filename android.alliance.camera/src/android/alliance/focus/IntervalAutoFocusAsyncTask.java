@@ -2,14 +2,15 @@ package android.alliance.focus;
 
 import android.os.AsyncTask;
 
+/**
+ * The task can be executed only once (an exception will be thrown if a second execution is attempted.)
+ *  
+ * @author strangeoptics
+ */
 public class IntervalAutoFocusAsyncTask extends AsyncTask<AutoFocus, Void, AutoFocus> {
 
-	private AutoFocus autoFocus;
-	
 	@Override
 	protected AutoFocus doInBackground(AutoFocus... autoFocus) {
-		
-		this.autoFocus = autoFocus[0];
 		
 		try {
 			Thread.sleep(3000);
@@ -17,12 +18,12 @@ public class IntervalAutoFocusAsyncTask extends AsyncTask<AutoFocus, Void, AutoF
 			e.printStackTrace();
 		}
 		
-		return null;
+		return autoFocus[0];
 	}
 	
 	@Override
     protected void onPostExecute(AutoFocus autoFocus) {
-		this.autoFocus.autoFocus();
+		autoFocus.autoFocus();
     }
 	
 }

@@ -78,7 +78,7 @@ public class SensorAutoFocus extends AutoFocus implements SensorEventListener {
     		}
     	}
 	}
-
+	
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
 		
