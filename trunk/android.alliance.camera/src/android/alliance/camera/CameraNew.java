@@ -25,8 +25,7 @@ public class CameraNew extends Activity implements Callback {
 
 	/**
 	 * CameraInfo.CAMERA_FACING_BACK = 0 <br>
-	 * CameraInfo.CAMERA_FACING_FRONT = 1 <br>
-	 */
+	 * CameraInfo.CAMERA_FACING_FRONT = 1 */
 	private int cameraFacing = cameraInfo.CAMERA_FACING_BACK;
 
 	@Override
@@ -55,6 +54,10 @@ public class CameraNew extends Activity implements Callback {
 		 *             needed.
 		 * 
 		 *             Da sag ich nur ROFL
+		 */
+		/*
+		 * deprecated setting, but required on Android versions prior to 3.0
+		 * source: http://developer.android.com/guide/topics/media/camera.html
 		 */
 		surfaceView.getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 
