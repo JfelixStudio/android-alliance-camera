@@ -1,25 +1,22 @@
 package android.alliance.camera;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
-import android.hardware.Camera.Size;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
-import android.view.Display;
 import android.view.SurfaceView;
 import android.view.Window;
 import android.view.WindowManager;
 
 public class CameraNew extends Activity implements Callback {
 
-	public Camera camera;
+	private Camera camera;
 	private SurfaceView surfaceView;
 	private Parameters parameters;
 	private Display display = null;
