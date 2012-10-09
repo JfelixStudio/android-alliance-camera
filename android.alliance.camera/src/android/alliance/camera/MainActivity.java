@@ -2,6 +2,7 @@ package android.alliance.camera;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.hardware.Camera.CameraInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +23,7 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(MainActivity.this, CameraNew.class);
+				intent.putExtra(CameraNew.INTENT_KEY_INITIAL_CAMERA_FACING, CameraInfo.CAMERA_FACING_FRONT);
 		        startActivity(intent);
 			}
 		});
