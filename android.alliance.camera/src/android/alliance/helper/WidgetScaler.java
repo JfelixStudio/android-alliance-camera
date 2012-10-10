@@ -2,7 +2,6 @@ package android.alliance.helper;
 
 import java.math.BigDecimal;
 
-import android.alliance.camera.Orientation;
 import android.alliance.helper.ScreenSizeHelper;
 import android.app.Activity;
 import android.util.DisplayMetrics;
