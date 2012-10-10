@@ -10,12 +10,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import android.alliance.camera.CameraHelper.CameraTarget;
 import android.alliance.data.VOContextMenu;
 import android.alliance.focus.IntervalAutoFocus;
 import android.alliance.focus.MyFocusRectangle;
 import android.alliance.focus.SensorAutoFocus;
+import android.alliance.helper.CameraHelper;
+import android.alliance.helper.Orientation;
 import android.alliance.helper.WidgetScaler;
+import android.alliance.helper.CameraHelper.CameraTarget;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -62,7 +64,7 @@ public class AllianceCamera extends Activity implements Callback {
 	private Orientation orientation = Orientation.getInstance();
 	private List<Size> lSupportedPictureSizes = null;
 	private AudioManager audioManager;
-	private android.alliance.camera.TextViewRotate txAufloesung;
+	private android.alliance.widgets.TextViewRotate txAufloesung;
 	private static Size preSelection = null;
 	private Display display = null;
 	private WidgetScaler ws = null;
@@ -180,7 +182,7 @@ public class AllianceCamera extends Activity implements Callback {
 			}
 		};
 
-		txAufloesung = (android.alliance.camera.TextViewRotate) findViewById(R.id.aufloesung);
+		txAufloesung = (android.alliance.widgets.TextViewRotate) findViewById(R.id.aufloesung);
 		txAufloesung.setLayoutParams(ws.get_camera_aufloesung_layout());
 		txAufloesung.setBackgroundDrawable(rotateBitmap(bmpAufloesung, txAufloesung));
 		txAufloesung.setOnClickListener(new OnClickListener() {

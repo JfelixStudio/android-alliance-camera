@@ -1,4 +1,4 @@
-package android.alliance.camera;
+package android.alliance.helper;
 
 import android.alliance.camera.R;
 import android.util.Log;
