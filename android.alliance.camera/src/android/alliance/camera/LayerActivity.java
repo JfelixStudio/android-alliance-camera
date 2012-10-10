@@ -13,9 +13,11 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.OrientationEventListener;
 import android.alliance.camera.R;
-import android.alliance.camera.CameraHelper.CameraTarget;
 import android.alliance.data.VOContextMenu;
 import android.alliance.dialoge.MySpinnerMenuDialog;
+import android.alliance.helper.CameraHelper;
+import android.alliance.helper.Orientation;
+import android.alliance.helper.CameraHelper.CameraTarget;
 public class LayerActivity extends Activity {
 
 	private CameraHelper cameraHelper = CameraHelper.getInstance();

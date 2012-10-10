@@ -1,6 +1,7 @@
-package android.alliance.camera;
+package android.alliance.widgets;
 
 import android.alliance.camera.R;
+import android.alliance.helper.Orientation;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;

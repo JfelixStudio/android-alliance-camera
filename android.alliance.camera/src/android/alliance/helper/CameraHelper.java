@@ -1,4 +1,4 @@
-package android.alliance.camera;
+package android.alliance.helper;
 
 import java.util.ArrayList;
 import java.util.List;
