@@ -34,11 +34,6 @@
             android:label="@string/title_activity_orientation"
             android:configChanges="orientation|screenSize"> 
         </activity>
-         <activity
-            android:name=".YAchseActivity"
-            android:label="@string/title_activity_orientation"
-            android:configChanges="orientation|screenSize"> 
-        </activity>
     </application>
 
 </manifest>

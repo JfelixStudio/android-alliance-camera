@@ -11,7 +11,6 @@ public class MainActivity extends Activity {
 	private Button btOrientation;
 	private Button btOrientationLandscape;
 	private Button btConfigurationChanged;
-	private Button btYAchse;
 	
 	 @Override
 	 public void onCreate(Bundle savedInstanceState) {
@@ -41,15 +40,6 @@ public class MainActivity extends Activity {
 				public void onClick(View v) {
 					OrientationApplication.getInstance().clearConsole();
 					Intent intent = new Intent(MainActivity.this, ConfigurationChangedActivity.class);
-			        startActivity(intent);
-				}
-			});
-	        
-	        btYAchse = (Button) findViewById(R.id.btYAchse);
-	        btYAchse.setOnClickListener(new View.OnClickListener() {
-				public void onClick(View v) {
-					OrientationApplication.getInstance().clearConsole();
-					Intent intent = new Intent(MainActivity.this, YAchseActivity.class);
 			        startActivity(intent);
 				}
 			});
