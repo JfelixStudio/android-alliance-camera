@@ -26,6 +26,15 @@
             android:label="Sensor"
             android:configChanges="orientation|screenSize">
         </activity>
+        
+        <activity
+	        android:name=".YAchseActivity"
+	        android:label="YAchse"
+	        android:configChanges="orientation|screenSize"> 
+    	</activity>
+    
     </application>
 
+   
+        
 </manifest>
