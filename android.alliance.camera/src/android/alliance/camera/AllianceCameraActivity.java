@@ -56,7 +56,7 @@ import com.drew.metadata.MetadataException;
 import com.drew.metadata.exif.ExifIFD0Directory;
 import com.drew.metadata.jpeg.JpegDirectory;
 
-public class AllianceCamera extends Activity implements Callback {
+public class AllianceCameraActivity extends Activity implements Callback {
 
 	public Camera camera;
 	private WindowManager wm = null;
@@ -208,7 +208,7 @@ public class AllianceCamera extends Activity implements Callback {
 					// Dialogs gedreht erscheinen.
 					camRelease();
 
-					Intent x = new Intent(AllianceCamera.this, LayerActivity.class);
+					Intent x = new Intent(AllianceCameraActivity.this, LayerActivity.class);
 					x.putExtra(CameraHelper.CameraTarget.CAMERATARGET.getName(), targetAufloesung.getName());
 					startActivityForResult(x, targetAufloesung.getId());
 				}
@@ -549,12 +549,12 @@ public class AllianceCamera extends Activity implements Callback {
 				localFileOutputStream.flush();
 				localFileOutputStream.close();
 
-				Toast.makeText(AllianceCamera.this, "Bild wurde gespeichert!", Toast.LENGTH_SHORT).show();
+				Toast.makeText(AllianceCameraActivity.this, "Bild wurde gespeichert!", Toast.LENGTH_SHORT).show();
 
 				startPreview();
 
 			} catch (IOException localIOException) {
-				Toast.makeText(AllianceCamera.this, "Fehler!", Toast.LENGTH_SHORT).show();
+				Toast.makeText(AllianceCameraActivity.this, "Fehler!", Toast.LENGTH_SHORT).show();
 			}
 		}
 	}
