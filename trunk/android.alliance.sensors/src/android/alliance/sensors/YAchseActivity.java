@@ -108,17 +108,24 @@ public class YAchseActivity extends Activity {
 	    		boolean success = SensorManager.getRotationMatrix(R, null, mGravity, mGeomagnetic);
 	        
 	    		if(success) {
-	    			/*  azimuth/yaw - z - nose lefto or right, axis from ground to sky
+	    			/*  azimuth/yaw - z - nose left or right, axis from ground to sky 
 	    			 *  pitch - x - nose up or down, axis from wing to wing
 	    			 *  roll - y - rotation about an axis running from nose to tail
 	    			 *  http://en.wikipedia.org/wiki/Aircraft_principal_axes
 	    			 */
 	    			float orientation[] = new float[3];
 	    			mOrientation = SensorManager.getOrientation(R, orientation);
-	    			
-	    			txValueOrientation.setText("azimuth Z: "+ mOrientation[0] + "\npitch      X: " + mOrientation[1] + "\nroll        Y: " + mOrientation[2]);
+	    			txValueOrientation.setText("azimuth Z: "+ radianToDegree(mOrientation[0]) + "\npitch      X: " + mOrientation[1] + "\nroll        Y: " + mOrientation[2]);
 	    		}
 		 	}
+	 }
+	 
+	 /** 
+	  * Converts the unit radian to degree. 1Pi = 180°
+	  * http://en.wikipedia.org/wiki/Radian 
+	  */
+	 private float radianToDegree(float radian) {
+		 return radian*(180/3.1415926f);
 	 }
 	 
 	@Override
@@ -132,11 +139,11 @@ public class YAchseActivity extends Activity {
 	
 	    
     @Override
-    protected void onStop() {
+    protected void onPause() {
         mSensorManager.unregisterListener(listenerOrientation);
         mSensorManager.unregisterListener(listenerAccelerometer);
         mSensorManager.unregisterListener(listenerMagnetometer);
-        super.onStop();
+        super.onPause();
     }
 
 }
