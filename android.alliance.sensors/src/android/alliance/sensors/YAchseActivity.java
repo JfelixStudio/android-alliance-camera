@@ -26,9 +26,9 @@ public class YAchseActivity extends Activity {
 	private Sensor sensorAccelerometer;
 	private Sensor sensorMagnetometer;
 	
-	float[] mGravity;
-    float[] mGeomagnetic;
-    float[] mOrientation;
+	float[] mGravity = new float[3];
+    float[] mGeomagnetic = new float[3];
+    float[] mOrientation = new float[3];
 
 	private SensorEventListener listenerAccelerometer;
 
@@ -49,6 +49,7 @@ public class YAchseActivity extends Activity {
         
         /*
          * Hier werden die korrekten Werte ausgelesen
+         * TODO: Seit wann deprecated, und warum
          */
         sensorOrientation = mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
         listenerOrientation = new SensorEventListener(){
@@ -76,7 +77,7 @@ public class YAchseActivity extends Activity {
 				
 				txValueAcc.setText(String.valueOf(mGravity[0] + "\n" + mGravity[1] + "\n" + mGravity[2]));
 				
-				checkOrientation();
+				calculateOrientation();
 			}
 
 			public void onAccuracyChanged(Sensor sensor, int accuracy) {
@@ -91,42 +92,38 @@ public class YAchseActivity extends Activity {
 				
 				txValueMag.setText(String.valueOf(mGeomagnetic[0] + "\n" + mGeomagnetic[1] + "\n" + mGeomagnetic[2]));
 				
-				checkOrientation();
+				calculateOrientation();
 			}
 
 			public void onAccuracyChanged(Sensor sensor, int accuracy) {
 			}
         };
         
-        
-        
-        
-        
-        
 	 }
 	 
-	 private void checkOrientation(){
-		 if (mGravity != null && mGeomagnetic != null) {
+	 private void calculateOrientation() {
+		 	// this method is called from 3 independant threads, therefore it should get synchronized
+		 	synchronized (this) {
 	    		float R[] = new float[9];
 	    		float I[] = new float[9];
 	    		boolean success = SensorManager.getRotationMatrix(R, I, mGravity, mGeomagnetic);
 	        
-	    		if (success) {
+	    		if(success) {
 	    			float orientation[] = new float[3];
 	    			mOrientation = SensorManager.getOrientation(R, orientation);
 	    			
-	    			txValueOrientation.setText(String.valueOf(mOrientation[0] + "\n" + mOrientation[1] + "\n" + mOrientation[2]));
+	    			txValueOrientation.setText("azimuth Z: "+ mOrientation[0] + "\npitch      X: " + mOrientation[1] + "\nroll        Y: " + mOrientation[2]);
 	    		}
-	    	}
+		 	}
 	 }
 	 
 	@Override
     protected void onResume() {
         super.onResume();
         
-        mSensorManager.registerListener(listenerOrientation, sensorOrientation, SensorManager.SENSOR_DELAY_FASTEST);
-        mSensorManager.registerListener(listenerAccelerometer, sensorAccelerometer, SensorManager.SENSOR_DELAY_FASTEST);
-        mSensorManager.registerListener(listenerMagnetometer, sensorMagnetometer, SensorManager.SENSOR_DELAY_FASTEST);
+        mSensorManager.registerListener(listenerOrientation, sensorOrientation, SensorManager.SENSOR_DELAY_UI);
+        mSensorManager.registerListener(listenerAccelerometer, sensorAccelerometer, SensorManager.SENSOR_DELAY_UI);
+        mSensorManager.registerListener(listenerMagnetometer, sensorMagnetometer, SensorManager.SENSOR_DELAY_UI);
     }
     
     @Override
