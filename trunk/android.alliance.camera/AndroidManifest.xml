@@ -32,7 +32,7 @@
             </intent-filter>
         </activity>
         
-		<activity android:name=".CameraNew" android:screenOrientation="landscape" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
+		<activity android:name=".BlancCameraActivity" android:screenOrientation="landscape" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
 		<activity android:name=".AllianceCamera" android:screenOrientation="landscape" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
 		
 		<activity android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:name=".LayerActivity" android:configChanges="keyboardHidden|orientation"></activity>

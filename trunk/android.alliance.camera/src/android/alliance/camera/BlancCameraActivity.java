@@ -22,10 +22,10 @@ import android.widget.Toast;
  * @author alliance
  *
  */
-public class CameraNew extends Activity implements Callback {
+public class BlancCameraActivity extends Activity implements Callback {
 
 	/** Intent key to send the initial camera facing. <br>
-	 * intent.putExtra(CameraNew.INTENT_KEY_INITIAL_CAMERA_FACING, CameraInfo.CAMERA_FACING_FRONT); */
+	 * intent.putExtra(BlancCameraActivity.INTENT_KEY_INITIAL_CAMERA_FACING, CameraInfo.CAMERA_FACING_FRONT); */
 	public static String INTENT_KEY_INITIAL_CAMERA_FACING = "InitialCameraFacing";
 	
 	private Context ctx;
