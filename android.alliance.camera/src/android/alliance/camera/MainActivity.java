@@ -22,9 +22,9 @@ public class MainActivity extends Activity {
 		btBlancCamera.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(MainActivity.this, CameraNew.class);
-//				intent.putExtra(CameraNew.INTENT_KEY_INITIAL_CAMERA_FACING, CameraInfo.CAMERA_FACING_FRONT);
-				intent.putExtra(CameraNew.INTENT_KEY_INITIAL_CAMERA_FACING, CameraInfo.CAMERA_FACING_BACK);
+				Intent intent = new Intent(MainActivity.this, BlancCameraActivity.class);
+//				intent.putExtra(BlancCameraActivity.INTENT_KEY_INITIAL_CAMERA_FACING, CameraInfo.CAMERA_FACING_FRONT);
+				intent.putExtra(BlancCameraActivity.INTENT_KEY_INITIAL_CAMERA_FACING, CameraInfo.CAMERA_FACING_BACK);
 		        startActivity(intent);
 			}
 		});
