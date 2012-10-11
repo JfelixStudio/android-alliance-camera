@@ -35,6 +35,7 @@ public class CheckSensorActivity extends Activity {
 		sensors = checkAvailabilityOfSensorType(sensorManager, Sensor.TYPE_GYROSCOPE, "TYPE_GYROSCOPE", sensors);
 		sensors = checkAvailabilityOfSensorType(sensorManager, Sensor.TYPE_AMBIENT_TEMPERATURE, "TYPE_AMBIENT_TEMPERATURE", sensors);
 		sensors = checkAvailabilityOfSensorType(sensorManager, Sensor.TYPE_LIGHT, "TYPE_LIGHT", sensors);
+		sensors = checkAvailabilityOfSensorType(sensorManager, Sensor.TYPE_ROTATION_VECTOR, "TYPE_ROTATION_VECTOR", sensors);
 
 		tvSensorPresent.setText(sensors);
 		
