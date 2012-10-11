@@ -102,13 +102,17 @@ public class YAchseActivity extends Activity {
 	 }
 	 
 	 private void calculateOrientation() {
-		 	// this method is called from 3 independant threads, therefore it should get synchronized
+		 	// this method is called from 3 independant threads, therefore it should get synchronized 
 		 	synchronized (this) {
 	    		float R[] = new float[9];
-	    		float I[] = new float[9];
-	    		boolean success = SensorManager.getRotationMatrix(R, I, mGravity, mGeomagnetic);
+	    		boolean success = SensorManager.getRotationMatrix(R, null, mGravity, mGeomagnetic);
 	        
 	    		if(success) {
+	    			/*  azimuth/yaw - z - nose lefto or right, axis from ground to sky
+	    			 *  pitch - x - nose up or down, axis from wing to wing
+	    			 *  roll - y - rotation about an axis running from nose to tail
+	    			 *  http://en.wikipedia.org/wiki/Aircraft_principal_axes
+	    			 */
 	    			float orientation[] = new float[3];
 	    			mOrientation = SensorManager.getOrientation(R, orientation);
 	    			
@@ -125,7 +129,8 @@ public class YAchseActivity extends Activity {
         mSensorManager.registerListener(listenerAccelerometer, sensorAccelerometer, SensorManager.SENSOR_DELAY_UI);
         mSensorManager.registerListener(listenerMagnetometer, sensorMagnetometer, SensorManager.SENSOR_DELAY_UI);
     }
-    
+	
+	    
     @Override
     protected void onStop() {
         mSensorManager.unregisterListener(listenerOrientation);
