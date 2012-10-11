@@ -10,6 +10,7 @@ public class MainActivity extends Activity {
 
 	private Button btSensor;
 	private Button btYAchse;
+	private Button btCheckSensor;
 	
 	 @Override
 	 public void onCreate(Bundle savedInstanceState) {
@@ -28,6 +29,14 @@ public class MainActivity extends Activity {
 	        btYAchse.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
 					Intent intent = new Intent(MainActivity.this, YAchseActivity.class);
+			        startActivity(intent);
+				}
+			});
+	        
+	        btCheckSensor = (Button) findViewById(R.id.btCheckSensor);
+	        btCheckSensor.setOnClickListener(new View.OnClickListener() {
+				public void onClick(View v) {
+					Intent intent = new Intent(MainActivity.this, CheckSensorActivity.class);
 			        startActivity(intent);
 				}
 			});
