@@ -1,5 +1,7 @@
 package android.alliance.sensors;
 
+import android.alliance.sensors.average.IAverage;
+import android.alliance.sensors.average.MovingAverage;
 import android.app.Activity;
 import android.content.Context;
 import android.hardware.Sensor;
@@ -30,13 +32,8 @@ public class SensorActivity extends Activity {
 	private float[] valuesDelta = new float[3];
 	private float[] valuesOldPeak = new float[3];
 	
+	private IAverage movingAverage = new MovingAverage(5);
 
-	/*
-	 * time smoothing constant for low-pass filter
-	 * 0 <= alpha <= 1 ; a smaller value basically means more smoothing
-	 * See: http://en.wikipedia.org/wiki/Low-pass_filter#Discrete-time_realization
-	 */
-	static final float ALPHA = 0.15f;
 	static final float TRESHOLD = 1.5f;
 
 	@Override
@@ -64,6 +61,8 @@ public class SensorActivity extends Activity {
 		sensorAccel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 		sensorEventListenerAccel = new SensorEventListener() {
 
+			int max = 0;
+			
 			public void onSensorChanged(SensorEvent event) {
 				float[] values = event.values;
 				
@@ -71,17 +70,23 @@ public class SensorActivity extends Activity {
 				tvY.setText(Float.toString(values[1]));
 				tvZ.setText(Float.toString(values[2]));
 				
-				valuesAccelSmooth = lowPass(values.clone(), valuesAccelSmooth);
-				
-				tvXS.setText(Float.toString(valuesAccelSmooth[0]));
-				tvYS.setText(Float.toString(valuesAccelSmooth[1]));
-				tvZS.setText(Float.toString(valuesAccelSmooth[2]));
-				
-				delta(valuesOldPeak, valuesAccelSmooth, valuesDelta);
-				
-				if(valuesDelta[0] > TRESHOLD || valuesDelta[1] > TRESHOLD || valuesDelta[2] > TRESHOLD) {
-					SensorApplication.getInstance().addConsoleLine("dx:" + valuesDelta[0] + "  dy:" + valuesDelta[1] + "  dz:" + valuesDelta[2], tvConsole);
-					valuesOldPeak = valuesAccelSmooth.clone();
+				if(max == 2) {
+					max = 0;
+					
+					movingAverage.getAverage(values, valuesAccelSmooth);
+					
+					tvXS.setText(Float.toString(valuesAccelSmooth[0]));
+					tvYS.setText(Float.toString(valuesAccelSmooth[1]));
+					tvZS.setText(Float.toString(valuesAccelSmooth[2]));
+					
+					delta(valuesOldPeak, valuesAccelSmooth, valuesDelta);
+					
+					if(valuesDelta[0] > TRESHOLD || valuesDelta[1] > TRESHOLD || valuesDelta[2] > TRESHOLD) {
+						SensorApplication.getInstance().addConsoleLine("dx:" + valuesDelta[0] + "  dy:" + valuesDelta[1] + "  dz:" + valuesDelta[2], tvConsole);
+						valuesOldPeak = valuesAccelSmooth.clone();
+					}
+				} else {
+					max++;
 				}
 			}
 
@@ -101,19 +106,6 @@ public class SensorActivity extends Activity {
 	protected void onPause() {
 		sensorManager.unregisterListener(sensorEventListenerAccel);
 		super.onPause();
-	}
-	
-	/**
-	 * @see http://en.wikipedia.org/wiki/Low-pass_filter#Algorithmic_implementation
-	 * @see http://developer.android.com/reference/android/hardware/SensorEvent.html#values
-	 */
-	private float[] lowPass( float[] input, float[] output ) {
-	    if ( output == null ) return input;
-	     
-	    for ( int i=0; i<input.length; i++ ) {
-	        output[i] = output[i] + ALPHA * (input[i] - output[i]);
-	    }
-	    return output;
 	}
 	
 	private void delta(float[] a, float[] b, float[] delta) {
