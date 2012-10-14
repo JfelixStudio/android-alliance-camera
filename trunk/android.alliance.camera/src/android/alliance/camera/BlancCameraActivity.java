@@ -26,6 +26,7 @@ public class BlancCameraActivity extends Activity { //implements Callback {
 	 * CameraInfo.CAMERA_FACING_FRONT = 1 */
 	private Integer cameraFacing = null;
 
+	private boolean useAlternativeFacing = false;
 	
 	private AllianceCamera allianceCamera;
 	
@@ -43,6 +44,7 @@ public class BlancCameraActivity extends Activity { //implements Callback {
 		Bundle extras = getIntent().getExtras(); 
 		if(extras != null) {
 			cameraFacing = extras.getInt(AllianceCamera.INTENT_KEY_INITIAL_CAMERA_FACING, CameraInfo.CAMERA_FACING_BACK);
+			useAlternativeFacing = extras.getBoolean(AllianceCamera.INTENT_KEY_USE_ALTERNATIVE_FACING, false);
 		}
 		
 		display = ((WindowManager) this.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
@@ -51,7 +53,7 @@ public class BlancCameraActivity extends Activity { //implements Callback {
 
 		surfaceView = (SurfaceView) findViewById(R.id.sv_camera);
 
-		allianceCamera = new AllianceCamera(this, surfaceView, cameraFacing);
+		allianceCamera = new AllianceCamera(this, surfaceView, cameraFacing, useAlternativeFacing);
 	}
 
 	@Override
@@ -83,7 +85,7 @@ public class BlancCameraActivity extends Activity { //implements Callback {
 		Log.d("#", "onStop()");
 		super.onStop();
 		
-		// TODO: sollte das nicht in onPause()?
+		// TODO: sollte das nicht in onPause()? Ist aber schon in onSurfaceDestroyed
 		allianceCamera.camRelease();
 	}
 	
