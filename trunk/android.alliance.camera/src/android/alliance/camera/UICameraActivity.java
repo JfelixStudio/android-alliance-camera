@@ -180,6 +180,8 @@ public class UICameraActivity extends Activity {
 		rotateView(ib1, degree);
 		rotateView(ib2, degree);
 
+		
+//		rotateView(ibLeft0, degree);	// not rotated to see the difference
 		rotateView(ibLeft1, degree);
 		rotateView(ibLeft2, degree);
 		
