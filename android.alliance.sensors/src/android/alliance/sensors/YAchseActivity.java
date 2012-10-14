@@ -28,7 +28,10 @@ public class YAchseActivity extends Activity {
 	
 	float[] mGravity = new float[3];
     float[] mGeomagnetic = new float[3];
-    float[] mOrientation = new float[3];
+    
+    float[] mOrientationRadian = new float[3];
+    float[] mOrientationDegree = new float[3];
+    
 
 	private SensorEventListener listenerAccelerometer;
 
@@ -48,7 +51,7 @@ public class YAchseActivity extends Activity {
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         
         /*
-         * Hier werden die korrekten Werte ausgelesen
+         *
          * TODO: Seit wann deprecated, und warum
          */
         sensorOrientation = mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
@@ -65,10 +68,6 @@ public class YAchseActivity extends Activity {
         };
         
         
-        
-        /*
-         * Hier werden die falschen Werte ausgelesen 
-         */
         sensorAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         listenerAccelerometer = new SensorEventListener(){
 
@@ -91,8 +90,6 @@ public class YAchseActivity extends Activity {
 				mGeomagnetic = event.values;
 				
 				txValueMag.setText(String.valueOf(mGeomagnetic[0] + "\n" + mGeomagnetic[1] + "\n" + mGeomagnetic[2]));
-				
-				calculateOrientation();
 			}
 
 			public void onAccuracyChanged(Sensor sensor, int accuracy) {
@@ -101,6 +98,9 @@ public class YAchseActivity extends Activity {
         
 	 }
 	 
+	 /**
+	  * Gets called just from the accelerometer event becaus the frequency is enough.
+	  */
 	 private void calculateOrientation() {
 		 	// this method is called from 3 independant threads, therefore it should get synchronized 
 		 	synchronized (this) {
@@ -114,18 +114,33 @@ public class YAchseActivity extends Activity {
 	    			 *  http://en.wikipedia.org/wiki/Aircraft_principal_axes
 	    			 */
 	    			float orientation[] = new float[3];
-	    			mOrientation = SensorManager.getOrientation(R, orientation);
-	    			txValueOrientation.setText("azimuth Z: "+ radianToDegree(mOrientation[0]) + "\npitch      X: " + mOrientation[1] + "\nroll        Y: " + mOrientation[2]);
+	    			mOrientationRadian = SensorManager.getOrientation(R, orientation);
+	    			radianToDegree(mOrientationRadian, mOrientationDegree);
+	    			
+	    			txValueOrientation.setText("azimuth Z: "+ mOrientationDegree[0] + "\npitch      X: " + mOrientationDegree[1] + "\nroll        Y: " + mOrientationDegree[2]);
 	    		}
 		 	}
 	 }
 	 
 	 /** 
-	  * Converts the unit radian to degree. 1Pi = 180°
+	  * Converts the unit radian to degree. Pi = 3.1415... = 180°
 	  * http://en.wikipedia.org/wiki/Radian 
 	  */
 	 private float radianToDegree(float radian) {
 		 return radian*(180/3.1415926f);
+	 }
+	 
+	 /** 
+	  * Converts the unit radian to degree. Pi = 3.1415... = 180°
+	  * http://en.wikipedia.org/wiki/Radian 
+	  */
+	 private float[] radianToDegree(float[] radians, float[] degrees) {
+		 
+		 degrees[0] = radians[0]*(180/3.1415926f);
+		 degrees[1] = radians[1]*(180/3.1415926f);
+		 degrees[2] = radians[2]*(180/3.1415926f);
+		 
+		 return degrees;
 	 }
 	 
 	@Override
