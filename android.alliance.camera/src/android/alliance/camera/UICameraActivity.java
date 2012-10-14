@@ -1,6 +1,5 @@
 package android.alliance.camera;
 
-import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.hardware.Camera.CameraInfo;
@@ -162,11 +161,12 @@ public class UICameraActivity extends Activity {
 	}
 	
 	private void rotateView(View view, float degree) {
+		// TODO: 90° kommen von der landscape orientation und sollten dynamisch ausgelesen werden
 		Animation an = new RotateAnimation(0.0f, -(degree+90), view.getWidth()/2, view.getHeight()/2);
 
 	    an.setDuration(0);
 	    an.setRepeatCount(0);
-	    an.setFillAfter(true);     // keep rotation after animation
+	    an.setFillAfter(true);
 	    
 	    view.startAnimation(an);
 	}
