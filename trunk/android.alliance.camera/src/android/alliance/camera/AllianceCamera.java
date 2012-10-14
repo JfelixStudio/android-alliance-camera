@@ -258,6 +258,13 @@ public class AllianceCamera implements Callback {
 			}
 		}
 		
+		/**
+		 * good source: http://www.java2s.com/Code/Android/Hardware/Gettheoptimalpreviewsizeforthegivenscreensize.htm
+		 * @param width
+		 * @param height
+		 * @param supportedPreviewSizes
+		 * @return
+		 */
 		private Camera.Size getBestPreviewSize(int width, int height, List<Size> supportedPreviewSizes) {
 			Camera.Size result = null;
 

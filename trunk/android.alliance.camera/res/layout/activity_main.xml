@@ -9,7 +9,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="BlancCamera" />
-
+
+    <Button
+        android:id="@+id/btUICamera"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="UICamera" />
     <Button
         android:id="@+id/btAllianceCamera"
         android:layout_width="match_parent"
