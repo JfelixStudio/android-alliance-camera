@@ -2,20 +2,13 @@ package android.alliance.camera;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.graphics.ImageFormat;
-import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
-import android.hardware.Camera.Parameters;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
-import android.view.SurfaceHolder;
-import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 /**
  * 
