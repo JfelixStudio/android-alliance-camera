@@ -29,6 +29,11 @@ public class UICameraActivity extends Activity {
 	private ImageButton ib1;
 	private ImageButton ib2;
 
+	private ImageButton ibLeft0;
+	private ImageButton ibLeft1;
+	private ImageButton ibLeft2;
+	
+
 	/**
 	 * CameraInfo.CAMERA_FACING_BACK = 0 <br>
 	 * CameraInfo.CAMERA_FACING_FRONT = 1 */
@@ -73,6 +78,23 @@ public class UICameraActivity extends Activity {
 		});
 		ib1 = (ImageButton) findViewById(R.id.ib1);
 		ib2 = (ImageButton) findViewById(R.id.ib2);
+
+		ibLeft0 = (ImageButton) findViewById(R.id.ibLeft0);
+		ibLeft1 = (ImageButton) findViewById(R.id.ibLeft1);
+		ibLeft2 = (ImageButton) findViewById(R.id.ibLeft2);
+		ibLeft2.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				View view = findViewById(R.id.leftMenuLevel1);
+				
+				if(view.getVisibility() == View.VISIBLE) {
+					view.setVisibility(View.INVISIBLE);
+				} else
+				if(view.getVisibility() == View.INVISIBLE) {
+					view.setVisibility(View.VISIBLE);
+				}
+			}
+		});
 		
         
         /* Helper class for receiving notifications from the SensorManager when the orientation of the device has changed.
@@ -157,6 +179,9 @@ public class UICameraActivity extends Activity {
 		rotateView(ib0, degree);
 		rotateView(ib1, degree);
 		rotateView(ib2, degree);
+
+		rotateView(ibLeft1, degree);
+		rotateView(ibLeft2, degree);
 		
 	}
 	
