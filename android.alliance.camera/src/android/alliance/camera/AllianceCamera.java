@@ -1,11 +1,14 @@
 package android.alliance.camera;
 
+import java.util.List;
+
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
+import android.hardware.Camera.Size;
 import android.util.Log;
 import android.view.Display;
 import android.view.SurfaceHolder;
@@ -26,7 +29,7 @@ public class AllianceCamera implements Callback {
 	private Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
 	private SurfaceView surfaceView;
 	private Parameters parameters;
-	private Display display = null;
+//	private Display display = null;
 
 	/**
 	 * CameraInfo.CAMERA_FACING_BACK = 0 <br>
@@ -232,6 +235,11 @@ public class AllianceCamera implements Callback {
 				parameters.setPictureFormat(ImageFormat.JPEG);
 
 				// Setze BestPreviewSize
+				// display.width is deprecated was für Alternativen gibt es? die View die als Zeichenfläche dient
+				int widthSurface = surfaceView.getWidth();
+				int heightSurface = surfaceView.getHeight();
+				getBestPreviewSize(widthSurface, heightSurface, parameters.getSupportedPreviewSizes());
+				
 				// Setze BestPictureSize
 				// Init Autofocus
 
@@ -245,9 +253,30 @@ public class AllianceCamera implements Callback {
 			if (camera != null) {
 				camera.stopPreview();
 				camera.setPreviewCallback(null);
-				camera.release(); // Speicher freigeben
+				camera.release(); // Speicher freigeben ? wieso speicher freigeben
 				camera = null;
 			}
+		}
+		
+		private Camera.Size getBestPreviewSize(int width, int height, List<Size> supportedPreviewSizes) {
+			Camera.Size result = null;
+
+			for (Size size : supportedPreviewSizes) {
+				if (size.width <= width && size.height <= height) {
+					if (result == null) {
+						result = size;
+					} else {
+						int resultArea = result.width * result.height;
+						int newArea = size.width * size.height;
+
+						if (newArea > resultArea) {
+							result = size;
+						}
+					}
+				}
+			}
+
+			return (result);
 		}
 
 }
