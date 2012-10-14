@@ -10,20 +10,63 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
     
-    <LinearLayout
+    
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	    android:layout_width="wrap_content"
-	    android:layout_height="match_parent" 
-	    android:layout_gravity="left"
-	    android:orientation="vertical"
-	    android:background="#44000000">
-	    
-        <ImageButton
-		    android:id="@+id/ibLeft0"
+	    android:layout_height="fill_parent" 
+	    android:layout_gravity="left">
+    
+	    <LinearLayout
+	        android:id="@+id/leftMenu"
 		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:src="@android:drawable/ic_menu_crop" />
-        
-    </LinearLayout>
+		    android:layout_height="match_parent" 
+		    android:orientation="vertical"
+		    android:background="#44000000">
+		    
+	        <ImageButton
+			    android:id="@+id/ibLeft0"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:src="@android:drawable/ic_menu_crop" />
+	        
+	        <ImageButton
+			    android:id="@+id/ibLeft1"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:src="@android:drawable/ic_menu_edit" />
+	        
+	        <ImageButton
+			    android:id="@+id/ibLeft2"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:src="@android:drawable/ic_menu_preferences" />
+	        
+	    </LinearLayout>
+	    
+	     <LinearLayout
+	         android:id="@+id/leftMenuLevel1"
+		    android:layout_width="wrap_content"
+		    android:layout_height="match_parent" 
+		    android:orientation="vertical"
+		    android:background="#66000000"
+		    android:layout_toRightOf="@+id/leftMenu"
+		    android:visibility="invisible">
+	        
+	         <ImageButton
+			    android:id="@+id/ibLeft11"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:src="@android:drawable/ic_menu_close_clear_cancel" />
+	         
+	         <ImageButton
+			    android:id="@+id/ibLeft12"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:src="@android:drawable/ic_menu_gallery" />
+	         
+	      </LinearLayout>
+	
+	</RelativeLayout>
 
 	<LinearLayout
 	    android:layout_width="wrap_content"
