@@ -17,8 +17,8 @@ public class SensorAutoFocus extends AutoFocus {
 	private Sensor sensorMagnetometer;
 	private SensorEventListener listenerMagnetometer;
 	
-	float[] mGravity;
-    float[] mGeomagnetic;
+	float[] mGravity = new float[3];
+    float[] mGeomagnetic = new float[3];
     float[] mOrientation;
     private IAverage averageGravity = new LowPassAverage(0.2f);
 	
@@ -55,8 +55,7 @@ public class SensorAutoFocus extends AutoFocus {
 
 	@Override
 	public void startTask() {
-		task = new IntervalAutoFocusAsyncTask();
-		task.execute(this, this, this);
+		
 	}
 	
 	@Override
@@ -94,7 +93,7 @@ public class SensorAutoFocus extends AutoFocus {
 			
 			if(valuesDelta[0] > TRESHOLD || valuesDelta[1] > TRESHOLD || valuesDelta[2] > TRESHOLD) {
 				
-				
+				autoFocus();
 				
 				valuesOldPeak = mOrientation.clone();
 			}

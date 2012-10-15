@@ -1,7 +1,6 @@
 package android.alliance.focus;
 
 import android.hardware.Camera;
-import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -29,7 +28,8 @@ public abstract class AutoFocus implements Camera.AutoFocusCallback {
 		startTask();
 	}
 	
-	/** Create a AsyncTask and execute it. */
+	/** Gets called when startAutoFocus() is completed.<br> 
+	 * Create a AsyncTask and execute it. */
 	public abstract void startTask();
 	
 	public void stopAutoFocus() {
@@ -39,11 +39,13 @@ public abstract class AutoFocus implements Camera.AutoFocusCallback {
 	}
 	
 	public void autoFocus() {
-		mFocusState = FOCUSING;
-		updateFocusIndicator();
-
-		if(camera != null) {
-			camera.autoFocus(this);
+		if(mFocusState != FOCUSING) {
+			mFocusState = FOCUSING;
+			updateFocusIndicator();
+	
+			if(camera != null) {
+				camera.autoFocus(this);
+			}
 		}
 	}
 
