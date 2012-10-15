@@ -142,7 +142,7 @@
          android:id="@+id/textViewConsole"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
-         android:text="Consol"
+         android:text="Console:"
          android:textAppearance="?android:attr/textAppearanceMedium" />
      
      <ScrollView

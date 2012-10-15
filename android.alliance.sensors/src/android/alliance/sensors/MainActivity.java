@@ -11,6 +11,7 @@ public class MainActivity extends Activity {
 	private Button btSensor;
 	private Button btYAchse;
 	private Button btCheckSensor;
+	private Button btProximitySensor;
 	
 	 @Override
 	 public void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,14 @@ public class MainActivity extends Activity {
 	        btCheckSensor.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
 					Intent intent = new Intent(MainActivity.this, CheckSensorActivity.class);
+			        startActivity(intent);
+				}
+			});
+	        
+	        btProximitySensor = (Button) findViewById(R.id.btProximitySensor);
+	        btProximitySensor.setOnClickListener(new View.OnClickListener() {
+				public void onClick(View v) {
+					Intent intent = new Intent(MainActivity.this, ProximityActivity.class);
 			        startActivity(intent);
 				}
 			});
