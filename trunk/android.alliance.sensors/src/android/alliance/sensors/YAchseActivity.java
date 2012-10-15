@@ -1,13 +1,14 @@
 package android.alliance.sensors;
 
+import android.alliance.sensors.average.IAverage;
+import android.alliance.sensors.average.MovingAverage;
 import android.app.Activity;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 public class YAchseActivity extends Activity {
@@ -18,6 +19,7 @@ public class YAchseActivity extends Activity {
     private TextView txValueOrientation;
     private TextView txValueMag;
 	private TextView txValueAcc;
+	private TextView tvConsole;
     
     private SensorEventListener listenerOrientation = null;
 	private Sensor sensorOrientation;
@@ -26,12 +28,17 @@ public class YAchseActivity extends Activity {
 	private Sensor sensorAccelerometer;
 	private Sensor sensorMagnetometer;
 	
-	float[] mGravity = new float[3];
+	private float[] mGravity = new float[3];
+	private IAverage averageGravity = new MovingAverage(7);
+	
     float[] mGeomagnetic = new float[3];
     
     float[] mOrientationRadian = new float[3];
     float[] mOrientationDegree = new float[3];
+    private float[] valuesDelta = new float[3];
+	private float[] valuesOldPeak = new float[3];
     
+	static final float TRESHOLD = 18f;
 
 	private SensorEventListener listenerAccelerometer;
 
@@ -47,6 +54,13 @@ public class YAchseActivity extends Activity {
         txValueOrientation = (TextView) findViewById(R.id.valueOr);
         txValueMag= (TextView) findViewById(R.id.valueMag);
         txValueAcc = (TextView) findViewById(R.id.valueAcc);
+        tvConsole = (TextView) findViewById(R.id.tvConsole);
+        tvConsole.setOnLongClickListener(new View.OnLongClickListener() {
+			public boolean onLongClick(View v) {
+				SensorApplication.getInstance().clearConsole(tvConsole);
+				return true;
+			}
+		});
         
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         
@@ -72,11 +86,12 @@ public class YAchseActivity extends Activity {
         listenerAccelerometer = new SensorEventListener(){
 
 			public void onSensorChanged(SensorEvent event) {
-				mGravity = event.values;
-				
-				txValueAcc.setText(String.valueOf(mGravity[0] + "\n" + mGravity[1] + "\n" + mGravity[2]));
-				
-				calculateOrientation();
+	//				mGravity = event.values;
+					averageGravity.getAverage(event.values, mGravity);
+					
+					txValueAcc.setText(String.valueOf(mGravity[0] + "\n" + mGravity[1] + "\n" + mGravity[2]));
+					
+					calculateOrientation();
 			}
 
 			public void onAccuracyChanged(Sensor sensor, int accuracy) {
@@ -118,6 +133,13 @@ public class YAchseActivity extends Activity {
 	    			radianToDegree(mOrientationRadian, mOrientationDegree);
 	    			
 	    			txValueOrientation.setText("azimuth Z: "+ mOrientationDegree[0] + "\npitch      X: " + mOrientationDegree[1] + "\nroll        Y: " + mOrientationDegree[2]);
+	    			
+	    			delta(valuesOldPeak, mOrientationDegree, valuesDelta);
+	    			
+	    			if(valuesDelta[0] > TRESHOLD || valuesDelta[1] > TRESHOLD || valuesDelta[2] > TRESHOLD) {
+						SensorApplication.getInstance().addConsoleLine("dx:" + valuesDelta[0] + "  dy:" + valuesDelta[1] + "  dz:" + valuesDelta[2], tvConsole);
+						valuesOldPeak = mOrientationDegree.clone();
+					}
 	    		}
 		 	}
 	 }
@@ -147,9 +169,9 @@ public class YAchseActivity extends Activity {
     protected void onResume() {
         super.onResume();
         
-        mSensorManager.registerListener(listenerOrientation, sensorOrientation, SensorManager.SENSOR_DELAY_UI);
-        mSensorManager.registerListener(listenerAccelerometer, sensorAccelerometer, SensorManager.SENSOR_DELAY_UI);
-        mSensorManager.registerListener(listenerMagnetometer, sensorMagnetometer, SensorManager.SENSOR_DELAY_UI);
+        mSensorManager.registerListener(listenerOrientation, sensorOrientation, SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(listenerAccelerometer, sensorAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(listenerMagnetometer, sensorMagnetometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
 	
 	    
@@ -161,4 +183,10 @@ public class YAchseActivity extends Activity {
         super.onPause();
     }
 
+    
+    private void delta(float[] a, float[] b, float[] delta) {
+		for ( int i=0; i<a.length; i++ ) {
+			delta[i] = Math.abs(a[i] - b[i]);
+		}
+	}
 }

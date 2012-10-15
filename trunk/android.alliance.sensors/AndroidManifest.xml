@@ -23,7 +23,7 @@
         </activity>
         <activity
             android:name=".SensorActivity"
-            android:label="Sensor"
+            android:label="Sensor.TYPE_ACCELEROMETER"
             android:configChanges="orientation|screenSize">
         </activity>
         
@@ -36,6 +36,12 @@
         <activity
 	        android:name=".CheckSensorActivity"
 	        android:label="CheckSensor"
+	        android:configChanges="orientation|screenSize"> 
+    	</activity>
+    	
+        <activity
+	        android:name=".ProximityActivity"
+	        android:label="Sensor.TYPE_PROXIMITY"
 	        android:configChanges="orientation|screenSize"> 
     	</activity>
         
