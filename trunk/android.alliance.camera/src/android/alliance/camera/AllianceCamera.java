@@ -1,6 +1,10 @@
 package android.alliance.camera;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -86,7 +90,8 @@ public class AllianceCamera implements Callback {
 		private void initCamera(SurfaceHolder holder) {
 			
 			try {
-			
+				
+				// Dieser Code wird unten ersetzt
 				camera = openCamera(cameraFacing);
 				if(camera == null && useAlternativeFacing) {
 					switch(cameraFacing) {
@@ -98,9 +103,13 @@ public class AllianceCamera implements Callback {
 						break;
 					}
 				}
+				
 			
 				if(camera != null){
-					camera.setPreviewDisplay(holder);	
+					camera.setPreviewDisplay(holder);
+					
+				} else {
+					throw new Exception();
 				}
 				
 			} catch (Exception e) {
@@ -117,113 +126,18 @@ public class AllianceCamera implements Callback {
 		 * @return initialized camera or null
 		 */
 		private Camera openCamera(int desiredFacing) {
-			Camera camera = null;
+			Camera cam = null;
+			
 			Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
 			int cameraCount = Camera.getNumberOfCameras();
 			for (int camIdx = 0; camIdx < cameraCount; camIdx++) {
 				Camera.getCameraInfo(camIdx, cameraInfo);
 				if (cameraInfo.facing == desiredFacing) {
-					camera = Camera.open(camIdx);
+					cam = Camera.open(camIdx);
 				}
 			}
-			return camera;
+			return cam;
 		}
-		
-
-		// TODO: Auswahl des Facings - über Intent?
-		// TODO: berücksichtigen das es keine front_facing gibt oder nur eine front_facing(nexus)!
-		// TODO: wo ist das exception handling am sinnvollsten?
-		private void initCamera1(SurfaceHolder holder) {
-			try {
-
-				boolean backCamAvailable = ctx.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
-				boolean frontCamAvailable = ctx.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FRONT);
-
-				boolean initBackCamera = false;
-				boolean initFrontCamera = false;
-				
-				/**
-				 * CAMERAFACING == NULL
-				 * 	 Hier wird die Rück-Kamera genommen, wenn diese nicht vorhanden ist, wird die Front-Kamera genommen
-				 * 
-				 * CAMERAFACING == CAMERA_FACING_BACK
-				 *   Es wird nur die Rück-Kamera genommen. Falls diese nicht zur Verfügung steht muß ein Dialog ausgegeben werden
-				 *   
-				 * CAMERAFACING == CAMERA_FACING_FRONT
-				 *   Es wird nur die Front-Kamera genommen. Falls diese nicht zur Verfügung steht muß ein Dialog ausgegeben werden
-				 */
-				if(cameraFacing == null){
-					initBackCamera = true;
-					initFrontCamera = true;
-				
-				} else if(cameraFacing == CameraInfo.CAMERA_FACING_BACK){
-					initBackCamera = true;
-					initFrontCamera = false;
-					
-				} else if(cameraFacing == CameraInfo.CAMERA_FACING_FRONT){
-					initBackCamera = false;
-					initFrontCamera = true;
-				}
-
-				
-				if(initBackCamera == true && initFrontCamera == false){
-					if(backCamAvailable){
-						camera = Camera.open();
-						
-					} else {
-						/**
-						 *  TODO: Dialog, das die Rück-Kamera nicht zur Verfügung steht 
-						 */
-					}
-				
-				} else if(initBackCamera == true && initFrontCamera == true){
-					
-					if(!backCamAvailable){
-						if(frontCamAvailable){
-							initCameraFront();
-						}
-						
-					} else {
-						camera = Camera.open();
-					}
-
-				} else if(initBackCamera == false && initFrontCamera == true){
-					
-					if(frontCamAvailable){
-						initCameraFront();
-					} else {
-						/**
-						 * TODO: Dialog, das die Front-Kamera nicht zur Verfügung steht 
-						 */
-					}
-				}
-				
-
-				if(camera != null){
-					camera.setPreviewDisplay(holder);	
-				}
-				
-			} catch (Exception e) {
-				camRelease();
-
-				Log.e("#", "Camera failed to open: " + e.getLocalizedMessage());
-				Toast.makeText(ctx, e.getLocalizedMessage(), Toast.LENGTH_LONG);
-			}
-		}
-
-		// Hier werden die Kameras ausgelesen und die
-		// Frontkamera initialisiert		
-		private void initCameraFront(){
-			Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
-			int cameraCount = Camera.getNumberOfCameras();
-			for (int camIdx = 0; camIdx < cameraCount; camIdx++) {
-				Camera.getCameraInfo(camIdx, cameraInfo);
-				if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-					camera = Camera.open(camIdx);
-				}
-			}
-		}
-		
 		
 		private void initCameraPreferences() {
 			if (camera != null) {
@@ -238,7 +152,12 @@ public class AllianceCamera implements Callback {
 				// display.width is deprecated was für Alternativen gibt es? die View die als Zeichenfläche dient
 				int widthSurface = surfaceView.getWidth();
 				int heightSurface = surfaceView.getHeight();
-				getBestPreviewSize(widthSurface, heightSurface, parameters.getSupportedPreviewSizes());
+				
+				Size optimalPreviewSize = getBestPreviewSize(widthSurface, heightSurface, parameters.getSupportedPreviewSizes());
+				
+				if(optimalPreviewSize != null){
+					parameters.setPreviewSize(optimalPreviewSize.width, optimalPreviewSize.height);	
+				}
 				
 				// Setze BestPictureSize
 				// Init Autofocus
@@ -265,25 +184,50 @@ public class AllianceCamera implements Callback {
 		 * @param supportedPreviewSizes
 		 * @return
 		 */
-		private Camera.Size getBestPreviewSize(int width, int height, List<Size> supportedPreviewSizes) {
-			Camera.Size result = null;
+		private Size getBestPreviewSize(int width, int height, List<Size> supportedPreviewSizes) {
+			Double sourceRatio = null;
 
-			for (Size size : supportedPreviewSizes) {
-				if (size.width <= width && size.height <= height) {
-					if (result == null) {
-						result = size;
-					} else {
-						int resultArea = result.width * result.height;
-						int newArea = size.width * size.height;
+	        if(width < height){
+                 sourceRatio = (double) width / height;
+	         } else {
+                 sourceRatio = (double) height / width;
+	         }
 
-						if (newArea > resultArea) {
-							result = size;
-						}
-					}
+	        int index = 0;
+	        Double lastRatioToCheck = null;
+
+	        for (Size size : supportedPreviewSizes) {
+
+	        	Double targetRatio = null;
+				
+				if(size.width > size.height){
+					sourceRatio = (double) size.width / size.height;
+				} else {
+					sourceRatio = (double) size.height / size.width;
 				}
-			}
+				
+	            if(lastRatioToCheck == null){
+                     lastRatioToCheck = targetRatio;
+                     index = 0;
 
-			return (result);
-		}
+	            } else {
+	            	// Because of Math.ab there gonves No negative ratio values
+	                double chkLastTarget = Math.abs(lastRatioToCheck);
+	                double chkCurrentTarget = Math.abs(targetRatio);
+
+	                double chkSource = Math.abs(sourceRatio);
+
+	                if(Math.abs(chkSource - chkCurrentTarget) < Math.abs(chkSource - chkLastTarget)){
+	                	lastRatioToCheck = targetRatio;
+	                    index = supportedPreviewSizes.indexOf(targetRatio);
+	                 }
+	             }
+	        }
+
+	        return supportedPreviewSizes.get(index);
+		}	        
+	        
+	        
+	        
 
 }
