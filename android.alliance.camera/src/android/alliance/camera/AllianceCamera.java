@@ -1,23 +1,18 @@
 package android.alliance.camera;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import android.alliance.helper.Exif;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.Size;
 import android.util.Log;
-import android.view.Display;
 import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.SurfaceHolder.Callback;
+import android.view.SurfaceView;
 import android.widget.Toast;
 
 public class AllianceCamera implements Callback {
@@ -33,7 +28,6 @@ public class AllianceCamera implements Callback {
 	private Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
 	private SurfaceView surfaceView;
 	private Parameters parameters;
-//	private Display display = null;
 
 	/**
 	 * CameraInfo.CAMERA_FACING_BACK = 0 <br>
@@ -227,7 +221,34 @@ public class AllianceCamera implements Callback {
 	        return supportedPreviewSizes.get(index);
 		}	        
 	        
-	        
-	        
+	    /**
+	     * Captures the image.
+	     * If the camera is focusing nothing happens.
+	     * If the last focus is more than ~10 seconds left, focus is triggered
+	     */
+	    public void capture() {
+	    	
+	    	// if focused otherwise focus
+	    	
+	    	// set rotation
+	    	Camera.Parameters localParameters = camera.getParameters();
+//			localParameters.setRotation(?);
+			camera.setParameters(localParameters);
+	    	
+			camera.takePicture(null, null, new PhotoCallback());
+	    }
+	    
+	    private class PhotoCallback implements Camera.PictureCallback {
+
+			@Override
+			public void onPictureTaken(byte[] data, Camera camera) {
+				
+				// gibt es eine Device das orientation in den exif-daten speichert?
+				int orientation = Exif.getOrientation(data);
+				Log.d("#", "onPictureTaken().orientation = " + orientation);
+				
+			}
+	    	
+	    }
 
 }
