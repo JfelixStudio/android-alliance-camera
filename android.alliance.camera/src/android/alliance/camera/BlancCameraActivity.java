@@ -19,7 +19,6 @@ public class BlancCameraActivity extends Activity { //implements Callback {
 
 	private Context ctx;
 	private SurfaceView surfaceView;
-//	private Display display = null;
 
 	/**
 	 * CameraInfo.CAMERA_FACING_BACK = 0 <br>
@@ -47,8 +46,6 @@ public class BlancCameraActivity extends Activity { //implements Callback {
 			useAlternativeFacing = extras.getBoolean(AllianceCamera.INTENT_KEY_USE_ALTERNATIVE_FACING, false);
 		}
 		
-//		display = ((WindowManager) this.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-
 		setContentView(R.layout.cameranew);
 
 		surfaceView = (SurfaceView) findViewById(R.id.sv_camera);
