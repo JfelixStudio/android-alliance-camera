@@ -78,6 +78,14 @@ public class UICameraActivity extends Activity {
 		});
 		ib1 = (ImageButton) findViewById(R.id.ib1);
 		ib2 = (ImageButton) findViewById(R.id.ib2);
+		ib2.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				allianceCamera.capture();
+			}
+		});
 
 		ibLeft0 = (ImageButton) findViewById(R.id.ibLeft0);
 		ibLeft1 = (ImageButton) findViewById(R.id.ibLeft1);

@@ -1,5 +1,10 @@
 package android.alliance.camera;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import android.alliance.helper.Exif;
@@ -10,6 +15,7 @@ import android.hardware.SensorManager;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.Size;
+import android.os.Environment;
 import android.util.Log;
 import android.view.OrientationEventListener;
 import android.view.SurfaceHolder;
@@ -142,6 +148,8 @@ public class AllianceCamera implements Callback {
 			Camera.getCameraInfo(camIdx, cameraInfo);
 			if (cameraInfo.facing == desiredFacing) {
 				cam = Camera.open(camIdx);
+				cameraId = camIdx;
+				break;
 			}
 		}
 		return cam;
@@ -196,7 +204,7 @@ public class AllianceCamera implements Callback {
 	 * @return
 	 */
 	private Size getBestPreviewSize(int width, int height, List<Size> supportedPreviewSizes) {
-		Double sourceRatio = null;
+		double sourceRatio;
 
 		if (width < height) {
 			sourceRatio = (double) width / height;
@@ -205,11 +213,11 @@ public class AllianceCamera implements Callback {
 		}
 
 		int index = 0;
-		Double lastRatioToCheck = null;
+		double lastRatioToCheck = 0.0d;
 
 		for (Size size : supportedPreviewSizes) {
 
-			Double targetRatio = null;
+			double targetRatio = 0.0d;
 
 			if (size.width > size.height) {
 				sourceRatio = (double) size.width / size.height;
@@ -217,7 +225,7 @@ public class AllianceCamera implements Callback {
 				sourceRatio = (double) size.height / size.width;
 			}
 
-			if (lastRatioToCheck == null) {
+			if (lastRatioToCheck == 0.0d) {
 				lastRatioToCheck = targetRatio;
 				index = 0;
 
@@ -255,7 +263,7 @@ public class AllianceCamera implements Callback {
 		public void onPictureTaken(byte[] data, Camera camera) {
 			Log.d("#", "onPictureTaken()");
 			
-			// gibt es eine Device das orientation in den exif-daten speichert?
+			// TODO: gibt es eine Device das orientation in den exif-daten speichert?
 			/*
 			 * The camera driver may set orientation in the EXIF header without
 			 * rotating the picture. Or the driver may rotate the picture and
@@ -266,6 +274,26 @@ public class AllianceCamera implements Callback {
 			int orientation = Exif.getOrientation(data);
 			Log.d("#", "onPictureTaken().orientation = " + orientation);
 
+			try {
+
+				String str = "IMG" + new SimpleDateFormat("_yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime()) + ".jpg";
+
+				File localFile1 = new File(Environment.getExternalStorageDirectory(), "/CamTest/");
+				localFile1.mkdirs();
+
+				File localFile2 = new File(localFile1, str);
+
+				FileOutputStream localFileOutputStream = new FileOutputStream(localFile2);
+
+				localFileOutputStream.write(data);
+				localFileOutputStream.flush();
+				localFileOutputStream.close();
+
+				camera.startPreview();
+//				startPreview();
+
+			} catch (IOException localIOException) {
+			}
 		}
 
 	}
@@ -307,8 +335,8 @@ public class AllianceCamera implements Callback {
 				mOrientation = orientation;
 
 				// TODO: cameraId muss noch belegt werden
-				android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
-				android.hardware.Camera.getCameraInfo(cameraId, info);
+				CameraInfo info = new Camera.CameraInfo();
+				Camera.getCameraInfo(cameraId, info);
 
 				int rotation = 0;
 				if (info.facing == CameraInfo.CAMERA_FACING_FRONT) {
@@ -318,7 +346,7 @@ public class AllianceCamera implements Callback {
 				}
 				Log.d("#", "AllianceOrientationEventListener.rotation = " + rotation);
 
-				Camera.Parameters localParameters = camera.getParameters();
+				Parameters localParameters = camera.getParameters();
 				/*
 				 * Sets the rotation angle in degrees relative to the
 				 * orientation of the camera. This affects the pictures returned
