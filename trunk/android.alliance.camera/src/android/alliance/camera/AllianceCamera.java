@@ -204,7 +204,7 @@ public class AllianceCamera implements Callback {
 
 			parameters.setPictureFormat(ImageFormat.JPEG);
 
-			Size optimalPreviewSize = CameraPreviewSizeHelper.getBestPreviewSize(surfaceView.getWidth(), surfaceView.getHeight(), parameters.getSupportedPreviewSizes());
+			Size optimalPreviewSize = CameraPreviewSizeHelper.getBestPreviewSize(surfaceView.getWidth(), surfaceView.getHeight(), parameters.getSupportedPreviewSizes(), CameraPreviewSizeHelper.ASPECT_TOLERANCE);
 
 			if (optimalPreviewSize != null) {
 				parameters.setPreviewSize(optimalPreviewSize.width, optimalPreviewSize.height);

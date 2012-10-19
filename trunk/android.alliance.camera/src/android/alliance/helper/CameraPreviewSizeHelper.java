@@ -6,6 +6,8 @@ import java.util.List;
 import android.hardware.Camera.Size;
 
 public class CameraPreviewSizeHelper {
+	
+	public static double ASPECT_TOLERANCE = 0.12;
 
 	/**
 	 * good source: http://www.java2s.com/Code/Android/Hardware/
@@ -16,7 +18,7 @@ public class CameraPreviewSizeHelper {
 	 * @param supportedPreviewSizes	the sizes reflect the orientation of the camera width > height
 	 * @return Size  
 	 */
-	public static Size getBestPreviewSize(int width, int height, List<Size> supportedPreviewSizes) {
+	public static Size getBestPreviewSize(int width, int height, List<Size> supportedPreviewSizes, double aspectTolerance) {
 
 		/*
 		 * if necessary, changes the values to the orientation of the camera
@@ -28,7 +30,7 @@ public class CameraPreviewSizeHelper {
 			width = tmpHeight;
 		}
 
-		double aspectTolerance = 0.12;
+//		double aspectTolerance = 0.12;
 		double sourceRatio = (double) width / height;
 		List<Size> bestSizesOnRatioAndTolerance = new ArrayList<Size>();
 		Size bestPreviewSize = null;
