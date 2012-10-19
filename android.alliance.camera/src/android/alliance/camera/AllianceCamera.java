@@ -19,13 +19,12 @@ import android.hardware.Camera.Size;
 import android.hardware.SensorManager;
 import android.os.Environment;
 import android.util.Log;
-import android.view.OrientationEventListener;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
 import android.widget.Toast;
 
-public class AllianceCamera implements Callback {
+public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 
 	/**
 	 * Intent key to send the initial camera facing. <br>
@@ -48,7 +47,7 @@ public class AllianceCamera implements Callback {
 	private Parameters parameters;
 	private int mOrientation;
 
-	private OrientationEventListener orientationListener;
+	private AllianceOrientationEventListener orientationListener;
 
 	/**
 	 * CameraInfo.CAMERA_FACING_BACK = 0 <br>
@@ -74,6 +73,8 @@ public class AllianceCamera implements Callback {
 		surfaceView.getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 
 		orientationListener = new AllianceOrientationEventListener(ctx, SensorManager.SENSOR_DELAY_NORMAL);
+		orientationListener.setCameraId(cameraId);
+		orientationListener.addOrientationChangedListeners(this);
 	}
 
 	// SurfaceHolder.Callback ////////////////////////////////
@@ -142,6 +143,7 @@ public class AllianceCamera implements Callback {
 			Log.e("#", "Camera failed to open: " + e.getLocalizedMessage());
 			Toast.makeText(ctx, e.getLocalizedMessage(), Toast.LENGTH_LONG);
 		}
+		orientationListener.setCameraId(cameraId);
 	}
 
 	/**
@@ -282,72 +284,10 @@ public class AllianceCamera implements Callback {
 				camera.startPreview();
 
 			} catch (IOException localIOException) {
+				// TODO
 			}
 		}
 
-	}
-
-	/**
-	 * Creates a new OrientationEventListener.
-	 * 
-	 * @param context
-	 *            for the OrientationEventListener.
-	 * @param rate
-	 *            at which sensor events are processed (see also
-	 *            {@link android.hardware.SensorManager SensorManager}). Use the
-	 *            default value of
-	 *            {@link android.hardware.SensorManager#SENSOR_DELAY_NORMAL
-	 *            SENSOR_DELAY_NORMAL} for simple screen orientation change
-	 *            detection.
-	 */
-	private class AllianceOrientationEventListener extends OrientationEventListener {
-
-		public AllianceOrientationEventListener(Context context, int rate) {
-			super(context, rate);
-		}
-
-		/*
-		 * Called when the orientation of the device has changed. Orientation
-		 * parameter is in degrees, ranging from 0 to 359. 0 degrees when the
-		 * device is oriented in its natural position.
-		 */
-		@Override
-		public void onOrientationChanged(int orientation) {
-			if (orientation == ORIENTATION_UNKNOWN)
-				return;
-
-			orientation = (orientation + 45) / 90 * 90;
-			if (orientation == 360) {
-				orientation = 0;
-			}
-
-			if (mOrientation != orientation) {
-				Log.d("#", "AllianceOrientationEventListener.orientation = " + orientation);
-
-				mOrientation = orientation;
-
-				// TODO: cameraId muss noch belegt werden
-				CameraInfo info = new Camera.CameraInfo();
-				Camera.getCameraInfo(cameraId, info);
-
-				int rotation = 0;
-				if (info.facing == CameraInfo.CAMERA_FACING_FRONT) {
-					rotation = (info.orientation - orientation + 360) % 360;
-				} else { // back-facing camera
-					rotation = (info.orientation + orientation) % 360;
-				}
-				Log.d("#", "AllianceOrientationEventListener.rotation = " + rotation);
-
-				Parameters localParameters = camera.getParameters();
-				/*
-				 * Sets the rotation angle in degrees relative to the
-				 * orientation of the camera. This affects the pictures returned
-				 * from JPEG android.hardware.Camera.PictureCallback.
-				 */
-				localParameters.setRotation(rotation);
-				camera.setParameters(localParameters);
-			}
-		}
 	}
 
 	public Parameters getCameraParameters() {
@@ -356,5 +296,25 @@ public class AllianceCamera implements Callback {
 
 	public void setCameraParameters(Parameters param) {
 		camera.setParameters(param);
+	}
+
+	// IAllianceOrientationChanged /////////////////////////
+	
+	@Override
+	public void onAllianceOrientationChanged(int orientation, int orientationType, int rotation) {
+		Log.d("#", "onAllianceOrientationChanged()");
+		
+		Parameters localParameters = camera.getParameters();
+		/*
+		 * Sets the rotation angle in degrees relative to the
+		 * orientation of the camera. This affects the pictures returned
+		 * from JPEG android.hardware.Camera.PictureCallback.
+		 */
+		localParameters.setRotation(rotation);
+		camera.setParameters(localParameters);
+	}
+	
+	public void addOrientationChangedListeners(IAllianceOrientationChanged listener) {
+		orientationListener.addOrientationChangedListeners(listener);
 	}
 }
