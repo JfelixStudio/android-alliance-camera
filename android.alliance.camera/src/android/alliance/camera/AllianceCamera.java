@@ -81,11 +81,15 @@ public class AllianceCamera implements Callback {
 
 	// SurfaceHolder.Callback ////////////////////////////////
 
+	/**
+	 * Called after onResume()
+	 */
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		Log.d("#", "surfaceCreated()");
 		initCamera(holder);
 		initCameraPreferences();
+		orientationListener.enable();
 	}
 
 	@Override
@@ -94,9 +98,14 @@ public class AllianceCamera implements Callback {
 		// do nothing
 	}
 
+	/**
+	 * Called after onPause()
+	 */
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		Log.d("#", "surfaceDestroyed()");
+
+		orientationListener.disable();
 		camRelease();
 	}
 
@@ -313,6 +322,9 @@ public class AllianceCamera implements Callback {
 				return;
 
 			orientation = (orientation + 45) / 90 * 90;
+			if(orientation == 360) {
+				orientation = 0;
+			}
 
 			if (mOrientation != orientation) {
 				Log.d("#", "AllianceOrientationEventListener.orientation = " + orientation);
