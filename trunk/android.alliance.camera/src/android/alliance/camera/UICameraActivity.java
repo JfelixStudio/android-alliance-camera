@@ -1,8 +1,13 @@
 package android.alliance.camera;
 
+import android.alliance.helper.FlashlightHelper;
+import android.alliance.helper.FlashlightHelper.FlashLightStatus;
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
+import android.hardware.Camera.Parameters;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +20,7 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 public class UICameraActivity extends Activity {
 	
@@ -32,8 +38,11 @@ public class UICameraActivity extends Activity {
 	private ImageButton ibLeft0;
 	private ImageButton ibLeft1;
 	private ImageButton ibLeft2;
-	
+	private ImageView ibFlashlight;
 
+	private ImageView zoomIn;
+	private ImageView zoomOut;
+	
 	/**
 	 * CameraInfo.CAMERA_FACING_BACK = 0 <br>
 	 * CameraInfo.CAMERA_FACING_FRONT = 1 */
@@ -42,6 +51,8 @@ public class UICameraActivity extends Activity {
 	private boolean useAlternativeFacing = false;
 	
 	private AllianceCamera allianceCamera;
+	
+	
 	
 	// Activity livecycle ///////////////////////////////
 	
@@ -104,6 +115,41 @@ public class UICameraActivity extends Activity {
 			}
 		});
 		
+		ibFlashlight = (ImageView) findViewById(R.id.ibFlashlight);
+		ibFlashlight.setImageResource(R.drawable.bt_flashlight_auto);
+		ibFlashlight.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				/*
+				 *  Setting Flashlight on Click. 
+				 *  If Flashlight:
+				 *  	auto 	  => set status. Check the mode in AllianceCamera on photo capture()
+				 *  	otherwise => set status and set FlashLight-Mode to Camera-Parameters
+				 */
+				if(FlashlightHelper.flashlightStatus.equals(FlashLightStatus.FLASHLIGHT_AUTO)){
+					FlashlightHelper.flashlightStatus = FlashLightStatus.FLASHLIGHT_ON;
+					ibFlashlight.setImageResource(R.drawable.bt_flashlight_on);
+						
+					Parameters param = FlashlightHelper.setFlashlightOn(allianceCamera.getCameraParameters());
+					allianceCamera.setCameraParameters(param);
+						
+				} else if(FlashlightHelper.flashlightStatus.equals(FlashLightStatus.FLASHLIGHT_ON)){
+					FlashlightHelper.flashlightStatus = FlashLightStatus.FLASHLIGHT_OFF;
+					ibFlashlight.setImageResource(R.drawable.bt_flashlight_off);
+					
+					Parameters param = FlashlightHelper.setFlashlightOff(allianceCamera.getCameraParameters());
+					allianceCamera.setCameraParameters(param);
+					
+				} else if(FlashlightHelper.flashlightStatus.equals(FlashLightStatus.FLASHLIGHT_OFF)){
+					FlashlightHelper.flashlightStatus = FlashLightStatus.FLASHLIGHT_AUTO;
+					ibFlashlight.setImageResource(R.drawable.bt_flashlight_auto);
+				}
+			}
+		});
+		
+		
+		
         
         /* Helper class for receiving notifications from the SensorManager when the orientation of the device has changed.
 		 * Used sensor type:			Sensor.TYPE_ACCELEROMETER
@@ -138,6 +184,17 @@ public class UICameraActivity extends Activity {
         	}
         };
         orientationEventListener.enable();
+        
+        initFlashlight();
+	}
+	
+	private void initFlashlight(){
+		boolean available = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
+		
+		if (!available) {
+			ibFlashlight.setVisibility(View.GONE);
+			FlashlightHelper.flashlightStatus = null;
+		} 
 	}
 
 	@Override
@@ -192,6 +249,7 @@ public class UICameraActivity extends Activity {
 //		rotateView(ibLeft0, degree);	// not rotated to see the difference
 		rotateView(ibLeft1, degree);
 		rotateView(ibLeft2, degree);
+		rotateView(ibFlashlight, degree);
 		
 	}
 	
@@ -205,4 +263,6 @@ public class UICameraActivity extends Activity {
 	    
 	    view.startAnimation(an);
 	}
+	
+
 }
