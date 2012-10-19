@@ -8,7 +8,7 @@ import android.hardware.Camera.Size;
 public class CameraPreviewSizeHelper {
 	
 	/**
-	 * The tolerance to find Sizes that belong to the same aspect ratio. <br>
+	 * The tolerance to find sizes that belong to the same aspect ratio group (16:9, 5:3, 3:2, 4:3). <br>
 	 * For example the HTC Sensation has for 16:9 three supported sizes  1.78(1280:720), 1.76(960:544), 1.67(800:480) which can get grouped with a tolerance of  0.11 
 	 */
 	public static double ASPECT_TOLERANCE = 0.12;
