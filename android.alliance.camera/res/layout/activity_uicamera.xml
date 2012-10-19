@@ -41,6 +41,12 @@
 			    android:layout_height="wrap_content"
 			    android:src="@android:drawable/ic_menu_preferences" />
 	        
+	        <ImageView
+	            android:id="@+id/ibFlashlight"
+	            android:scaleType="fitCenter"
+	            android:layout_width="match_parent"
+			    android:layout_height="wrap_content"/>
+			    
 	    </LinearLayout>
 	    
 	     <LinearLayout
@@ -95,4 +101,11 @@
 
 	</LinearLayout>
 	 
+	 <RelativeLayout
+	    android:id="@+id/layoutZoom"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content" 
+	    android:layout_gravity="top|center_horizontal">
+		
+	     </RelativeLayout>
 </FrameLayout>

@@ -110,7 +110,7 @@ public class AllianceCameraActivity extends Activity implements Callback {
 		wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
 		display = wm.getDefaultDisplay();
 
-		bmpFlashlight = BitmapFactory.decodeResource(this.getResources(), R.drawable.bt_flashlight);
+		bmpFlashlight = BitmapFactory.decodeResource(this.getResources(), R.drawable.bt_flashlight_on);
 		bmpZoomIn = BitmapFactory.decodeResource(this.getResources(), R.drawable.bt_zoomin);
 		bmpZoomOut = BitmapFactory.decodeResource(this.getResources(), R.drawable.bt_zoomout);
 		bmpShutter = BitmapFactory.decodeResource(this.getResources(), R.drawable.camshutter);

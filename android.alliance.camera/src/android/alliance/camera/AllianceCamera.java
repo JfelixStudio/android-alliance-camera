@@ -4,11 +4,16 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import android.alliance.helper.CameraPreviewSizeHelper;
 import android.alliance.helper.Exif;
+import android.alliance.helper.FlashlightHelper;
+import android.alliance.helper.FlashlightHelper.FlashLightStatus;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.hardware.SensorManager;
@@ -142,16 +147,44 @@ public class AllianceCamera implements Callback {
 	private Camera openCamera(int desiredFacing) {
 		Camera cam = null;
 
-		Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
-		int cameraCount = Camera.getNumberOfCameras();
-		for (int camIdx = 0; camIdx < cameraCount; camIdx++) {
-			Camera.getCameraInfo(camIdx, cameraInfo);
-			if (cameraInfo.facing == desiredFacing) {
-				cam = Camera.open(camIdx);
-				cameraId = camIdx;
-				break;
+		/*
+		 * Oh no, more bugs!
+		 * 
+		 * Hier mal in deutsch Alex :-)
+		 * 
+		 * Wenn ich die Back-Kamera über den Code im Else-Block öffne
+		 * sich die Preview öffnet und ich dann das Projekt im PreviewModus
+		 * nochmals deploye, dann schmiert die Kamera ab, es wird eine Exception
+		 * geworfen und camRelease() ausgeführt. Da die Kamera allerdings
+		 * null ist, kann nichts released werden und ich muß mein Telefon
+		 * neustarten, um die Kamera überhaupt nochmal nutzen zu können. 
+		 * Ohne Neustart geht es nicht mehr.
+		 * 
+		 * Verwendet man bei der Back-Facing-Kamera die Methode Camera.open() und
+		 * deployed das Projekt neu, dann schmiert nichts ab
+		 */
+		if(desiredFacing == cameraInfo.CAMERA_FACING_BACK){
+			/**
+		     * Creates a new Camera object to access the first back-facing camera on the
+		     * device. If the device does not have a back-facing camera, this returns
+		     * null.
+		     * @see #open(int)
+		     */
+			cam = Camera.open();
+		
+		} else {
+			Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
+			int cameraCount = Camera.getNumberOfCameras();
+			for (int camIdx = 0; camIdx < cameraCount; camIdx++) {
+				Camera.getCameraInfo(camIdx, cameraInfo);
+				if (cameraInfo.facing == desiredFacing) {
+					cam = Camera.open(camIdx);
+					cameraId = camIdx;
+					break;
+				}
 			}
 		}
+		
 		return cam;
 	}
 
@@ -164,20 +197,13 @@ public class AllianceCamera implements Callback {
 
 			parameters.setPictureFormat(ImageFormat.JPEG);
 
-			// Setze BestPreviewSize
-			// display.width is deprecated was für Alternativen gibt es? die
-			// View die als Zeichenfläche dient
-			int widthSurface = surfaceView.getWidth();
-			int heightSurface = surfaceView.getHeight();
-
-			Size optimalPreviewSize = getBestPreviewSize(widthSurface, heightSurface, parameters.getSupportedPreviewSizes());
+			Size optimalPreviewSize = CameraPreviewSizeHelper.getBestPreviewSize(surfaceView.getWidth(), surfaceView.getHeight(), parameters.getSupportedPreviewSizes());
 
 			if (optimalPreviewSize != null) {
 				parameters.setPreviewSize(optimalPreviewSize.width, optimalPreviewSize.height);
 			}
 
 			// Setze BestPictureSize
-			// Init Autofocus
 
 			camera.setParameters(parameters);
 
@@ -190,61 +216,14 @@ public class AllianceCamera implements Callback {
 			camera.stopPreview();
 			camera.setPreviewCallback(null);
 			camera.release(); // Speicher freigeben ? wieso speicher freigeben
-			camera = null;
 		}
+		
+		camera = null;
 	}
 
-	/**
-	 * good source: http://www.java2s.com/Code/Android/Hardware/
-	 * Gettheoptimalpreviewsizeforthegivenscreensize.htm
-	 * 
-	 * @param width
-	 * @param height
-	 * @param supportedPreviewSizes
-	 * @return
-	 */
-	private Size getBestPreviewSize(int width, int height, List<Size> supportedPreviewSizes) {
-		double sourceRatio;
-
-		if (width < height) {
-			sourceRatio = (double) width / height;
-		} else {
-			sourceRatio = (double) height / width;
-		}
-
-		int index = 0;
-		double lastRatioToCheck = 0.0d;
-
-		for (Size size : supportedPreviewSizes) {
-
-			double targetRatio = 0.0d;
-
-			if (size.width > size.height) {
-				sourceRatio = (double) size.width / size.height;
-			} else {
-				sourceRatio = (double) size.height / size.width;
-			}
-
-			if (lastRatioToCheck == 0.0d) {
-				lastRatioToCheck = targetRatio;
-				index = 0;
-
-			} else {
-				// Because of Math.ab there gonves No negative ratio values
-				double chkLastTarget = Math.abs(lastRatioToCheck);
-				double chkCurrentTarget = Math.abs(targetRatio);
-
-				double chkSource = Math.abs(sourceRatio);
-
-				if (Math.abs(chkSource - chkCurrentTarget) < Math.abs(chkSource - chkLastTarget)) {
-					lastRatioToCheck = targetRatio;
-					index = supportedPreviewSizes.indexOf(targetRatio);
-				}
-			}
-		}
-
-		return supportedPreviewSizes.get(index);
-	}
+	
+	
+	
 
 	/**
 	 * Captures the image. If the camera is focusing nothing happens. If the
@@ -252,15 +231,22 @@ public class AllianceCamera implements Callback {
 	 */
 	public void capture() {
 
-		// if focused otherwise focus
-
+		if (FlashlightHelper.flashlightStatus != null) {
+			if(FlashlightHelper.flashlightStatus.equals(FlashLightStatus.FLASHLIGHT_AUTO)){
+				FlashlightHelper.flashlightStatus = FlashLightStatus.FLASHLIGHT_ON;
+					
+				Parameters param = FlashlightHelper.setFlashlightAuto(parameters);
+				camera.setParameters(param);
+			} 
+		}
+		
 		camera.takePicture(null, null, new PhotoCallback());
 	}
 
 	private class PhotoCallback implements Camera.PictureCallback {
 
 		@Override
-		public void onPictureTaken(byte[] data, Camera camera) {
+		public void onPictureTaken(byte[] data, Camera cam) {
 			Log.d("#", "onPictureTaken()");
 			
 			// TODO: gibt es eine Device das orientation in den exif-daten speichert?
@@ -290,7 +276,6 @@ public class AllianceCamera implements Callback {
 				localFileOutputStream.close();
 
 				camera.startPreview();
-//				startPreview();
 
 			} catch (IOException localIOException) {
 			}
@@ -358,4 +343,11 @@ public class AllianceCamera implements Callback {
 		}
 	}
 
+	public Parameters getCameraParameters(){
+		return camera.getParameters();
+	}
+	
+	public void setCameraParameters(Parameters param){
+		camera.setParameters(param);
+	}
 }
