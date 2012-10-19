@@ -20,7 +20,7 @@ public class CameraPreviewSizeHelper {
 	 * @param width	of the SurfaceView
 	 * @param height of the SurfaceView
 	 * @param supportedPreviewSizes	the sizes reflect the orientation of the camera width > height
-	 * @param aspectTolerance 
+	 * @param aspectTolerance use CameraPreviewSizeHelper.ASPECT_TOLERANCE
 	 * @return Size  
 	 */
 	public static Size getBestPreviewSize(int width, int height, List<Size> supportedPreviewSizes, double aspectTolerance) {
@@ -49,8 +49,7 @@ public class CameraPreviewSizeHelper {
 		if (bestSizesOnRatioAndTolerance.isEmpty()) {
 			bestPreviewSize = getBestSizeOnRatio(sourceRatio, supportedPreviewSizes);
 
-			// Get tolerance-ratios and check with value nearest display width
-			// and height
+		// Get tolerance-ratios and check with value nearest display width
 		} else {
 			bestPreviewSize = getBestSizeOnWith(width, bestSizesOnRatioAndTolerance);
 		}
