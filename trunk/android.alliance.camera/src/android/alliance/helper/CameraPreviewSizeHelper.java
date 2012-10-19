@@ -11,10 +11,10 @@ public class CameraPreviewSizeHelper {
 	 * good source: http://www.java2s.com/Code/Android/Hardware/
 	 * Gettheoptimalpreviewsizeforthegivenscreensize.htm
 	 * 
-	 * @param width
-	 * @param height
-	 * @param supportedPreviewSizes
-	 * @return
+	 * @param width	of the SurfaceView
+	 * @param height of the SurfaceView
+	 * @param supportedPreviewSizes	the sizes reflect the orientation of the camera width > height
+	 * @return Size  
 	 */
 	public static Size getBestPreviewSize(int width, int height, List<Size> supportedPreviewSizes) {
 
