@@ -30,57 +30,70 @@ public class CameraPreviewSizeHelper {
 
 		double aspectTolerance = 0.12;
 		double sourceRatio = (double) width / height;
-		List<Size> lFilteredSizes = new ArrayList<Size>();
+		List<Size> bestSizesOnRatioAndTolerance = new ArrayList<Size>();
 		Size bestPreviewSize = null;
 
 		sourceRatio = Math.abs(sourceRatio);
 
-		// Check best ratio with respect to aspectTolerance
-		for (Size size : supportedPreviewSizes) {
-
-			double supportedRatio = (double) size.width / size.height;
-
-			if (Math.abs(sourceRatio - supportedRatio) < aspectTolerance) {
-				lFilteredSizes.add(size);
-			}
-		}
+		bestSizesOnRatioAndTolerance = getBestSizesOnRatioAndTolerance(sourceRatio, supportedPreviewSizes, aspectTolerance);
 
 		// Is there no ratios within aspectTolerance
 		// get best ratio without taking into account check screen width and
 		// height
-		if (lFilteredSizes.size() == 0) {
+		if (bestSizesOnRatioAndTolerance.isEmpty()) {
 			bestPreviewSize = getBestSizeOnRatio(sourceRatio, supportedPreviewSizes);
 
 			// Get tolerance-ratios and check with value nearest display width
 			// and height
 		} else {
-
-			double lastDiff = Double.MAX_VALUE;
-
-			for (Size size : lFilteredSizes) {
-
-				double diff = Math.abs(width - size.width);
-				if (diff < lastDiff) {
-					lastDiff = diff;
-					bestPreviewSize = size;
-				}
-			}
+			bestPreviewSize = getBestSizeOnWith(width, bestSizesOnRatioAndTolerance);
 		}
 
 		return bestPreviewSize;
 	}
 
-	private static Size getBestSizeOnRatio(double sourceRatio, List<Size> supportedPreviewSizes) {
+	private static Size getBestSizeOnRatio(double sourceRatio, List<Size> supportedSizes) {
 		Size bestSize = null;
 		double lastDiff = Double.MAX_VALUE;
 		
-		for (Size size : supportedPreviewSizes) {
+		for (Size size : supportedSizes) {
 			double supportedRatio = size.width / size.height;
 			
 			double diff = Math.abs(sourceRatio - supportedRatio);
 			if(diff < lastDiff) {
 				bestSize = size;
 				lastDiff = diff;
+			}
+		}
+		
+		return bestSize;
+	}
+	
+	private static List<Size> getBestSizesOnRatioAndTolerance(double sourceRatio, List<Size> supportedSizes, double tolerance) {
+		List<Size> bestSizes = new ArrayList<Size>();
+		
+		for (Size size : supportedSizes) {
+
+			double supportedRatio = (double) size.width / size.height;
+
+			if (Math.abs(sourceRatio - supportedRatio) < tolerance) {
+				bestSizes.add(size);
+			}
+		}
+		
+		return bestSizes;
+	}
+	
+	private static Size getBestSizeOnWith(int width, List<Size> supportedSizes) {
+		double lastDiff = Double.MAX_VALUE;
+		Size bestSize = null;
+
+		for (Size size : supportedSizes) {
+
+			double diff = Math.abs(width - size.width);
+			if (diff < lastDiff) {
+				lastDiff = diff;
+				bestSize = size;
 			}
 		}
 		
