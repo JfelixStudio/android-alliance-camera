@@ -1,6 +1,7 @@
 package android.alliance.sensors;
 
 import android.alliance.sensors.average.IAverage;
+import android.alliance.sensors.average.LowPassAverage;
 import android.alliance.sensors.average.MovingAverage;
 import android.app.Activity;
 import android.content.Context;
@@ -32,7 +33,8 @@ public class SensorActivity extends Activity {
 	private float[] valuesDelta = new float[3];
 	private float[] valuesOldPeak = new float[3];
 	
-	private IAverage movingAverage = new MovingAverage(5);
+	private IAverage movingAverage = new LowPassAverage(0.2f);
+//	private IAverage movingAverage = new MovingAverage(5);
 
 	static final float TRESHOLD = 1.5f;
 

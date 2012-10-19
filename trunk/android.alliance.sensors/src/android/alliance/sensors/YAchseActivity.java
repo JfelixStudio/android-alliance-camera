@@ -1,7 +1,7 @@
 package android.alliance.sensors;
 
 import android.alliance.sensors.average.IAverage;
-import android.alliance.sensors.average.MovingAverage;
+import android.alliance.sensors.average.LowPassAverage;
 import android.app.Activity;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -29,7 +29,8 @@ public class YAchseActivity extends Activity {
 	private Sensor sensorMagnetometer;
 	
 	private float[] mGravity = new float[3];
-	private IAverage averageGravity = new MovingAverage(7);
+	private IAverage averageGravity = new LowPassAverage(0.2f);
+//	private IAverage averageGravity = new MovingAverage(7);
 	
     float[] mGeomagnetic = new float[3];
     
@@ -38,7 +39,7 @@ public class YAchseActivity extends Activity {
     private float[] valuesDelta = new float[3];
 	private float[] valuesOldPeak = new float[3];
     
-	static final float TRESHOLD = 18f;
+	static final float TRESHOLD = 0.31f;
 
 	private SensorEventListener listenerAccelerometer;
 
@@ -134,11 +135,11 @@ public class YAchseActivity extends Activity {
 	    			
 	    			txValueOrientation.setText("azimuth Z: "+ mOrientationDegree[0] + "\npitch      X: " + mOrientationDegree[1] + "\nroll        Y: " + mOrientationDegree[2]);
 	    			
-	    			delta(valuesOldPeak, mOrientationDegree, valuesDelta);
+	    			delta(valuesOldPeak, mOrientationRadian, valuesDelta);
 	    			
 	    			if(valuesDelta[0] > TRESHOLD || valuesDelta[1] > TRESHOLD || valuesDelta[2] > TRESHOLD) {
 						SensorApplication.getInstance().addConsoleLine("dx:" + valuesDelta[0] + "  dy:" + valuesDelta[1] + "  dz:" + valuesDelta[2], tvConsole);
-						valuesOldPeak = mOrientationDegree.clone();
+						valuesOldPeak = mOrientationRadian.clone();
 					}
 	    		}
 		 	}
