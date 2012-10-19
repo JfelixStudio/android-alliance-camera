@@ -4,22 +4,19 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import android.alliance.helper.CameraPreviewSizeHelper;
 import android.alliance.helper.Exif;
 import android.alliance.helper.FlashlightHelper;
 import android.alliance.helper.FlashlightHelper.FlashLightStatus;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.graphics.ImageFormat;
 import android.hardware.Camera;
-import android.hardware.SensorManager;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.Size;
+import android.hardware.SensorManager;
 import android.os.Environment;
 import android.util.Log;
 import android.view.OrientationEventListener;
@@ -38,8 +35,8 @@ public class AllianceCamera implements Callback {
 	public static String INTENT_KEY_INITIAL_CAMERA_FACING = "InitialCameraFacing";
 
 	/**
-	 * Intent key to indicate if the camera can use an alternative facing
-	 * camera in case the desired is not available.
+	 * Intent key to indicate if the camera can use an alternative facing camera
+	 * in case the desired is not available.
 	 */
 	public static String INTENT_KEY_USE_ALTERNATIVE_FACING = "UseAlternativeFacing";
 
@@ -161,26 +158,27 @@ public class AllianceCamera implements Callback {
 		 * 
 		 * Hier mal in deutsch Alex :-)
 		 * 
-		 * Wenn ich die Back-Kamera über den Code im Else-Block öffne
-		 * sich die Preview öffnet und ich dann das Projekt im PreviewModus
-		 * nochmals deploye, dann schmiert die Kamera ab, es wird eine Exception
-		 * geworfen und camRelease() ausgeführt. Da die Kamera allerdings
-		 * null ist, kann nichts released werden und ich muß mein Telefon
-		 * neustarten, um die Kamera überhaupt nochmal nutzen zu können. 
-		 * Ohne Neustart geht es nicht mehr.
+		 * Wenn ich die Back-Kamera über den Code im Else-Block öffne sich die
+		 * Preview öffnet und ich dann das Projekt im PreviewModus nochmals
+		 * deploye, dann schmiert die Kamera ab, es wird eine Exception geworfen
+		 * und camRelease() ausgeführt. Da die Kamera allerdings null ist, kann
+		 * nichts released werden und ich muß mein Telefon neustarten, um die
+		 * Kamera überhaupt nochmal nutzen zu können. Ohne Neustart geht es
+		 * nicht mehr.
 		 * 
-		 * Verwendet man bei der Back-Facing-Kamera die Methode Camera.open() und
-		 * deployed das Projekt neu, dann schmiert nichts ab
+		 * Verwendet man bei der Back-Facing-Kamera die Methode Camera.open()
+		 * und deployed das Projekt neu, dann schmiert nichts ab
 		 */
-		if(desiredFacing == cameraInfo.CAMERA_FACING_BACK){
+		if (desiredFacing == cameraInfo.CAMERA_FACING_BACK) {
 			/**
-		     * Creates a new Camera object to access the first back-facing camera on the
-		     * device. If the device does not have a back-facing camera, this returns
-		     * null.
-		     * @see #open(int)
-		     */
+			 * Creates a new Camera object to access the first back-facing
+			 * camera on the device. If the device does not have a back-facing
+			 * camera, this returns null.
+			 * 
+			 * @see #open(int)
+			 */
 			cam = Camera.open();
-		
+
 		} else {
 			Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
 			int cameraCount = Camera.getNumberOfCameras();
@@ -193,7 +191,7 @@ public class AllianceCamera implements Callback {
 				}
 			}
 		}
-		
+
 		return cam;
 	}
 
@@ -226,13 +224,9 @@ public class AllianceCamera implements Callback {
 			camera.setPreviewCallback(null);
 			camera.release(); // Speicher freigeben ? wieso speicher freigeben
 		}
-		
+
 		camera = null;
 	}
-
-	
-	
-	
 
 	/**
 	 * Captures the image. If the camera is focusing nothing happens. If the
@@ -241,14 +235,14 @@ public class AllianceCamera implements Callback {
 	public void capture() {
 
 		if (FlashlightHelper.flashlightStatus != null) {
-			if(FlashlightHelper.flashlightStatus.equals(FlashLightStatus.FLASHLIGHT_AUTO)){
+			if (FlashlightHelper.flashlightStatus.equals(FlashLightStatus.FLASHLIGHT_AUTO)) {
 				FlashlightHelper.flashlightStatus = FlashLightStatus.FLASHLIGHT_ON;
-					
+
 				Parameters param = FlashlightHelper.setFlashlightAuto(parameters);
 				camera.setParameters(param);
-			} 
+			}
 		}
-		
+
 		camera.takePicture(null, null, new PhotoCallback());
 	}
 
@@ -257,8 +251,9 @@ public class AllianceCamera implements Callback {
 		@Override
 		public void onPictureTaken(byte[] data, Camera cam) {
 			Log.d("#", "onPictureTaken()");
-			
-			// TODO: gibt es eine Device das orientation in den exif-daten speichert?
+
+			// TODO: gibt es eine Device das orientation in den exif-daten
+			// speichert? Ja das Samsung Galaxy 10.1n
 			/*
 			 * The camera driver may set orientation in the EXIF header without
 			 * rotating the picture. Or the driver may rotate the picture and
@@ -322,7 +317,7 @@ public class AllianceCamera implements Callback {
 				return;
 
 			orientation = (orientation + 45) / 90 * 90;
-			if(orientation == 360) {
+			if (orientation == 360) {
 				orientation = 0;
 			}
 
@@ -355,11 +350,11 @@ public class AllianceCamera implements Callback {
 		}
 	}
 
-	public Parameters getCameraParameters(){
+	public Parameters getCameraParameters() {
 		return camera.getParameters();
 	}
-	
-	public void setCameraParameters(Parameters param){
+
+	public void setCameraParameters(Parameters param) {
 		camera.setParameters(param);
 	}
 }
