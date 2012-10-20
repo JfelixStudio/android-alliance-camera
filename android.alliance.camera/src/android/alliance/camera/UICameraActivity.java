@@ -1,5 +1,6 @@
 package android.alliance.camera;
 
+import android.alliance.focus.SensorAutoFocus;
 import android.alliance.helper.FlashlightHelper;
 import android.alliance.helper.FlashlightHelper.FlashLightStatus;
 import android.app.Activity;
@@ -43,7 +44,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 	private boolean useAlternativeFacing = false;
 
 	private AllianceCamera allianceCamera;
-
+	
 	// Activity livecycle ///////////////////////////////
 
 	@Override
