@@ -237,15 +237,6 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	 */
 	public void capture() {
 
-//		if (FlashlightHelper.flashlightStatus != null) {
-//			if (FlashlightHelper.flashlightStatus.equals(FlashLightStatus.FLASHLIGHT_AUTO)) {
-//				FlashlightHelper.flashlightStatus = FlashLightStatus.FLASHLIGHT_ON;
-//
-//				Parameters param = FlashlightHelper.setFlashlightAuto(parameters);
-//				camera.setParameters(param);
-//			}
-//		}
-
 		camera.takePicture(null, null, new PhotoCallback());
 	}
 
