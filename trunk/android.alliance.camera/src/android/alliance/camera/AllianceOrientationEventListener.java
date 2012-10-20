@@ -24,7 +24,7 @@ import android.view.OrientationEventListener;
  */
 public class AllianceOrientationEventListener extends OrientationEventListener {
 
-	private int mOrientation;
+	private int mOrientation = Integer.MAX_VALUE;
 	private int cameraId = CameraInfo.CAMERA_FACING_BACK;
 	
 	private List<IAllianceOrientationChanged> orientationChangedListeners = new ArrayList<IAllianceOrientationChanged>();
