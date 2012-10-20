@@ -24,6 +24,7 @@ import android.view.OrientationEventListener;
  */
 public class AllianceOrientationEventListener extends OrientationEventListener {
 
+	// Is set to max to generate an inital onAllianceOrientationChanged() callback that can be used to align the ui-buttons
 	private int mOrientation = Integer.MAX_VALUE;
 	private int cameraId = CameraInfo.CAMERA_FACING_BACK;
 	

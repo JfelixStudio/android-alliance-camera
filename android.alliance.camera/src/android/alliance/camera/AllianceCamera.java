@@ -71,7 +71,6 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		surfaceView.getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 
 		orientationListener = new AllianceOrientationEventListener(ctx, SensorManager.SENSOR_DELAY_NORMAL);
-		orientationListener.setCameraId(cameraId);
 		orientationListener.addOrientationChangedListeners(this);
 	}
 
@@ -85,6 +84,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		Log.d("#", "surfaceCreated()");
 		initCamera(holder);
 		initCameraPreferences();
+		orientationListener.setCameraId(cameraId);
 		orientationListener.enable();
 	}
 
