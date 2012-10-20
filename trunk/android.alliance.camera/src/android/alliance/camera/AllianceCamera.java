@@ -6,8 +6,11 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import android.alliance.focus.MyFocusRectangle;
+import android.alliance.focus.SensorAutoFocus;
 import android.alliance.helper.CameraPreviewSizeHelper;
 import android.alliance.helper.Exif;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.ImageFormat;
 import android.hardware.Camera;
@@ -53,8 +56,9 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	 * AllianceCamera.CAMERA_FACING_BACK_OR_FRONT
 	 */
 	private Integer cameraFacing = null;
-
 	private boolean useAlternativeFacing = false;
+	
+	private SensorAutoFocus sensorAutoFocus;
 
 	public AllianceCamera(Context ctx, SurfaceView surfaceView, int cameraFacing, boolean useAlternativeFacing) {
 		this.ctx = ctx;
@@ -86,6 +90,15 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		initCameraPreferences();
 		orientationListener.setCameraId(cameraId);
 		orientationListener.enable();
+		
+		if (sensorAutoFocus != null) {
+			sensorAutoFocus.setCamera(camera);
+			sensorAutoFocus.startAutoFocus();
+		} else {
+			MyFocusRectangle mFocusRectangle = (MyFocusRectangle) ((Activity)ctx).findViewById(R.id.focus_rectangle);
+			sensorAutoFocus = new SensorAutoFocus(camera, mFocusRectangle, ctx);
+			sensorAutoFocus.startAutoFocus();
+		}
 	}
 
 	@Override
@@ -101,6 +114,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		Log.d("#", "surfaceDestroyed()");
 
+		sensorAutoFocus.stopAutoFocus();
 		orientationListener.disable();
 		camRelease();
 	}
@@ -247,6 +261,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		}
 
 		camera = null;
+		sensorAutoFocus.setCamera(null);
 	}
 
 	/**
