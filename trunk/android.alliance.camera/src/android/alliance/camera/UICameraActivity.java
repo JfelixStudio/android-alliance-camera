@@ -107,35 +107,37 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		});
 		
 		ibFlashlight = (ImageView) findViewById(R.id.ibFlashlight);
-		ibFlashlight.setImageResource(R.drawable.bt_flashlight_auto);
 		ibFlashlight.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
+				
+				Parameters param = allianceCamera.getCameraParameters();
 				/*
 				 *  Setting Flashlight on Click. 
 				 *  If Flashlight:
 				 *  	auto 	  => set status. Check the mode in AllianceCamera on photo capture()
-				 *  	otherwise => set status and set FlashLight-Mode to Camera-Parameters
+				 *  	otherwise => set status and set FlashLightType-Mode to Camera-Parameters
 				 */
 				if(FlashlightHelper.flashlightStatus.equals(FlashLightStatus.FLASHLIGHT_AUTO)){
 					FlashlightHelper.flashlightStatus = FlashLightStatus.FLASHLIGHT_ON;
 					ibFlashlight.setImageResource(R.drawable.bt_flashlight_on);
 						
-					Parameters param = FlashlightHelper.setFlashlightOn(allianceCamera.getCameraParameters());
-					allianceCamera.setCameraParameters(param);
+					FlashlightHelper.setFlashMode(param);
 						
 				} else if(FlashlightHelper.flashlightStatus.equals(FlashLightStatus.FLASHLIGHT_ON)){
 					FlashlightHelper.flashlightStatus = FlashLightStatus.FLASHLIGHT_OFF;
 					ibFlashlight.setImageResource(R.drawable.bt_flashlight_off);
 					
-					Parameters param = FlashlightHelper.setFlashlightOff(allianceCamera.getCameraParameters());
-					allianceCamera.setCameraParameters(param);
+					FlashlightHelper.setFlashMode(param);
 					
 				} else if(FlashlightHelper.flashlightStatus.equals(FlashLightStatus.FLASHLIGHT_OFF)){
 					FlashlightHelper.flashlightStatus = FlashLightStatus.FLASHLIGHT_AUTO;
 					ibFlashlight.setImageResource(R.drawable.bt_flashlight_auto);
+					
+					FlashlightHelper.setFlashMode(param);
 				}
+				allianceCamera.setCameraParameters(param);
 			}
 		});
 

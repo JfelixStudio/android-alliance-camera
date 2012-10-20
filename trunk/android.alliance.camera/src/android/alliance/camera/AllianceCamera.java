@@ -231,19 +231,20 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	}
 
 	/**
-	 * Captures the image. If the camera is focusing nothing happens. If the
+	 * Captures the image. 
+	 * TODO: If the camera is focusing nothing happens. If the
 	 * last focus is more than ~10 seconds left, focus is triggered
 	 */
 	public void capture() {
 
-		if (FlashlightHelper.flashlightStatus != null) {
-			if (FlashlightHelper.flashlightStatus.equals(FlashLightStatus.FLASHLIGHT_AUTO)) {
-				FlashlightHelper.flashlightStatus = FlashLightStatus.FLASHLIGHT_ON;
-
-				Parameters param = FlashlightHelper.setFlashlightAuto(parameters);
-				camera.setParameters(param);
-			}
-		}
+//		if (FlashlightHelper.flashlightStatus != null) {
+//			if (FlashlightHelper.flashlightStatus.equals(FlashLightStatus.FLASHLIGHT_AUTO)) {
+//				FlashlightHelper.flashlightStatus = FlashLightStatus.FLASHLIGHT_ON;
+//
+//				Parameters param = FlashlightHelper.setFlashlightAuto(parameters);
+//				camera.setParameters(param);
+//			}
+//		}
 
 		camera.takePicture(null, null, new PhotoCallback());
 	}
