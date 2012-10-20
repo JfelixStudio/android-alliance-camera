@@ -8,8 +8,6 @@ import java.util.Calendar;
 
 import android.alliance.helper.CameraPreviewSizeHelper;
 import android.alliance.helper.Exif;
-import android.alliance.helper.FlashlightHelper;
-import android.alliance.helper.FlashlightHelper.FlashLightStatus;
 import android.content.Context;
 import android.graphics.ImageFormat;
 import android.hardware.Camera;
@@ -45,7 +43,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	private Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
 	private SurfaceView surfaceView;
 	private Parameters parameters;
-	private int mOrientation;
+	// private int mOrientation;
 
 	private AllianceOrientationEventListener orientationListener;
 
@@ -105,6 +103,26 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 
 		orientationListener.disable();
 		camRelease();
+	}
+
+	// IAllianceOrientationChanged /////////////////////////
+
+	@Override
+	public void onAllianceOrientationChanged(int orientation, int orientationType, int rotation) {
+		Log.d("#", "onAllianceOrientationChanged()");
+
+		Parameters localParameters = camera.getParameters();
+		/*
+		 * Sets the rotation angle in degrees relative to the orientation of the
+		 * camera. This affects the pictures returned from JPEG
+		 * android.hardware.Camera.PictureCallback.
+		 */
+		localParameters.setRotation(rotation);
+		camera.setParameters(localParameters);
+	}
+
+	public void addOrientationChangedListeners(IAllianceOrientationChanged listener) {
+		orientationListener.addOrientationChangedListeners(listener);
 	}
 
 	// remaining methods ///////////////////////////////////////////////////
@@ -206,7 +224,8 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 
 			parameters.setPictureFormat(ImageFormat.JPEG);
 
-			Size optimalPreviewSize = CameraPreviewSizeHelper.getBestPreviewSize(surfaceView.getWidth(), surfaceView.getHeight(), parameters.getSupportedPreviewSizes(), CameraPreviewSizeHelper.ASPECT_TOLERANCE);
+			Size optimalPreviewSize = CameraPreviewSizeHelper.getBestPreviewSize(surfaceView.getWidth(), surfaceView.getHeight(), parameters.getSupportedPreviewSizes(),
+					CameraPreviewSizeHelper.ASPECT_TOLERANCE);
 
 			if (optimalPreviewSize != null) {
 				parameters.setPreviewSize(optimalPreviewSize.width, optimalPreviewSize.height);
@@ -231,9 +250,8 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	}
 
 	/**
-	 * Captures the image. 
-	 * TODO: If the camera is focusing nothing happens. If the
-	 * last focus is more than ~10 seconds left, focus is triggered
+	 * Captures the image. TODO: If the camera is focusing nothing happens. If
+	 * the last focus is more than ~10 seconds left, focus is triggered
 	 */
 	public void capture() {
 
@@ -290,23 +308,4 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		camera.setParameters(param);
 	}
 
-	// IAllianceOrientationChanged /////////////////////////
-	
-	@Override
-	public void onAllianceOrientationChanged(int orientation, int orientationType, int rotation) {
-		Log.d("#", "onAllianceOrientationChanged()");
-		
-		Parameters localParameters = camera.getParameters();
-		/*
-		 * Sets the rotation angle in degrees relative to the
-		 * orientation of the camera. This affects the pictures returned
-		 * from JPEG android.hardware.Camera.PictureCallback.
-		 */
-		localParameters.setRotation(rotation);
-		camera.setParameters(localParameters);
-	}
-	
-	public void addOrientationChangedListeners(IAllianceOrientationChanged listener) {
-		orientationListener.addOrientationChangedListeners(listener);
-	}
 }
