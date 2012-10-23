@@ -12,11 +12,9 @@ import android.alliance.helper.CameraPreviewSizeHelper;
 import android.alliance.helper.Exif;
 import android.alliance.helper.FlashlightHelper;
 import android.alliance.helper.ResolutionHelper;
-import android.app.Activity;
 import android.alliance.helper.ZoomHelper;
-import android.alliance.helper.FlashlightHelper.FlashLightStatus;
+import android.app.Activity;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
@@ -27,7 +25,6 @@ import android.media.AudioManager;
 import android.os.Environment;
 import android.util.Log;
 import android.view.SurfaceHolder;
-import android.view.View;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
 import android.widget.Toast;
@@ -53,6 +50,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	private Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
 	private SurfaceView surfaceView;
 	private Parameters parameters;
+	private IAllianceCameraListener allianceCameraListener;
 	
 	// private int mOrientation;
 	
@@ -106,12 +104,16 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		orientationListener.enable();
 		
 		if (sensorAutoFocus != null) {
-			sensorAutoFocus.setCamera(camera);
+			sensorAutoFocus.setCamera(camera); // vielleicht raus?
 			sensorAutoFocus.startAutoFocus();
 		} else {
 			MyFocusRectangle mFocusRectangle = (MyFocusRectangle) ((Activity)ctx).findViewById(R.id.focus_rectangle);
 			sensorAutoFocus = new SensorAutoFocus(camera, mFocusRectangle, ctx);
 			sensorAutoFocus.startAutoFocus();
+		}
+		
+		if(allianceCameraListener != null) {
+			allianceCameraListener.onCameraCreated();
 		}
 	}
 
@@ -357,7 +359,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		camera.setParameters(param);
 	}
 
-	
+	// called from surfaceCreated()
 	private void initZoom(){
 		
 		// TODO: sSmoothZoomSupported temporär auf false !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -373,9 +375,13 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			zoomHelper.maxZoomLevel = parameters.getMaxZoom();
 			zoomHelper.currentZoomLevel = parameters.getZoom();
 
-			if(ctx instanceof UICameraActivity){
-				((UICameraActivity)ctx).createZoomButtons();
-			}
+//			if(ctx instanceof UICameraActivity){
+//				((UICameraActivity)ctx).createZoomButtons();
+//			}
 		}
+	}
+	
+	public void addAllianceCameraListener(IAllianceCameraListener allianceCameraListener) {
+		this.allianceCameraListener = allianceCameraListener;
 	}
 }
