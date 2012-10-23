@@ -36,7 +36,6 @@
         
 		<activity android:name=".BlancCameraActivity" android:screenOrientation="landscape" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
 		<activity android:name=".UICameraActivity" android:screenOrientation="landscape" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
-		<activity android:name=".AllianceCameraActivity" android:screenOrientation="landscape" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
 		
 		<activity android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:name=".LayerActivity" android:configChanges="keyboardHidden|orientation"></activity>
 			

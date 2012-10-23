@@ -23,8 +23,8 @@
 		    android:orientation="vertical"
 		    android:background="#44000000">
 		    
-	        <ImageButton
-			    android:id="@+id/ibLeft0"
+	        <ImageView
+			    android:id="@+id/ivResolution"
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
 			    android:src="@android:drawable/ic_menu_crop" />
@@ -74,7 +74,7 @@
 	      </LinearLayout>
 	
 	</RelativeLayout>
-
+	 
 	<LinearLayout
 	    android:layout_width="wrap_content"
 	    android:layout_height="match_parent" 
@@ -102,15 +102,24 @@
 
 	</LinearLayout>
 	 
-	 <RelativeLayout
-	    android:id="@+id/layoutZoom"
+	
+	<RelativeLayout
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content" 
-	    android:layout_gravity="top|center_horizontal">
+	    android:layout_gravity="bottom|center_horizontal">
 		
+	      <LinearLayout
+	        android:id="@+id/layoutZoom"
+		    android:layout_width="wrap_content"
+		    android:layout_height="match_parent" 
+		    android:orientation="horizontal"
+		    android:background="@null">
+	         
+	          
+	        </LinearLayout>
 	 </RelativeLayout>
 	 
-	 <android.alliance.focus.MyFocusRectangle
+	  <android.alliance.focus.MyFocusRectangle
                     android:id="@+id/focus_rectangle"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
