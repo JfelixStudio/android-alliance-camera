@@ -2,11 +2,9 @@ package android.alliance.camera;
 
 import android.alliance.dialoge.ResolutionDialog;
 import android.alliance.helper.FlashlightHelper;
-import android.alliance.helper.FlashlightHelper.FlashLightStatus;
 import android.alliance.helper.ResolutionHelper;
 import android.alliance.helper.ZoomHelper;
 import android.app.Activity;
-import android.content.pm.PackageManager;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
 import android.os.Bundle;
@@ -19,11 +17,10 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 
-public class UICameraActivity extends Activity implements IAllianceOrientationChanged {
+public class UICameraActivity extends Activity implements IAllianceOrientationChanged, IAllianceCameraListener {
 
 	private SurfaceView surfaceView;
 
@@ -164,7 +161,13 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 	@Override
 	protected void onResume() {
 		Log.d("#", "onResume()");
+		allianceCamera.addAllianceCameraListener(this);
 		super.onResume();
+	}
+	
+	@Override
+	public void onCameraCreated() {
+		createZoomButtons();
 	}
 
 	@Override
@@ -223,7 +226,8 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		orientationHasChanged(rotation);
 	}
 
-	public void createZoomButtons(){
+	// called from AllianceCamera
+	public void createZoomButtons() {
 
 		ZoomHelper zoomHelper = ZoomHelper.getInstance();
 		
@@ -260,4 +264,6 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 			layoutZoom.addView(zoomOut);	
 		}
 	}
+
+	
 }
