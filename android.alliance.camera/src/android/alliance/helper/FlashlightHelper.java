@@ -69,9 +69,9 @@ public class FlashlightHelper {
 	
 	public enum FlashLightStatus {
 		
-		FLASHLIGHT_AUTO(Parameters.FLASH_MODE_ON, R.drawable.bt_flashlight_auto),
-		FLASHLIGHT_ON(Parameters.FLASH_MODE_TORCH, R.drawable.bt_flashlight_on),
-		FLASHLIGHT_OFF(Parameters.FLASH_MODE_OFF, R.drawable.bt_flashlight_off);
+		FLASHLIGHT_AUTO(Parameters.FLASH_MODE_ON, R.drawable.bt_flashlight_auto_default_48),
+		FLASHLIGHT_ON(Parameters.FLASH_MODE_TORCH, R.drawable.bt_flashlight_on_default_48),
+		FLASHLIGHT_OFF(Parameters.FLASH_MODE_OFF, R.drawable.bt_flashlight_off_default_48);
 		
 		public String flashMode;
 		public int drawable;
