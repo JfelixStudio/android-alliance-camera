@@ -1,24 +1,70 @@
 package android.alliance.helper;
 
 import android.alliance.camera.R;
+import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.hardware.Camera.Parameters;
 import android.widget.ImageView;
 
 public class FlashlightHelper {
-
-	public static FlashLightStatus flashlightStatus = FlashLightStatus.FLASHLIGHT_AUTO;
 	
-	public static Parameters setFlashMode(Parameters params, ImageView imageView) {
+	private static FlashlightHelper instance;
+	public FlashLightStatus flashlightStatus = FlashLightStatus.FLASHLIGHT_AUTO;
+	public boolean available = false; 
+			
+	
+	public static FlashlightHelper getInstance(){
+		if(instance == null){
+			instance = new FlashlightHelper();
+		}
+		
+		return instance;
+	}
+	
+	public void init(Activity activity){
+		available = activity.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
+	}
+	
+	public Parameters setFlashMode(Parameters params, ImageView imageView) {
 		flashlightStatus.setFlashMode(params);
 		imageView.setImageResource(flashlightStatus.drawable);
 		return params;
 	}
 	
-	public static Parameters nextFlashMode(Parameters params) {
+	public String getFlashlightMode(){
 		
-		// TODO die logik hier rein und nicht in die UICamera 
+		String flashMode = null;
 		
-		return params;
+		for(FlashLightStatus fls : FlashLightStatus.values()){
+			if(fls.equals(flashlightStatus)){
+				flashMode = fls.flashMode;
+				break;
+			}
+		}
+		
+		return flashMode;
+	}
+	
+	/*
+	 * Setting Flashlight on Click. If Flashlight: auto => set
+	 * status. Check the mode in AllianceCamera on photo capture()
+	 * otherwise => set status and set FlashLightType-Mode to
+	 * Camera-Parameters
+	 */
+	public Parameters nextFlashMode(Parameters param, ImageView ivFlashlight) {
+		
+		if (flashlightStatus.equals(FlashLightStatus.FLASHLIGHT_AUTO)) {
+			flashlightStatus = FlashLightStatus.FLASHLIGHT_ON;
+			setFlashMode(param, ivFlashlight);
+		} else if (flashlightStatus.equals(FlashLightStatus.FLASHLIGHT_ON)) {
+			flashlightStatus = FlashLightStatus.FLASHLIGHT_OFF;
+			setFlashMode(param, ivFlashlight);
+		} else if (flashlightStatus.equals(FlashLightStatus.FLASHLIGHT_OFF)) {
+			flashlightStatus = FlashLightStatus.FLASHLIGHT_AUTO;
+			setFlashMode(param, ivFlashlight);
+		} 
+		
+		return param;
 	}
 	
 	public enum FlashLightStatus {

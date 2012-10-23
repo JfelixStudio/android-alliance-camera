@@ -10,17 +10,24 @@ import android.alliance.focus.MyFocusRectangle;
 import android.alliance.focus.SensorAutoFocus;
 import android.alliance.helper.CameraPreviewSizeHelper;
 import android.alliance.helper.Exif;
+import android.alliance.helper.FlashlightHelper;
+import android.alliance.helper.ResolutionHelper;
 import android.app.Activity;
+import android.alliance.helper.ZoomHelper;
+import android.alliance.helper.FlashlightHelper.FlashLightStatus;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.Size;
 import android.hardware.SensorManager;
+import android.media.AudioManager;
 import android.os.Environment;
 import android.util.Log;
 import android.view.SurfaceHolder;
+import android.view.View;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
 import android.widget.Toast;
@@ -46,8 +53,9 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	private Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
 	private SurfaceView surfaceView;
 	private Parameters parameters;
+	
 	// private int mOrientation;
-
+	
 	private AllianceOrientationEventListener orientationListener;
 
 	/**
@@ -60,12 +68,16 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	
 	private SensorAutoFocus sensorAutoFocus;
 
+	private AudioManager audioManager;
+	private ResolutionHelper resolutionHelper =  ResolutionHelper.getInstance();
+	
 	public AllianceCamera(Context ctx, SurfaceView surfaceView, int cameraFacing, boolean useAlternativeFacing) {
 		this.ctx = ctx;
 		this.surfaceView = surfaceView;
 		this.cameraFacing = cameraFacing;
 		this.useAlternativeFacing = useAlternativeFacing;
-
+		this.audioManager = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
+		
 		surfaceView.getHolder().addCallback(this);
 
 		/*
@@ -88,6 +100,8 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		Log.d("#", "surfaceCreated()");
 		initCamera(holder);
 		initCameraPreferences();
+		initZoom();
+
 		orientationListener.setCameraId(cameraId);
 		orientationListener.enable();
 		
@@ -246,13 +260,20 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			}
 
 			// Setze BestPictureSize
-
+			parameters.setFlashMode(FlashlightHelper.getInstance().getFlashlightMode());
+			
+			// Init available resolution
+			resolutionHelper.initSupportedScreenSizes(parameters.getSupportedPictureSizes());
+			
+			// Setting 3 megapixel size as default
+			resolutionHelper.set3MegaPixelSizeOnDefault();
+			parameters.setPictureSize(resolutionHelper.selectedResolution.width, resolutionHelper.selectedResolution.height);
+			
 			camera.setParameters(parameters);
-
 			camera.startPreview();
 		}
 	}
-
+	
 	public void camRelease() {
 		if (camera != null) {
 			camera.stopPreview();
@@ -270,9 +291,22 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	 */
 	public void capture() {
 
+		setSelectedPictureSize();
+		
+		// Turn Camera capture-sound mute
+		audioManager.setStreamMute(AudioManager.STREAM_SYSTEM, true);
+		
 		camera.takePicture(null, null, new PhotoCallback());
+		
+		// Turn Camera capture-sound normal
+		audioManager.setStreamMute(AudioManager.STREAM_SYSTEM, false);
 	}
 
+	private void setSelectedPictureSize(){
+		parameters.setPictureSize(resolutionHelper.selectedResolution.width, resolutionHelper.selectedResolution.height);
+		camera.setParameters(parameters);
+	}
+	
 	private class PhotoCallback implements Camera.PictureCallback {
 
 		@Override
@@ -323,4 +357,25 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		camera.setParameters(param);
 	}
 
+	
+	private void initZoom(){
+		
+		// TODO: sSmoothZoomSupported temporär auf false !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		
+		ZoomHelper zoomHelper = ZoomHelper.getInstance();
+		zoomHelper.mSmoothZoomSupported = false; //parameters.isSmoothZoomSupported();
+		zoomHelper.mZoomSupported = parameters.isZoomSupported();
+		
+		if(zoomHelper.mSmoothZoomSupported){
+			// initSmoothZoomButtons
+			
+		} else if(zoomHelper.mZoomSupported && !zoomHelper.mSmoothZoomSupported){
+			zoomHelper.maxZoomLevel = parameters.getMaxZoom();
+			zoomHelper.currentZoomLevel = parameters.getZoom();
+
+			if(ctx instanceof UICameraActivity){
+				((UICameraActivity)ctx).createZoomButtons();
+			}
+		}
+	}
 }

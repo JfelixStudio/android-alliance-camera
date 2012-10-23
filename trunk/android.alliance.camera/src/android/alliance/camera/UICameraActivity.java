@@ -1,8 +1,10 @@
 package android.alliance.camera;
 
-import android.alliance.focus.SensorAutoFocus;
+import android.alliance.dialoge.ResolutionDialog;
 import android.alliance.helper.FlashlightHelper;
 import android.alliance.helper.FlashlightHelper.FlashLightStatus;
+import android.alliance.helper.ResolutionHelper;
+import android.alliance.helper.ZoomHelper;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.hardware.Camera.CameraInfo;
@@ -11,11 +13,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
+import android.widget.ImageView.ScaleType;
+import android.widget.LinearLayout;
 
 public class UICameraActivity extends Activity implements IAllianceOrientationChanged {
 
@@ -27,13 +33,10 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 	private ImageButton ib1;
 	private ImageButton ib2;
 
-	private ImageButton ibLeft0;
+	private ImageView ivResolutionDialog;
 	private ImageButton ibLeft1;
 	private ImageButton ibLeft2;
 	private ImageView ibFlashlight;
-
-	private ImageView zoomIn;
-	private ImageView zoomOut;
 
 	/**
 	 * CameraInfo.CAMERA_FACING_BACK = 0 <br>
@@ -44,6 +47,8 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 	private boolean useAlternativeFacing = false;
 
 	private AllianceCamera allianceCamera;
+	private LinearLayout layoutZoom;
+	
 	
 	// Activity livecycle ///////////////////////////////
 
@@ -54,29 +59,31 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-		Bundle extras = getIntent().getExtras();
-		if (extras != null) {
+		Bundle extras = getIntent().getExtras(); 
+		if(extras != null) {
 			cameraFacing = extras.getInt(AllianceCamera.INTENT_KEY_INITIAL_CAMERA_FACING, CameraInfo.CAMERA_FACING_BACK);
 			useAlternativeFacing = extras.getBoolean(AllianceCamera.INTENT_KEY_USE_ALTERNATIVE_FACING, false);
 		}
-
+		
 		setContentView(R.layout.activity_uicamera);
 
 		surfaceView = (SurfaceView) findViewById(R.id.sv_camera);
 
 		allianceCamera = new AllianceCamera(this, surfaceView, cameraFacing, useAlternativeFacing);
 
+		layoutZoom = (LinearLayout) findViewById(R.id.layoutZoom);
+		
 		ib0 = (ImageButton) findViewById(R.id.ib0);
 		ib0.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-
+				
 			}
 		});
 		ib1 = (ImageButton) findViewById(R.id.ib1);
 		ib2 = (ImageButton) findViewById(R.id.ib2);
 		ib2.setOnClickListener(new View.OnClickListener() {
-
+			
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -84,45 +91,42 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 			}
 		});
 
-		ibLeft0 = (ImageButton) findViewById(R.id.ibLeft0);
+		ivResolutionDialog = (ImageView) findViewById(R.id.ivResolution);
+		ivResolutionDialog.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+
+				if(ResolutionHelper.getInstance().lSupportedPictureSizes.size() > 0){
+					ResolutionDialog resDialog = new ResolutionDialog(UICameraActivity.this);
+					resDialog.show();
+				}
+			}
+		});
+		
 		ibLeft1 = (ImageButton) findViewById(R.id.ibLeft1);
 		ibLeft2 = (ImageButton) findViewById(R.id.ibLeft2);
 		ibLeft2.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				View view = findViewById(R.id.leftMenuLevel1);
-
-				if (view.getVisibility() == View.VISIBLE) {
+				
+				if(view.getVisibility() == View.VISIBLE) {
 					view.setVisibility(View.INVISIBLE);
-				} else if (view.getVisibility() == View.INVISIBLE) {
+				} else
+				if(view.getVisibility() == View.INVISIBLE) {
 					view.setVisibility(View.VISIBLE);
 				}
 			}
 		});
-
+		
 		ibFlashlight = (ImageView) findViewById(R.id.ibFlashlight);
 		ibFlashlight.setOnClickListener(new View.OnClickListener() {
-
+			
 			@Override
 			public void onClick(View v) {
 
 				Parameters param = allianceCamera.getCameraParameters();
-				/*
-				 * Setting Flashlight on Click. If Flashlight: auto => set
-				 * status. Check the mode in AllianceCamera on photo capture()
-				 * otherwise => set status and set FlashLightType-Mode to
-				 * Camera-Parameters
-				 */
-				if (FlashlightHelper.flashlightStatus.equals(FlashLightStatus.FLASHLIGHT_AUTO)) {
-					FlashlightHelper.flashlightStatus = FlashLightStatus.FLASHLIGHT_ON;
-					FlashlightHelper.setFlashMode(param, ibFlashlight);
-				} else if (FlashlightHelper.flashlightStatus.equals(FlashLightStatus.FLASHLIGHT_ON)) {
-					FlashlightHelper.flashlightStatus = FlashLightStatus.FLASHLIGHT_OFF;
-					FlashlightHelper.setFlashMode(param, ibFlashlight);
-				} else if (FlashlightHelper.flashlightStatus.equals(FlashLightStatus.FLASHLIGHT_OFF)) {
-					FlashlightHelper.flashlightStatus = FlashLightStatus.FLASHLIGHT_AUTO;
-					FlashlightHelper.setFlashMode(param, ibFlashlight);
-				}
+				FlashlightHelper.getInstance().nextFlashMode(param, ibFlashlight);
 				allianceCamera.setCameraParameters(param);
 			}
 		});
@@ -130,29 +134,33 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		allianceCamera.addOrientationChangedListeners(this);
 
 		initFlashlight();
+        
 	}
 
 	private void initFlashlight() {
-		boolean available = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
 
-		if (!available) {
+		FlashlightHelper.getInstance().init(this);
+		
+		if (!FlashlightHelper.getInstance().available) {
 			ibFlashlight.setVisibility(View.GONE);
-			FlashlightHelper.flashlightStatus = null;
-		}
+		} 
 	}
+	
+	
+	
 
 	@Override
 	protected void onStart() {
 		Log.d("#", "onStart()");
 		super.onStart();
 	}
-
+	
 	@Override
 	protected void onRestart() {
 		Log.d("#", "onRestart()");
 		super.onRestart();
 	}
-
+	
 	@Override
 	protected void onResume() {
 		Log.d("#", "onResume()");
@@ -174,18 +182,18 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		// onSurfaceDestroyed
 		allianceCamera.camRelease();
 	}
-
+	
 	@Override
 	protected void onDestroy() {
 		Log.d("#", "onDestroy()");
 		super.onDestroy();
 	}
-
+	
 	// remaining methods ///////////////////////////////////////////////////
-
+	
 	private void orientationHasChanged(float degree) {
 		System.out.println("orientationHasChanged: " + degree);
-
+		
 		rotateView(ib0, degree);
 		rotateView(ib1, degree);
 		rotateView(ib2, degree);
@@ -194,9 +202,10 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		rotateView(ibLeft1, degree);
 		rotateView(ibLeft2, degree);
 		rotateView(ibFlashlight, degree);
-
+		rotateView(ivResolutionDialog, degree);
+		
 	}
-
+	
 	private void rotateView(View view, float degree) {
 		// TODO: 90° kommen von der landscape orientation und sollten dynamisch
 		// ausgelesen werden
@@ -214,4 +223,41 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		orientationHasChanged(rotation);
 	}
 
+	public void createZoomButtons(){
+
+		ZoomHelper zoomHelper = ZoomHelper.getInstance();
+		
+		if(zoomHelper.mSmoothZoomSupported){
+			
+			
+		} else {
+			
+			ImageView zoomIn = new ImageView(this);
+			zoomIn.setScaleType(ScaleType.FIT_CENTER);
+			zoomIn.setImageResource(R.drawable.bt_zoomin);
+			zoomIn.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					Parameters param = ZoomHelper.getInstance().zoomIn(allianceCamera.getCameraParameters()); 
+					allianceCamera.setCameraParameters(param);
+				}
+			});
+			
+			ImageView zoomOut = new ImageView(this);	
+			zoomOut.setScaleType(ScaleType.FIT_CENTER);
+			zoomOut.setImageResource(R.drawable.bt_zoomout);
+			zoomOut.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					Parameters param = ZoomHelper.getInstance().zoomOut(allianceCamera.getCameraParameters()); 
+					allianceCamera.setCameraParameters(param);
+				}
+			});
+			
+			layoutZoom.addView(zoomIn);
+			layoutZoom.addView(zoomOut);	
+		}
+	}
 }
