@@ -35,18 +35,17 @@ public class ResolutionHelper {
 	
 	public void setMegaPixelSizeOnDefault(int megapixel) {
 
+		int lastDiff = Integer.MAX_VALUE;
+		
 		if (lSupportedPictureSizes != null) {
 			for (VOResolution res : lSupportedPictureSizes) {
-				if (res.getMegapixel() < megapixel) {
+				int diff = Math.abs(megapixel - res.getMegapixel());
+				
+				if (diff < lastDiff) {
+					lastDiff = diff;
 					selectedResolution = res.getSize();
-					break;
 				}
 			}
 		}
-
-		if(selectedResolution == null){
-			selectedResolution = lSupportedPictureSizes.get(0).getSize();
-		}
 	}
-	
 }
