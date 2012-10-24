@@ -8,10 +8,9 @@ import android.hardware.Camera.Size;
 
 public class ResolutionHelper {
 
-	private static ResolutionHelper instance;
-	
 	public Size selectedResolution = null;
 	public List<VOResolution> lSupportedPictureSizes = new ArrayList<VOResolution>();
+	private static ResolutionHelper instance;
 	
 	public static ResolutionHelper getInstance(){
 		if(instance == null){
@@ -27,21 +26,20 @@ public class ResolutionHelper {
 		
 		int i = 0;
 		for(Size s : supportedSizes){
-			VOResolution cm = new VOResolution(i, s);
+			int mp = s.width * s.height;
+			VOResolution cm = new VOResolution(i, s, mp);
 			lSupportedPictureSizes.add(cm);
 			i++;
 		}
 	}
 	
-	public void set3MegaPixelSizeOnDefault() {
+	public void setMegaPixelSizeOnDefault(int megapixel) {
 
 		if (lSupportedPictureSizes != null) {
-
 			for (VOResolution res : lSupportedPictureSizes) {
-				int mp = res.getSize().width * res.getSize().height;
-
-				if (mp < 1500000) {
+				if (res.getMegapixel() < megapixel) {
 					selectedResolution = res.getSize();
+					break;
 				}
 			}
 		}

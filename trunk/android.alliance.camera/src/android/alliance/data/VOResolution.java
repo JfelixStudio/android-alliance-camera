@@ -6,10 +6,12 @@ public class VOResolution {
 
 	private int id;
 	private Size size;
+	private int megapixel;
 	
-	public VOResolution(int id, Size size) {
+	public VOResolution(int id, Size size, int megapixel) {
 		this.id = id;
 		this.size = size;
+		this.megapixel = megapixel;
 	}
 	public int getId() {
 		return id;
@@ -22,6 +24,12 @@ public class VOResolution {
 	}
 	public void setSize(Size size) {
 		this.size = size;
+	}
+	public int getMegapixel() {
+		return megapixel;
+	}
+	public void setMegapixel(int megapixel) {
+		this.megapixel = megapixel;
 	}
 	
 	

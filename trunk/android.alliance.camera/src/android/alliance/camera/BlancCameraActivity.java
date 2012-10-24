@@ -50,7 +50,7 @@ public class BlancCameraActivity extends Activity { //implements Callback {
 
 		surfaceView = (SurfaceView) findViewById(R.id.sv_camera);
 
-		allianceCamera = new AllianceCamera(this, surfaceView, cameraFacing, useAlternativeFacing);
+		allianceCamera = new AllianceCamera(this, surfaceView, cameraFacing, useAlternativeFacing, null, null);
 	}
 
 	@Override
