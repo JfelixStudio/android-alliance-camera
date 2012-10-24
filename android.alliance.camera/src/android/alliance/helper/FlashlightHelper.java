@@ -8,19 +8,9 @@ import android.widget.ImageView;
 
 public class FlashlightHelper {
 	
-	private static FlashlightHelper instance;
 	public FlashLightStatus flashlightStatus = FlashLightStatus.FLASHLIGHT_AUTO;
 	public boolean available = false; 
 			
-	
-	public static FlashlightHelper getInstance(){
-		if(instance == null){
-			instance = new FlashlightHelper();
-		}
-		
-		return instance;
-	}
-	
 	public void init(Activity activity){
 		available = activity.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
 	}
@@ -69,9 +59,9 @@ public class FlashlightHelper {
 	
 	public enum FlashLightStatus {
 		
-		FLASHLIGHT_AUTO(Parameters.FLASH_MODE_ON, R.drawable.bt_flashlight_auto_default_48),
-		FLASHLIGHT_ON(Parameters.FLASH_MODE_TORCH, R.drawable.bt_flashlight_on_default_48),
-		FLASHLIGHT_OFF(Parameters.FLASH_MODE_OFF, R.drawable.bt_flashlight_off_default_48);
+		FLASHLIGHT_AUTO(Parameters.FLASH_MODE_ON, R.drawable.bt_flashlight_auto_default),
+		FLASHLIGHT_ON(Parameters.FLASH_MODE_TORCH, R.drawable.bt_flashlight_on_default),
+		FLASHLIGHT_OFF(Parameters.FLASH_MODE_OFF, R.drawable.bt_flashlight_off_default);
 		
 		public String flashMode;
 		public int drawable;

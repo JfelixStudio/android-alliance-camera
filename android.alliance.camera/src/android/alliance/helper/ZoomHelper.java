@@ -9,16 +9,6 @@ public class ZoomHelper {
 	public boolean mSmoothZoomSupported;
 	public boolean mZoomSupported;
 	
-	private static ZoomHelper instance;
-	
-	public static ZoomHelper getInstance(){
-		if(instance == null){
-			instance = new ZoomHelper();
-		}
-		
-		return instance;
-	}
-	
 	public Parameters zoomIn(Parameters param){
 		
 		currentZoomLevel++;
@@ -43,5 +33,19 @@ public class ZoomHelper {
 		
 		return param;
 	}
-	
+
+	// called from surfaceCreated()
+	public void initZoom(Parameters param){
+		
+		mSmoothZoomSupported = param.isSmoothZoomSupported();
+		mZoomSupported = param.isZoomSupported();
+		
+		if(mSmoothZoomSupported){
+			// init some default values
+			
+		} else if(mZoomSupported){
+			maxZoomLevel = param.getMaxZoom();
+			currentZoomLevel = param.getZoom();
+		}
+	}
 }
