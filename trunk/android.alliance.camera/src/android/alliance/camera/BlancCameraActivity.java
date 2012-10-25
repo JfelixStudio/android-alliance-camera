@@ -1,9 +1,14 @@
 package android.alliance.camera;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import android.app.Activity;
 import android.content.Context;
 import android.hardware.Camera.CameraInfo;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Display;
 import android.view.SurfaceView;
@@ -50,7 +55,12 @@ public class BlancCameraActivity extends Activity { //implements Callback {
 
 		surfaceView = (SurfaceView) findViewById(R.id.sv_camera);
 
-		allianceCamera = new AllianceCamera(this, surfaceView, cameraFacing, useAlternativeFacing, null, null);
+		String folderPath  = Environment.getExternalStorageDirectory().getAbsolutePath() + "/CamTest/";
+		String fileName = "IMG" + new SimpleDateFormat("_yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime()) + ".jpg";
+
+		File filePath = new File(folderPath, fileName);
+		
+		allianceCamera = new AllianceCamera(this, surfaceView, cameraFacing, useAlternativeFacing, null, null, filePath);
 	}
 
 	@Override

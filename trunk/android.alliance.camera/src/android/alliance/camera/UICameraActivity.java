@@ -1,5 +1,9 @@
 package android.alliance.camera;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import android.alliance.dialoge.ResolutionDialog;
 import android.alliance.helper.FlashlightHelper;
 import android.alliance.helper.ResolutionHelper;
@@ -8,6 +12,7 @@ import android.app.Activity;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
@@ -74,8 +79,13 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		setContentView(R.layout.activity_uicamera);
 
 		surfaceView = (SurfaceView) findViewById(R.id.sv_camera);
+		
+		String folderPath  = Environment.getExternalStorageDirectory().getAbsolutePath() + "/CamTest/";
+		String fileName = "IMG" + new SimpleDateFormat("_yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime()) + ".jpg";
 
-		allianceCamera = new AllianceCamera(this, surfaceView, cameraFacing, useAlternativeFacing, flashlightHelper, zoomHelper);
+		File filePath = new File(folderPath, fileName);
+		
+		allianceCamera = new AllianceCamera(this, surfaceView, cameraFacing, useAlternativeFacing, flashlightHelper, zoomHelper, filePath);
 
 		layoutZoom = (LinearLayout) findViewById(R.id.layoutZoom);
 		
@@ -183,16 +193,14 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 	protected void onPause() {
 		Log.d("#", "onPause()");
 		super.onPause();
+		
+		allianceCamera.camRelease();
 	}
 
 	@Override
 	protected void onStop() {
 		Log.d("#", "onStop()");
 		super.onStop();
-
-		// TODO: sollte das nicht in onPause()? Ist aber schon in
-		// onSurfaceDestroyed
-		allianceCamera.camRelease();
 	}
 	
 	@Override
