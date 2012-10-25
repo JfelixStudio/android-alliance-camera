@@ -70,8 +70,9 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	private ResolutionHelper resolutionHelper =  ResolutionHelper.getInstance();
 	private FlashlightHelper flashlightHelper;
 	private ZoomHelper zoomHelper;
+	private File filePath;
 	
-	public AllianceCamera(Context ctx, SurfaceView surfaceView, int cameraFacing, boolean useAlternativeFacing, FlashlightHelper flashlightHelper, ZoomHelper zoomHelper) {
+	public AllianceCamera(Context ctx, SurfaceView surfaceView, int cameraFacing, boolean useAlternativeFacing, FlashlightHelper flashlightHelper, ZoomHelper zoomHelper, File filePath) {
 		this.ctx = ctx;
 		this.surfaceView = surfaceView;
 		this.cameraFacing = cameraFacing;
@@ -79,6 +80,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		this.audioManager = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
 		this.flashlightHelper = flashlightHelper;
 		this.zoomHelper = zoomHelper;
+		this.filePath = filePath;
 		
 		surfaceView.getHolder().addCallback(this);
 
@@ -289,10 +291,13 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			camera.stopPreview();
 			camera.setPreviewCallback(null);
 			camera.release(); // Speicher freigeben ? wieso speicher freigeben
+			camera = null;
 		}
 
-		camera = null;
-		sensorAutoFocus.setCamera(null);
+		if(sensorAutoFocus != null){
+			sensorAutoFocus.setCamera(null);	
+		}
+		
 	}
 
 	/**
@@ -337,14 +342,9 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 
 			try {
 
-				String str = "IMG" + new SimpleDateFormat("_yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime()) + ".jpg";
+				filePath.mkdirs();
 
-				File localFile1 = new File(Environment.getExternalStorageDirectory(), "/CamTest/");
-				localFile1.mkdirs();
-
-				File localFile2 = new File(localFile1, str);
-
-				FileOutputStream localFileOutputStream = new FileOutputStream(localFile2);
+				FileOutputStream localFileOutputStream = new FileOutputStream(filePath);
 
 				localFileOutputStream.write(data);
 				localFileOutputStream.flush();
