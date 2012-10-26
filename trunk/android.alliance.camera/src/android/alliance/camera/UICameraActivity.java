@@ -20,7 +20,6 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Toast;
@@ -34,13 +33,13 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 
 //	private float rotation = 0;
 
-	private ImageButton ib0;
-	private ImageButton ib1;
-	private ImageButton ib2;
+	private ImageView ib0;
+	private ImageView ib1;
+	private ImageView ib2;
 
 	private ImageView ivResolutionDialog;
-	private ImageButton ibLeft1;
-	private ImageButton ibLeft2;
+	private ImageView ibLeft1;
+	private ImageView ibLeft2;
 	private ImageView ibFlashlight;
 
 	/**
@@ -60,6 +59,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 	private FlashlightHelper flashlightHelper = new FlashlightHelper();
 	private ZoomHelper zoomHelper = new ZoomHelper();
 	
+	private int activityResultCode = RESULT_CANCELED;
 	
 	// Activity livecycle ///////////////////////////////
 
@@ -80,24 +80,25 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 
 		surfaceView = (SurfaceView) findViewById(R.id.sv_camera);
 		
+		
 		String folderPath  = Environment.getExternalStorageDirectory().getAbsolutePath() + "/CamTest/";
 		String fileName = "IMG" + new SimpleDateFormat("_yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime()) + ".jpg";
 
 		File filePath = new File(folderPath, fileName);
 		
-		allianceCamera = new AllianceCamera(this, surfaceView, cameraFacing, useAlternativeFacing, flashlightHelper, zoomHelper, filePath);
+		allianceCamera = new AllianceCamera(this, surfaceView, cameraFacing, useAlternativeFacing, flashlightHelper, zoomHelper, filePath, false);
 
 		layoutZoom = (LinearLayout) findViewById(R.id.layoutZoom);
 		
-		ib0 = (ImageButton) findViewById(R.id.ib0);
+		ib0 = (ImageView) findViewById(R.id.ib0);
 		ib0.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				
 			}
 		});
-		ib1 = (ImageButton) findViewById(R.id.ib1);
-		ib2 = (ImageButton) findViewById(R.id.ib2);
+		ib1 = (ImageView) findViewById(R.id.ib1);
+		ib2 = (ImageView) findViewById(R.id.ib2);
 		ib2.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -119,8 +120,9 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 			}
 		});
 		
-		ibLeft1 = (ImageButton) findViewById(R.id.ibLeft1);
-		ibLeft2 = (ImageButton) findViewById(R.id.ibLeft2);
+		ibLeft1 = (ImageView) findViewById(R.id.ibLeft1);
+		
+		ibLeft2 = (ImageView) findViewById(R.id.ibLeft2);
 		ibLeft2.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -193,14 +195,15 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 	protected void onPause() {
 		Log.d("#", "onPause()");
 		super.onPause();
-		
-		allianceCamera.camRelease();
 	}
 
 	@Override
 	protected void onStop() {
 		Log.d("#", "onStop()");
 		super.onStop();
+
+		allianceCamera.camRelease();
+		setResult(activityResultCode);
 	}
 	
 	@Override
@@ -300,8 +303,13 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 				}
 			});
 			
+			layoutZoom.addView(ivZoomOut);
 			layoutZoom.addView(ivZoomIn);
-			layoutZoom.addView(ivZoomOut);	
 		}
+	}
+
+	@Override
+	public void afterPhotoTaken() {
+		activityResultCode = RESULT_OK;
 	}
 }

@@ -71,8 +71,9 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	private FlashlightHelper flashlightHelper;
 	private ZoomHelper zoomHelper;
 	private File filePath;
+	private boolean closeAfterShot = false;
 	
-	public AllianceCamera(Context ctx, SurfaceView surfaceView, int cameraFacing, boolean useAlternativeFacing, FlashlightHelper flashlightHelper, ZoomHelper zoomHelper, File filePath) {
+	public AllianceCamera(Context ctx, SurfaceView surfaceView, int cameraFacing, boolean useAlternativeFacing, FlashlightHelper flashlightHelper, ZoomHelper zoomHelper, File filePath, boolean closeAfterShot) {
 		this.ctx = ctx;
 		this.surfaceView = surfaceView;
 		this.cameraFacing = cameraFacing;
@@ -81,6 +82,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		this.flashlightHelper = flashlightHelper;
 		this.zoomHelper = zoomHelper;
 		this.filePath = filePath;
+		this.closeAfterShot = closeAfterShot;
 		
 		surfaceView.getHolder().addCallback(this);
 
@@ -105,10 +107,6 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		initCamera(holder);
 		initCameraPreferences();
 		
-		if(zoomHelper != null) {
-			zoomHelper.initZoom(parameters);
-		}
-
 		orientationListener.setCameraId(cameraId);
 		orientationListener.enable();
 		
@@ -119,10 +117,6 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			MyFocusRectangle mFocusRectangle = (MyFocusRectangle) ((Activity)ctx).findViewById(R.id.focus_rectangle);
 			sensorAutoFocus = new SensorAutoFocus(camera, mFocusRectangle, ctx);
 			sensorAutoFocus.startAutoFocus();
-		}
-		
-		if(allianceCameraListener != null) {
-			allianceCameraListener.onCameraCreated();
 		}
 	}
 
@@ -282,6 +276,20 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			parameters.setPictureSize(resolutionHelper.selectedResolution.width, resolutionHelper.selectedResolution.height);
 			
 			camera.setParameters(parameters);
+			
+			/*
+			 *  Die beiden folgenden Aufrufe dieser beiden If-Anweisungen müssen an dieser Stelle
+			 *  gesetzt werden, da sonst die Zoom-Buttons zu spät generiert werden und sie erscheinen
+			 *  nicht sofort auf dem Display
+			 */
+			if(zoomHelper != null) {
+				zoomHelper.initZoom(parameters);
+			}
+			
+			if(allianceCameraListener != null) {
+				allianceCameraListener.onCameraCreated();
+			}
+			
 			camera.startPreview();
 		}
 	}
@@ -352,6 +360,12 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 
 				camera.startPreview();
 
+				allianceCameraListener.afterPhotoTaken();
+				
+				if(closeAfterShot){
+					((Activity) ctx).finish();
+				}
+				
 			} catch (IOException localIOException) {
 				// TODO
 			}

@@ -63,6 +63,8 @@ public abstract class AutoFocus implements Camera.AutoFocusCallback {
         } else {
         	focusView.clear();
         }
+        
+        
     }
 	
 	public void setCamera(Camera camera) {
