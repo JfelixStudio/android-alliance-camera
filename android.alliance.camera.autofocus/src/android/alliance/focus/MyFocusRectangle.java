@@ -2,48 +2,50 @@ package android.alliance.focus;
 
 import android.alliance.camera.autofocus.R;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.FrameLayout;
 
 public class MyFocusRectangle extends View implements FocusView {
 
-    private int xActual, yActual;
+    public MyFocusRectangle(Context context, AttributeSet attributeset) {
+		super(context, attributeset);
+	}
 
-    public MyFocusRectangle(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    private void setDrawable(int resid) {
-        setBackgroundDrawable(getResources().getDrawable(resid));
+	private void setDrawable(int resid) {
+        
+		Drawable bitmapDrawable = getResources().getDrawable(resid);
+		
+		Bitmap bmp = ((BitmapDrawable) bitmapDrawable).getBitmap();
+		
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(bmp.getWidth(), bmp.getHeight());
+        params.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
+        
+        setLayoutParams(params);
+        
+        setBackgroundDrawable(bitmapDrawable);
     }
 
     public void showStart() {
-        setDrawable(R.drawable.sk_auto_focusing);
+        setDrawable(R.drawable.bt_auto_focusing);
     }
 
     public void showSuccess() {
-        setDrawable(R.drawable.sk_auto_focused);
+        setDrawable(R.drawable.bt_auto_focused);
     }
 
     public void showFail() {
-    	setDrawable(R.drawable.sk_auto_fail);
+    	setDrawable(R.drawable.bt_auto_fail);
     }
 
     public void clear() {
         setBackgroundDrawable(null);
-    }
-
-    public void setPosition(int x, int y) {
-        if (x >= 0 && y >= 0) {
-            xActual = x;
-            yActual = y;
-            redraw();
-        }
-    }
-
-    public void redraw() {
-        int size = getWidth() / 2;
-        this.layout(xActual - size, yActual - size, xActual + size, yActual + size);
     }
 }
 

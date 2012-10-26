@@ -12,4 +12,9 @@ public interface IAllianceCameraListener {
 	 * Called after surfaceCreated() is finished. 
 	 */
 	public void onCameraCreated();
+	
+	/**
+	 * Set the activityResultCode to RESULT_OK after photo is taken. Default is RESULT_CANCELED
+	 */
+	public void afterPhotoTaken();
 }

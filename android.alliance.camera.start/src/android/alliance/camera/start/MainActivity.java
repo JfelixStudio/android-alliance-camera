@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.hardware.Camera.CameraInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -42,8 +43,27 @@ public class MainActivity extends Activity {
 				Intent intent = new Intent(MainActivity.this, UICameraActivity.class);
 				intent.putExtra(AllianceCamera.INTENT_KEY_INITIAL_CAMERA_FACING, CameraInfo.CAMERA_FACING_BACK);
 				intent.putExtra(AllianceCamera.INTENT_KEY_USE_ALTERNATIVE_FACING, true);
-		        startActivity(intent);
+		        startActivityForResult(intent, 666);
 			}
 		});
+		
+	}
+	
+	
+	@Override
+	 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
+		if(resultCode == 0){
+			switch(requestCode){
+	     		case 666:
+	     			if(resultCode == RESULT_OK){
+	     				Log.d("ResultCode", "OK");
+	     			} else {
+	     				Log.d("ResultCode", "DEFAULT");
+	     			}
+	     			
+	     			break;
+			}
+		}
 	}
 }
