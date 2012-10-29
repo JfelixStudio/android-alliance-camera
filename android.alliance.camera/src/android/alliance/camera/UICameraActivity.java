@@ -307,7 +307,6 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 			layoutZoom.addView(ivZoomIn);
 		}
 	}
-
 	@Override
 	public void afterPhotoTaken() {
 		activityResultCode = RESULT_OK;
