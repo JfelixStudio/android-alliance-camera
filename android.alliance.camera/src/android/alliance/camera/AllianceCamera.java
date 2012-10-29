@@ -378,7 +378,9 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	}
 
 	public void setCameraParameters(Parameters param) {
+		this.parameters = param;
 		camera.setParameters(param);
+		
 	}
 
 	public void addAllianceCameraListener(IAllianceCameraListener allianceCameraListener) {
