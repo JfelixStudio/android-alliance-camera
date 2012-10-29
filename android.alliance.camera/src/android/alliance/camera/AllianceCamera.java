@@ -3,8 +3,6 @@ package android.alliance.camera;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 import android.alliance.focus.MyFocusRectangle;
 import android.alliance.focus.SensorAutoFocus;
@@ -22,7 +20,6 @@ import android.hardware.Camera.Parameters;
 import android.hardware.Camera.Size;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
-import android.os.Environment;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
@@ -51,7 +48,6 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	private SurfaceView surfaceView;
 	private IAllianceCameraListener allianceCameraListener;
 	
-	// private int mOrientation;
 	
 	private AllianceOrientationEventListener orientationListener;
 
