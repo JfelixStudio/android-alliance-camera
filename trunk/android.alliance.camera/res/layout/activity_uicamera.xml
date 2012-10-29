@@ -140,7 +140,29 @@
 	
 	</RelativeLayout>
 	 
-	<LinearLayout
+     <RelativeLayout
+	    android:layout_width="wrap_content"
+	    android:layout_height="fill_parent" 
+	    android:layout_gravity="right">
+	     
+      <LinearLayout
+	    android:layout_width="wrap_content"
+	    android:layout_height="match_parent" 
+	    android:layout_gravity="right"
+	    android:orientation="vertical"
+	    android:background="#44000000">
+
+	         <ImageView
+			    android:scaleType="fitCenter"
+   	            android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:src="@drawable/bt_platzhalter"
+			    android:visibility="invisible" />
+	         
+	   </LinearLayout>
+    </RelativeLayout>
+         
+    <LinearLayout
 	    android:layout_width="wrap_content"
 	    android:layout_height="match_parent" 
 	    android:layout_gravity="right"
@@ -156,7 +178,7 @@
 	   	    android:gravity="center_vertical"
 		    android:layout_gravity="right"
 		    android:layout_weight="1"
-		    android:background="#44000000">
+		    android:background="@null">
 	    
 	         <ImageView
 			    android:id="@+id/ib0"
@@ -173,7 +195,7 @@
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:gravity="center_vertical"
-	    	android:background="#44000000">
+	    	android:background="@null">
 	    
 	        <ImageView
 			    android:id="@+id/ib2"
@@ -191,7 +213,7 @@
 		    android:orientation="vertical"
 		    android:gravity="center_vertical"
 		    android:layout_weight="1"
-		    android:background="#44000000">
+		    android:background="@null">
 	    
 	        <ImageView
 			    android:id="@+id/ib1"
@@ -202,7 +224,7 @@
         </LinearLayout>
         
 
-	</LinearLayout>
+	</LinearLayout>     
 	 
 	
 	<RelativeLayout
