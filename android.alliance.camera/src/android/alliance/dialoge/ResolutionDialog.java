@@ -5,6 +5,8 @@ import java.util.List;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.hardware.Camera.Size;
 import android.os.Bundle;
