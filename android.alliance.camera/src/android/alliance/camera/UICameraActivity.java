@@ -86,7 +86,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 
 		File filePath = new File(folderPath, fileName);
 		
-		allianceCamera = new AllianceCamera(this, surfaceView, cameraFacing, useAlternativeFacing, flashlightHelper, zoomHelper, filePath, false);
+		allianceCamera = new AllianceCamera(this, surfaceView, cameraFacing, useAlternativeFacing, flashlightHelper, zoomHelper, filePath, 3000000, false);
 
 		layoutZoom = (LinearLayout) findViewById(R.id.layoutZoom);
 		
@@ -307,6 +307,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 			layoutZoom.addView(ivZoomIn);
 		}
 	}
+
 	@Override
 	public void afterPhotoTaken() {
 		activityResultCode = RESULT_OK;
