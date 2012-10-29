@@ -312,6 +312,12 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	 * the last focus is more than ~10 seconds left, focus is triggered
 	 */
 	public void capture() {
+		
+		if(sensorAutoFocus.isFocusing()) {
+			return;
+		} else {
+			sensorAutoFocus.stopAutoFocus();
+		}
 
 		setSelectedPictureSize();
 		
@@ -350,8 +356,6 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 
 			try {
 
-				filePath.mkdirs();
-
 				FileOutputStream localFileOutputStream = new FileOutputStream(filePath);
 
 				localFileOutputStream.write(data);
@@ -363,6 +367,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 				allianceCameraListener.afterPhotoTaken();
 
 				audioManager.setStreamMute(AudioManager.STREAM_SYSTEM, false);
+				sensorAutoFocus.startAutoFocus();
 				
 				if(closeAfterShot){
 					((Activity) ctx).finish();
@@ -370,6 +375,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 				
 			} catch (IOException localIOException) {
 				// TODO
+				Log.e("#",localIOException.getMessage());
 			}
 		}
 

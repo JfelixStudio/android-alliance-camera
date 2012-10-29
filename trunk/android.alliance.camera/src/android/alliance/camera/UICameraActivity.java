@@ -81,6 +81,8 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		
 		
 		String folderPath  = Environment.getExternalStorageDirectory().getAbsolutePath() + "/CamTest/";
+		File x = new File(folderPath);
+		x.mkdir();
 		String fileName = "IMG" + new SimpleDateFormat("_yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime()) + ".jpg";
 
 		File filePath = new File(folderPath, fileName);
@@ -211,6 +213,11 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		super.onDestroy();
 	}
 	
+	@Override
+	public void afterPhotoTaken() {
+		activityResultCode = RESULT_OK;
+	}
+	
 	// remaining methods ///////////////////////////////////////////////////
 	
 	private void orientationHasChanged(float degree) {
@@ -307,8 +314,4 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		}
 	}
 
-	@Override
-	public void afterPhotoTaken() {
-		activityResultCode = RESULT_OK;
-	}
 }
