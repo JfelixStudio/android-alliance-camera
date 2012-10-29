@@ -71,6 +71,13 @@ public abstract class AutoFocus implements Camera.AutoFocusCallback {
 		this.camera = camera;
 	}
 	
+	public boolean isFocusing() {
+		if(mFocusState == FOCUSING) {
+			return true;
+		}
+		return false;
+	}
+	
 	// Camera.AutoFocusCallback //////////////
 
 		@Override

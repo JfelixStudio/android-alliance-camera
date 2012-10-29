@@ -58,6 +58,9 @@ public class SensorAutoFocus extends AutoFocus {
 		
 	}
 	
+	/**
+	 * registers sensor listeners (accelerometer, magnetometer)
+	 */
 	@Override
 	public void startAutoFocus() {
 		mySensorManager.registerListener(listenerAccelerometer, sensorAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
@@ -66,6 +69,9 @@ public class SensorAutoFocus extends AutoFocus {
 		super.startAutoFocus();
 	}
 	
+	/**
+	 * registers sensor listeners (accelerometer, magnetometer)
+	 */
 	@Override
 	public void stopAutoFocus() {
 		mySensorManager.unregisterListener(listenerAccelerometer, sensorAccelerometer);
