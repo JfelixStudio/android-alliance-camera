@@ -21,11 +21,10 @@ import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
-import android.widget.SeekBar;
-import android.widget.Toast;
 import android.widget.ImageView.ScaleType;
-import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 
 public class UICameraActivity extends Activity implements IAllianceOrientationChanged, IAllianceCameraListener {
 
