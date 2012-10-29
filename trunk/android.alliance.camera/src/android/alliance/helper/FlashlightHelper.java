@@ -44,13 +44,13 @@ public class FlashlightHelper {
 	public Parameters nextFlashMode(Parameters param, ImageView ivFlashlight) {
 		
 		if (flashlightStatus.equals(FlashLightStatus.FLASHLIGHT_AUTO)) {
-			flashlightStatus = FlashLightStatus.FLASHLIGHT_ON;
-			setFlashMode(param, ivFlashlight);
-		} else if (flashlightStatus.equals(FlashLightStatus.FLASHLIGHT_ON)) {
 			flashlightStatus = FlashLightStatus.FLASHLIGHT_OFF;
 			setFlashMode(param, ivFlashlight);
-		} else if (flashlightStatus.equals(FlashLightStatus.FLASHLIGHT_OFF)) {
+		} else if (flashlightStatus.equals(FlashLightStatus.FLASHLIGHT_ON)) {
 			flashlightStatus = FlashLightStatus.FLASHLIGHT_AUTO;
+			setFlashMode(param, ivFlashlight);
+		} else if (flashlightStatus.equals(FlashLightStatus.FLASHLIGHT_OFF)) {
+			flashlightStatus = FlashLightStatus.FLASHLIGHT_ON;
 			setFlashMode(param, ivFlashlight);
 		} 
 		
