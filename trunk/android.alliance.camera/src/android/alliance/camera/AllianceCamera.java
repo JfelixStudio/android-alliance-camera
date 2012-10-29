@@ -49,7 +49,6 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	private Camera camera;
 	private Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
 	private SurfaceView surfaceView;
-	private Parameters parameters;
 	private IAllianceCameraListener allianceCameraListener;
 	
 	// private int mOrientation;
@@ -72,8 +71,9 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	private ZoomHelper zoomHelper;
 	private File filePath;
 	private boolean closeAfterShot = false;
+	private int initPictureSize = 3000000;
 	
-	public AllianceCamera(Context ctx, SurfaceView surfaceView, int cameraFacing, boolean useAlternativeFacing, FlashlightHelper flashlightHelper, ZoomHelper zoomHelper, File filePath, boolean closeAfterShot) {
+	public AllianceCamera(Context ctx, SurfaceView surfaceView, int cameraFacing, boolean useAlternativeFacing, FlashlightHelper flashlightHelper, ZoomHelper zoomHelper, File filePath, int initPictureSize, boolean closeAfterShot) {
 		this.ctx = ctx;
 		this.surfaceView = surfaceView;
 		this.cameraFacing = cameraFacing;
@@ -83,6 +83,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		this.zoomHelper = zoomHelper;
 		this.filePath = filePath;
 		this.closeAfterShot = closeAfterShot;
+		this.initPictureSize = initPictureSize;
 		
 		surfaceView.getHolder().addCallback(this);
 
@@ -94,6 +95,8 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 
 		orientationListener = new AllianceOrientationEventListener(ctx, SensorManager.SENSOR_DELAY_NORMAL);
 		orientationListener.addOrientationChangedListeners(this);
+		
+				
 	}
 
 	// SurfaceHolder.Callback ////////////////////////////////
@@ -253,7 +256,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 
 			camera.stopPreview();
 
-			parameters = camera.getParameters();
+			Parameters parameters = camera.getParameters();
 
 			parameters.setPictureFormat(ImageFormat.JPEG);
 
@@ -272,7 +275,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			resolutionHelper.initSupportedScreenSizes(parameters.getSupportedPictureSizes());
 			
 			// Setting 3 megapixel size as default
-			resolutionHelper.setMegaPixelSizeOnDefault(3000000);
+			resolutionHelper.setMegaPixelSizeOnDefault(initPictureSize);
 			parameters.setPictureSize(resolutionHelper.selectedResolution.width, resolutionHelper.selectedResolution.height);
 			
 			camera.setParameters(parameters);
@@ -318,14 +321,15 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		
 		// Turn Camera capture-sound mute
 		audioManager.setStreamMute(AudioManager.STREAM_SYSTEM, true);
-		
+
 		camera.takePicture(null, null, new PhotoCallback());
 		
 		// Turn Camera capture-sound normal
-		audioManager.setStreamMute(AudioManager.STREAM_SYSTEM, false);
+
 	}
 
 	private void setSelectedPictureSize(){
+		Parameters parameters = camera.getParameters();
 		parameters.setPictureSize(resolutionHelper.selectedResolution.width, resolutionHelper.selectedResolution.height);
 		camera.setParameters(parameters);
 	}
@@ -361,6 +365,8 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 				camera.startPreview();
 
 				allianceCameraListener.afterPhotoTaken();
+
+				audioManager.setStreamMute(AudioManager.STREAM_SYSTEM, false);
 				
 				if(closeAfterShot){
 					((Activity) ctx).finish();
@@ -378,7 +384,6 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	}
 
 	public void setCameraParameters(Parameters param) {
-		this.parameters = param;
 		camera.setParameters(param);
 		
 	}
