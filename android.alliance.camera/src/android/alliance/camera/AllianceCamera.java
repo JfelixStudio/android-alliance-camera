@@ -61,7 +61,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	
 	private SensorAutoFocus sensorAutoFocus;
 
-	private AudioManager audioManager;
+	
 	private ResolutionHelper resolutionHelper =  ResolutionHelper.getInstance();
 	private FlashlightHelper flashlightHelper;
 	private ZoomHelper zoomHelper;
@@ -69,17 +69,12 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	private boolean closeAfterShot = false;
 	private int initPictureSize = 3000000;
 	
-	public AllianceCamera(Context ctx, SurfaceView surfaceView, int cameraFacing, boolean useAlternativeFacing, FlashlightHelper flashlightHelper, ZoomHelper zoomHelper, File filePath, int initPictureSize, boolean closeAfterShot) {
+	public AllianceCamera(Context ctx, SurfaceView surfaceView, int cameraFacing, boolean useAlternativeFacing, File filePath) {
 		this.ctx = ctx;
 		this.surfaceView = surfaceView;
 		this.cameraFacing = cameraFacing;
 		this.useAlternativeFacing = useAlternativeFacing;
-		this.audioManager = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
-		this.flashlightHelper = flashlightHelper;
-		this.zoomHelper = zoomHelper;
 		this.filePath = filePath;
-		this.closeAfterShot = closeAfterShot;
-		this.initPictureSize = initPictureSize;
 		
 		surfaceView.getHolder().addCallback(this);
 
@@ -91,10 +86,9 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 
 		orientationListener = new AllianceOrientationEventListener(ctx, SensorManager.SENSOR_DELAY_NORMAL);
 		orientationListener.addOrientationChangedListeners(this);
-		
-				
 	}
 
+	
 	// SurfaceHolder.Callback ////////////////////////////////
 
 	/**
@@ -321,9 +315,6 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 
 		setSelectedPictureSize();
 		
-		// Turn Camera capture-sound mute
-		audioManager.setStreamMute(AudioManager.STREAM_SYSTEM, true);
-
 		camera.takePicture(null, null, new PhotoCallback());
 		
 		// Turn Camera capture-sound normal
@@ -366,7 +357,6 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 
 				allianceCameraListener.afterPhotoTaken();
 
-				audioManager.setStreamMute(AudioManager.STREAM_SYSTEM, false);
 				sensorAutoFocus.startAutoFocus();
 				
 				if(closeAfterShot){
@@ -392,5 +382,36 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 
 	public void addAllianceCameraListener(IAllianceCameraListener allianceCameraListener) {
 		this.allianceCameraListener = allianceCameraListener;
+	}
+	
+
+	/**
+	 * The defalt, preselected picture size. 
+	 * If not set, the default value is 3000000
+	 */
+	public void setInitPictureSize(int initPictureSize){
+		this.initPictureSize = initPictureSize;
+	}
+	
+	/**
+	 * If photo is taken. Should the camera-activity to be close?
+	 * Default is false
+	 */
+	public void setInitCloseAfterShut(boolean value){
+		this.closeAfterShot = closeAfterShot;
+	}
+	
+	/**
+	 * Init if flashlight should be available
+	 */
+	public void setInitFlashlightHelper(FlashlightHelper flashlightHelper){
+		this.flashlightHelper = flashlightHelper;
+	}
+
+	/**
+	 * Init if zoom should be available
+	 */
+	public void setInitZoomHelper(ZoomHelper zoomHelper){
+		this.zoomHelper = zoomHelper;
 	}
 }
