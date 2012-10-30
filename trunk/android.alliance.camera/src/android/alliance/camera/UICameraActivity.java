@@ -104,7 +104,6 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		allianceCamera.setInitFlashlightHelper(flashlightHelper);
 		allianceCamera.setInitZoomHelper(zoomHelper);
 		
-		System.out.println("test");
 		layoutZoom = (LinearLayout) findViewById(R.id.layoutZoom);
 		
 		ib0 = (ImageView) findViewById(R.id.ib0);
