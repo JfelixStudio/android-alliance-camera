@@ -60,7 +60,7 @@ public class BlancCameraActivity extends Activity { //implements Callback {
 
 		File filePath = new File(folderPath, fileName);
 		
-		allianceCamera = new AllianceCamera(this, surfaceView, cameraFacing, useAlternativeFacing, null, null, filePath, 3000000, false);
+		allianceCamera = new AllianceCamera(this, surfaceView, cameraFacing, useAlternativeFacing, filePath);
 	}
 
 	@Override

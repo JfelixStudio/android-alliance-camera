@@ -9,8 +9,10 @@ import android.alliance.helper.FlashlightHelper;
 import android.alliance.helper.ResolutionHelper;
 import android.alliance.helper.ZoomHelper;
 import android.app.Activity;
+import android.content.Context;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -57,6 +59,8 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 	private ImageView ivZoomIn;
 	private FlashlightHelper flashlightHelper = new FlashlightHelper();
 	private ZoomHelper zoomHelper = new ZoomHelper();
+
+	private AudioManager audioManager;
 	
 	private int activityResultCode = RESULT_CANCELED;
 	
@@ -74,6 +78,13 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 			cameraFacing = extras.getInt(AllianceCamera.INTENT_KEY_INITIAL_CAMERA_FACING, CameraInfo.CAMERA_FACING_BACK);
 			useAlternativeFacing = extras.getBoolean(AllianceCamera.INTENT_KEY_USE_ALTERNATIVE_FACING, false);
 		}
+	
+		this.audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+		
+		// Turn Camera capture-sound mute
+		if(audioManager != null){
+			audioManager.setStreamMute(AudioManager.STREAM_SYSTEM, true);	
+		}
 		
 		setContentView(R.layout.activity_uicamera);
 
@@ -82,13 +93,18 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		
 		String folderPath  = Environment.getExternalStorageDirectory().getAbsolutePath() + "/CamTest/";
 		File x = new File(folderPath);
-		x.mkdir();
+		x.mkdirs();
 		String fileName = "IMG" + new SimpleDateFormat("_yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime()) + ".jpg";
 
 		File filePath = new File(folderPath, fileName);
 		
-		allianceCamera = new AllianceCamera(this, surfaceView, cameraFacing, useAlternativeFacing, flashlightHelper, zoomHelper, filePath, 3000000, false);
-
+		allianceCamera = new AllianceCamera(this, surfaceView, cameraFacing, useAlternativeFacing, filePath);
+		allianceCamera.setInitPictureSize(3000000);
+		allianceCamera.setInitCloseAfterShut(false);
+		allianceCamera.setInitFlashlightHelper(flashlightHelper);
+		allianceCamera.setInitZoomHelper(zoomHelper);
+		
+		System.out.println("test");
 		layoutZoom = (LinearLayout) findViewById(R.id.layoutZoom);
 		
 		ib0 = (ImageView) findViewById(R.id.ib0);
@@ -203,6 +219,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		Log.d("#", "onStop()");
 		super.onStop();
 
+		audioManager.setStreamMute(AudioManager.STREAM_SYSTEM, false);
 		allianceCamera.camRelease();
 		setResult(activityResultCode);
 	}
