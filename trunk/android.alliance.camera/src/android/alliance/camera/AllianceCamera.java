@@ -1,6 +1,7 @@
 package android.alliance.camera;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -13,13 +14,15 @@ import android.alliance.helper.ResolutionHelper;
 import android.alliance.helper.ZoomHelper;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
+import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.Size;
 import android.hardware.SensorManager;
-import android.media.AudioManager;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
@@ -344,31 +347,69 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			 */
 			int orientation = Exif.getOrientation(data);
 			Log.d("#", "onPictureTaken().orientation = " + orientation);
-
-			try {
-
-				FileOutputStream localFileOutputStream = new FileOutputStream(filePath);
-
-				localFileOutputStream.write(data);
-				localFileOutputStream.flush();
-				localFileOutputStream.close();
-
-				camera.startPreview();
-
-				allianceCameraListener.afterPhotoTaken();
-
-				sensorAutoFocus.startAutoFocus();
+			
+			if(orientation != 0) {
+				Bitmap bmpSrc = BitmapFactory.decodeByteArray(data, 0, data.length);
 				
-				if(closeAfterShot){
-					((Activity) ctx).finish();
+				if(bmpSrc.getWidth()*bmpSrc.getHeight() > 4000000) {
+					Toast.makeText(ctx, "image to big", Toast.LENGTH_SHORT).show();
 				}
 				
-			} catch (IOException localIOException) {
-				// TODO
-				Log.e("#",localIOException.getMessage());
+				Bitmap bmpRotated = rotate(bmpSrc, orientation);
+				bmpSrc.recycle();
+				
+				try {
+					
+					FileOutputStream localFileOutputStream = new FileOutputStream(filePath);
+					bmpRotated.compress(Bitmap.CompressFormat.JPEG, 90, localFileOutputStream);
+					
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+				
+			} else {
+
+				try {
+	
+					FileOutputStream localFileOutputStream = new FileOutputStream(filePath);
+	
+					localFileOutputStream.write(data);
+					localFileOutputStream.flush();
+					localFileOutputStream.close();
+	
+				} catch (IOException localIOException) {
+					// TODO
+					Log.e("#",localIOException.getMessage());
+				}
+			}
+			
+			camera.startPreview();
+			
+			allianceCameraListener.afterPhotoTaken();
+
+			sensorAutoFocus.startAutoFocus();
+			
+			if(closeAfterShot){
+				((Activity) ctx).finish();
 			}
 		}
 
+	}
+	
+	/**
+	 * Rotates a bitmap by some degrees. The bmpSrc stays untouched and a new rotated
+	 * Bitmap gets created.
+	 * @param bmpSrc
+	 * @param degrees	new rotated Bitmap
+	 * @return
+	 */
+	public Bitmap rotate(Bitmap bmpSrc, int degrees) {
+		int w = bmpSrc.getWidth();
+		int h = bmpSrc.getHeight();
+		Matrix mtx = new Matrix();
+		mtx.postRotate(degrees);
+		Bitmap bmpTrg = Bitmap.createBitmap(bmpSrc, 0, 0, w, h, mtx, true);
+		return bmpTrg;
 	}
 
 	public Parameters getCameraParameters() {
