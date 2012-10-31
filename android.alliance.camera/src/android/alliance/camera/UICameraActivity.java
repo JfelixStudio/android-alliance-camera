@@ -10,6 +10,7 @@ import android.alliance.helper.ResolutionHelper;
 import android.alliance.helper.ZoomHelper;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
 import android.media.AudioManager;
@@ -130,8 +131,11 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 			public void onClick(View v) {
 
 				if(ResolutionHelper.getInstance().lSupportedPictureSizes.size() > 0){
-					ResolutionDialog resDialog = new ResolutionDialog(UICameraActivity.this);
-					resDialog.show();
+//					ResolutionDialog resDialog = new ResolutionDialog(UICameraActivity.this, R.style.MyStandardAlertDialog);
+//					resDialog.show();
+					
+					Intent i = new Intent(UICameraActivity.this, LayerActivity.class);
+					UICameraActivity.this.startActivity(i);
 				}
 			}
 		});
@@ -329,5 +333,15 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 			layoutZoom.addView(ivZoomIn);
 		}
 	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+		if(requestCode == 666){
+			// start preview?
+		}
+	}
+	
+	
 
 }

@@ -38,8 +38,8 @@ public class ResolutionDialog extends Dialog implements OnClickListener{
 	private RadioGroup customRadioGroup;
 	private ResolutionHelper resolutionHelper = ResolutionHelper.getInstance();
 	
-	public ResolutionDialog(Context ctx) {
-		super(ctx);
+	public ResolutionDialog(Context ctx, int style) {
+		super(ctx, style);
 		
 		this.ctx = ctx;
 	}
