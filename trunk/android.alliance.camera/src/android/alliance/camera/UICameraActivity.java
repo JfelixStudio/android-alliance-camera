@@ -28,7 +28,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 
 public class UICameraActivity extends Activity implements IAllianceOrientationChanged, IAllianceCameraListener {
 
-	private SurfaceView surfaceView;
+//	private SurfaceView surfaceView;
 
 //	private float rotation = 0;
 
@@ -86,7 +86,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		
 		setContentView(R.layout.activity_uicamera);
 
-		surfaceView = (SurfaceView) findViewById(R.id.sv_camera);
+		SurfaceView surfaceView = (SurfaceView) findViewById(R.id.sv_camera);
 		
 		
 		String folderPath  = Environment.getExternalStorageDirectory().getAbsolutePath() + "/CamTest/";
