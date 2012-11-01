@@ -61,7 +61,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 	private FlashlightHelper flashlightHelper = new FlashlightHelper();
 	private ZoomHelper zoomHelper = new ZoomHelper();
 
-	private AudioManager audioManager;
+//	private AudioManager audioManager;
 	
 	private int activityResultCode = RESULT_CANCELED;
 	
@@ -80,12 +80,12 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 			useAlternativeFacing = extras.getBoolean(AllianceCamera.INTENT_KEY_USE_ALTERNATIVE_FACING, false);
 		}
 	
-		this.audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+//		audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 		
 		// Turn Camera capture-sound mute
-		if(audioManager != null){
-			audioManager.setStreamMute(AudioManager.STREAM_SYSTEM, true);	
-		}
+//		if(audioManager != null){
+//			audioManager.setStreamMute(AudioManager.STREAM_SYSTEM, true);	
+//		}
 		
 		setContentView(R.layout.activity_uicamera);
 
@@ -222,7 +222,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		Log.d("#", "onStop()");
 		super.onStop();
 
-		audioManager.setStreamMute(AudioManager.STREAM_SYSTEM, false);
+//		audioManager.setStreamMute(AudioManager.STREAM_SYSTEM, false);
 		allianceCamera.camRelease();
 		setResult(activityResultCode);
 	}
