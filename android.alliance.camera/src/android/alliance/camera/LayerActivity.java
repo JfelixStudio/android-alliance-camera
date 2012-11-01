@@ -4,6 +4,7 @@ import android.alliance.data.VOResolution;
 import android.alliance.dialoge.ResolutionDialog;
 import android.alliance.helper.ResolutionHelper;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.hardware.SensorManager;
@@ -13,12 +14,16 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
+import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
@@ -29,18 +34,28 @@ public class LayerActivity extends Activity implements IAllianceOrientationChang
 	private AllianceOrientationEventListener orientationListener;
 	private TextView txTitle;
 	private ImageView backImage;
-	
-	
+	private TableLayout tableLayout;
+	private LinearLayout linearLayout;
+	private View trennstrich;
+//	private ScrollView scrollView;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+
 		
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		
 		setContentView(R.layout.resolutiondialog);
 		
 		orientationListener = new AllianceOrientationEventListener(this, SensorManager.SENSOR_DELAY_NORMAL);
+		
+		tableLayout = (TableLayout) findViewById(R.id.umrandungAussen);
+		linearLayout = (LinearLayout) findViewById(R.id.radarAbstandLinksZumRand);
+		
+		trennstrich = (View) findViewById(R.id.trennstrich);
+//		scrollView = (ScrollView) findViewById(R.id.scrollview);
 		
 		txTitle = (TextView) findViewById(R.id.title);
 		txTitle.setText("Test-Titel");
@@ -56,56 +71,58 @@ public class LayerActivity extends Activity implements IAllianceOrientationChang
 			
 		});
 		
-		customRadioGroup = (RadioGroup) findViewById(R.id.customRadioGroup);
+//		customRadioGroup = (RadioGroup) findViewById(R.id.customRadioGroup);
 		
 		
 		
-		for(VOResolution cm : resolutionHelper.lSupportedPictureSizes) {
-			
-			final RadioButton bt = new RadioButton(this);
-			bt.setTextColor(getResources().getColor(R.color.grau));
-			bt.setButtonDrawable(getResources().getDrawable(R.drawable.radio_bt_selector));
-			bt.setMinWidth(40);
-			bt.setTextSize(20);
-			bt.setId(cm.getId());
-			bt.setText(cm.getSize().width + "x" + cm.getSize().height);
-			bt.setOnClickListener(new android.view.View.OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					for(VOResolution cm : resolutionHelper.lSupportedPictureSizes) {
-						if(cm.getId() == bt.getId()) {
-							resolutionHelper.selectedResolution = cm.getSize();
-							
-							break;
-						}
-					}
-					
-					onBackPressed();
-				}
-				
-			});
-			
-			Size selectedRes = resolutionHelper.selectedResolution;
-			if(selectedRes != null && selectedRes == cm.getSize()){
-				bt.setChecked(true);
-			} else {
-				bt.setChecked(false);
-			}
-			
-			
-			View v = new View(this);
-			v.setBackgroundDrawable(getResources().getDrawable(R.drawable.gradientline));
-			v.setLayoutParams(new TableRow.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-			
-			customRadioGroup.addView(bt);
-			customRadioGroup.addView(v);
-		}
+//		for(VOResolution cm : resolutionHelper.lSupportedPictureSizes) {
+//			
+//			final RadioButton bt = new RadioButton(this);
+//			bt.setTextColor(getResources().getColor(R.color.grau));
+//			bt.setButtonDrawable(getResources().getDrawable(R.drawable.radio_bt_selector));
+//			bt.setMinWidth(40);
+//			bt.setTextSize(20);
+//			bt.setId(cm.getId());
+//			bt.setText(cm.getSize().width + "x" + cm.getSize().height);
+//			bt.setOnClickListener(new android.view.View.OnClickListener() {
+//
+//				@Override
+//				public void onClick(View v) {
+//					for(VOResolution cm : resolutionHelper.lSupportedPictureSizes) {
+//						if(cm.getId() == bt.getId()) {
+//							resolutionHelper.selectedResolution = cm.getSize();
+//							
+//							break;
+//						}
+//					}
+//					
+//					onBackPressed();
+//				}
+//				
+//			});
+//			
+//			Size selectedRes = resolutionHelper.selectedResolution;
+//			if(selectedRes != null && selectedRes == cm.getSize()){
+//				bt.setChecked(true);
+//			} else {
+//				bt.setChecked(false);
+//			}
+//			
+//			
+//			View v = new View(this);
+//			v.setBackgroundDrawable(getResources().getDrawable(R.drawable.gradientline));
+//			v.setLayoutParams(new TableRow.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+//			
+//			customRadioGroup.addView(bt);
+//			customRadioGroup.addView(v);
+//		}
 		
 		
 		orientationListener.addOrientationChangedListeners(this);
 		orientationListener.enable();
 	}
+
+
 
 	@Override
 	public void onAllianceOrientationChanged(int orientation, int orientationType, int rotation) {
@@ -115,10 +132,26 @@ public class LayerActivity extends Activity implements IAllianceOrientationChang
 	}
 	
 	private void orientationHasChanged(float degree) {
-			 
+	
+		// Nur temporär, damit die Activity in einer anständigen Größe skalliert
+		if(degree == 0.0f){
+			getWindow().setLayout(300, 600);
+		}
+		
+		if(degree == 90.0f){
+			getWindow().setLayout(600, 300);
+		}
+		
+		
 		rotateView(txTitle, degree);
 		rotateView(backImage, degree);
-		rotateView(customRadioGroup, degree);
+//		rotateView(customRadioGroup, degree);
+//		rotateView(tableLayout, degree);
+//		rotateView(linearLayout, degree);
+//		rotateView(trennstrich, degree);
+//		rotateView(scrollView, degree);
+		
+	
 	}
 
 	private void rotateView(View view, float degree) {
@@ -138,7 +171,7 @@ public class LayerActivity extends Activity implements IAllianceOrientationChang
 		}
 
 	}
-
+	
 	@Override
 	public void onBackPressed() {
 		finish();
