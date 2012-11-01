@@ -23,6 +23,7 @@ import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.Size;
 import android.hardware.SensorManager;
+import android.media.AudioManager;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
@@ -64,6 +65,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	
 	private SensorAutoFocus sensorAutoFocus;
 
+	private AudioManager audioManager;
 	
 	private ResolutionHelper resolutionHelper =  ResolutionHelper.getInstance();
 	private FlashlightHelper flashlightHelper;
@@ -78,6 +80,11 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		this.cameraFacing = cameraFacing;
 		this.useAlternativeFacing = useAlternativeFacing;
 		this.filePath = filePath;
+		
+		audioManager = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
+		if(audioManager != null){
+			audioManager.setStreamMute(AudioManager.STREAM_SYSTEM, true);	
+		}
 		
 		surfaceView.getHolder().addCallback(this);
 
@@ -302,6 +309,9 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			sensorAutoFocus.setCamera(null);	
 		}
 		
+		if(audioManager != null) {
+			audioManager.setStreamMute(AudioManager.STREAM_SYSTEM, false);
+		}
 	}
 
 	/**
@@ -395,6 +405,8 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		}
 
 	}
+	
+	
 	
 	/**
 	 * Rotates a bitmap by some degrees. The bmpSrc stays untouched and a new rotated
