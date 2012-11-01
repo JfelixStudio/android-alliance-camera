@@ -5,6 +5,7 @@ import android.alliance.camera.start.R;
 import android.alliance.camera.AllianceCamera;
 import android.alliance.camera.BlancCameraActivity;
 import android.alliance.camera.UICameraActivity;
+import android.alliance.camera.CameraWrapperActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.hardware.Camera.CameraInfo;
@@ -17,6 +18,7 @@ public class MainActivity extends Activity {
 
 	private Button btBlancCamera;
 	private Button btUICamera;
+	private Button btCameraWrapper;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,15 @@ public class MainActivity extends Activity {
 				intent.putExtra(AllianceCamera.INTENT_KEY_INITIAL_CAMERA_FACING, CameraInfo.CAMERA_FACING_BACK);
 				intent.putExtra(AllianceCamera.INTENT_KEY_USE_ALTERNATIVE_FACING, true);
 		        startActivityForResult(intent, 666);
+			}
+		});
+		
+		btCameraWrapper = (Button) findViewById(R.id.btCameraWrapper);
+		btCameraWrapper.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(MainActivity.this, CameraWrapperActivity.class);
+		        startActivity(intent);
 			}
 		});
 		
