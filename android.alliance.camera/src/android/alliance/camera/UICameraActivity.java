@@ -307,7 +307,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 			
 			ivZoomIn = new ImageView(this);
 			ivZoomIn.setScaleType(ScaleType.FIT_CENTER);
-			ivZoomIn.setImageResource(R.drawable.bt_zoom_in_default);
+			ivZoomIn.setImageResource(R.drawable.bt_zoom_in_selector);
 			ivZoomIn.setOnClickListener(new OnClickListener() {
 
 				@Override
@@ -319,7 +319,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 			
 			ivZoomOut = new ImageView(this);	
 			ivZoomOut.setScaleType(ScaleType.FIT_CENTER);
-			ivZoomOut.setImageResource(R.drawable.bt_zoom_out_default);
+			ivZoomOut.setImageResource(R.drawable.bt_zoom_out_selector);
 			ivZoomOut.setOnClickListener(new OnClickListener() {
 
 				@Override
