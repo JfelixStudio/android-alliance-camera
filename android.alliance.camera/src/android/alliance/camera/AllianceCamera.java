@@ -30,6 +30,11 @@ import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
 import android.widget.Toast;
 
+/**
+ * 
+ * @author alliance
+ *
+ */
 public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 
 	/**
@@ -68,8 +73,8 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	private AudioManager audioManager;
 	
 	private ResolutionHelper resolutionHelper =  ResolutionHelper.getInstance();
-	private FlashlightHelper flashlightHelper;
-	private ZoomHelper zoomHelper;
+	public FlashlightHelper flashlightHelper;
+	public ZoomHelper zoomHelper;
 	private File filePath;
 	private boolean closeAfterShot = false;
 	private int initPictureSize = 3000000;
