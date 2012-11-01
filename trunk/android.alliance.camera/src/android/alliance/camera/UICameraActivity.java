@@ -4,16 +4,13 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import android.alliance.dialoge.ResolutionDialog;
 import android.alliance.helper.FlashlightHelper;
 import android.alliance.helper.ResolutionHelper;
 import android.alliance.helper.ZoomHelper;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
-import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -58,8 +55,8 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 	private ImageView ivZoomOut;
 
 	private ImageView ivZoomIn;
-	private FlashlightHelper flashlightHelper = new FlashlightHelper();
-	private ZoomHelper zoomHelper = new ZoomHelper();
+//	private FlashlightHelper flashlightHelper = new FlashlightHelper();
+//	private ZoomHelper zoomHelper = new ZoomHelper();
 
 //	private AudioManager audioManager;
 	
@@ -102,8 +99,8 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		allianceCamera = new AllianceCamera(this, surfaceView, cameraFacing, useAlternativeFacing, filePath);
 		allianceCamera.setInitPictureSize(3000000);
 		allianceCamera.setInitCloseAfterShut(false);
-		allianceCamera.setInitFlashlightHelper(flashlightHelper);
-		allianceCamera.setInitZoomHelper(zoomHelper);
+		allianceCamera.setInitFlashlightHelper(new FlashlightHelper());
+		allianceCamera.setInitZoomHelper(new ZoomHelper());
 		
 		layoutZoom = (LinearLayout) findViewById(R.id.layoutZoom);
 		
@@ -164,7 +161,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 			public void onClick(View v) {
 
 				Parameters param = allianceCamera.getCameraParameters();
-				flashlightHelper.nextFlashMode(param, ibFlashlight);
+				allianceCamera.flashlightHelper.nextFlashMode(param, ibFlashlight);
 				allianceCamera.setCameraParameters(param);
 			}
 		});
@@ -177,9 +174,9 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 
 	private void initFlashlight() {
 
-		flashlightHelper.init(this);
+		allianceCamera.flashlightHelper.init(this);
 		
-		if (!flashlightHelper.available) {
+		if (!allianceCamera.flashlightHelper.available) {
 			ibFlashlight.setVisibility(View.GONE);
 		} 
 	}
@@ -282,7 +279,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 	// called from AllianceCamera
 	public void createZoomButtons() {
 
-		if(zoomHelper.mSmoothZoomSupported){
+		if(allianceCamera.zoomHelper.mSmoothZoomSupported){
 			
 			SeekBar seekBar = new SeekBar(this);
 			seekBar.setThumb(getResources().getDrawable(R.drawable.bt_back));
@@ -303,7 +300,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 			
 			layoutZoom.addView(seekBar);
 			
-		} else if(zoomHelper.mZoomSupported){
+		} else if(allianceCamera.zoomHelper.mZoomSupported){
 			
 			ivZoomIn = new ImageView(this);
 			ivZoomIn.setScaleType(ScaleType.FIT_CENTER);
@@ -312,7 +309,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 
 				@Override
 				public void onClick(View v) {
-					Parameters param = zoomHelper.zoomIn(allianceCamera.getCameraParameters()); 
+					Parameters param = allianceCamera.zoomHelper.zoomIn(allianceCamera.getCameraParameters()); 
 					allianceCamera.setCameraParameters(param);
 				}
 			});
@@ -324,7 +321,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 
 				@Override
 				public void onClick(View v) {
-					Parameters param = zoomHelper.zoomOut(allianceCamera.getCameraParameters()); 
+					Parameters param = allianceCamera.zoomHelper.zoomOut(allianceCamera.getCameraParameters()); 
 					allianceCamera.setCameraParameters(param);
 				}
 			});
