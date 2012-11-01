@@ -50,56 +50,56 @@ public class ResolutionDialog extends Dialog implements OnClickListener{
 		
 		setContentView(R.layout.resolutiondialog);
 		
-		txTitle = (TextView) findViewById(R.id.title);
-		txTitle.setText("Test-Titel");
-
-		ImageView backImage = (ImageView) findViewById(R.id.backImage);
-		backImage.setOnClickListener(this);
-		
-		customRadioGroup = (RadioGroup) findViewById(R.id.customRadioGroup);
-		
-		
-		
-		for(VOResolution cm : resolutionHelper.lSupportedPictureSizes) {
-			
-			final RadioButton bt = new RadioButton(ctx);
-			bt.setTextColor(ctx.getResources().getColor(R.color.grau));
-			bt.setButtonDrawable(ctx.getResources().getDrawable(R.drawable.radio_bt_selector));
-			bt.setMinWidth(40);
-			bt.setTextSize(20);
-			bt.setId(cm.getId());
-			bt.setText(cm.getSize().width + "x" + cm.getSize().height);
-			bt.setOnClickListener(new android.view.View.OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					for(VOResolution cm : resolutionHelper.lSupportedPictureSizes) {
-						if(cm.getId() == bt.getId()) {
-							resolutionHelper.selectedResolution = cm.getSize();
-							
-							break;
-						}
-					}
-					dismiss();
-				}
-				
-			});
-			
-			Size selectedRes = resolutionHelper.selectedResolution;
-			if(selectedRes != null && selectedRes == cm.getSize()){
-				bt.setChecked(true);
-			} else {
-				bt.setChecked(false);
-			}
-			
-			
-			View v = new View(ctx);
-			v.setBackgroundDrawable(ctx.getResources().getDrawable(R.drawable.gradientline));
-			v.setLayoutParams(new TableRow.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-			
-			customRadioGroup.addView(bt);
-			customRadioGroup.addView(v);
-		}
+//		txTitle = (TextView) findViewById(R.id.title);
+//		txTitle.setText("Test-Titel");
+//
+//		ImageView backImage = (ImageView) findViewById(R.id.backImage);
+//		backImage.setOnClickListener(this);
+//		
+//		customRadioGroup = (RadioGroup) findViewById(R.id.customRadioGroup);
+//		
+//		
+//		
+//		for(VOResolution cm : resolutionHelper.lSupportedPictureSizes) {
+//			
+//			final RadioButton bt = new RadioButton(ctx);
+//			bt.setTextColor(ctx.getResources().getColor(R.color.grau));
+//			bt.setButtonDrawable(ctx.getResources().getDrawable(R.drawable.radio_bt_selector));
+//			bt.setMinWidth(40);
+//			bt.setTextSize(20);
+//			bt.setId(cm.getId());
+//			bt.setText(cm.getSize().width + "x" + cm.getSize().height);
+//			bt.setOnClickListener(new android.view.View.OnClickListener() {
+//
+//				@Override
+//				public void onClick(View v) {
+//					for(VOResolution cm : resolutionHelper.lSupportedPictureSizes) {
+//						if(cm.getId() == bt.getId()) {
+//							resolutionHelper.selectedResolution = cm.getSize();
+//							
+//							break;
+//						}
+//					}
+//					dismiss();
+//				}
+//				
+//			});
+//			
+//			Size selectedRes = resolutionHelper.selectedResolution;
+//			if(selectedRes != null && selectedRes == cm.getSize()){
+//				bt.setChecked(true);
+//			} else {
+//				bt.setChecked(false);
+//			}
+//			
+//			
+//			View v = new View(ctx);
+//			v.setBackgroundDrawable(ctx.getResources().getDrawable(R.drawable.gradientline));
+//			v.setLayoutParams(new TableRow.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+//			
+//			customRadioGroup.addView(bt);
+//			customRadioGroup.addView(v);
+//		}
    }
    
 	

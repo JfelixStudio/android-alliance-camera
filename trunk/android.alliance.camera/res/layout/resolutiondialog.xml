@@ -2,7 +2,7 @@
 
      
 		<TableLayout 
-		    xmlns:android="http://schemas.android.com/apk/res/android"
+		     xmlns:android="http://schemas.android.com/apk/res/android"
 		     android:id="@+id/umrandungAussen"
 		     android:layout_width="fill_parent" 
 			 android:layout_height="fill_parent"
@@ -37,12 +37,14 @@
 			 <TableRow>
 			     
 					<View
-			        style="@style/MyActionBar_Trennstrich"/>  
+					    android:id="@+id/trennstrich"
+			        	style="@style/MyActionBar_Trennstrich"/>  
 			</TableRow>
 			
 		    <TableRow>
 
 		        <ScrollView 
+		            android:id="@+id/scrollview"
 		            android:layout_width="fill_parent"
 				    android:layout_height="wrap_content"
 				    android:fillViewport="true">
