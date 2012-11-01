@@ -37,7 +37,7 @@
 				    android:scaleType="fitCenter"
 				    android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
-				    android:src="@drawable/bt_resolution_default" />
+				    android:src="@drawable/bt_resolution_selector" />
 	        
 	        </LinearLayout>
 	        
@@ -85,7 +85,7 @@
 		            android:scaleType="fitCenter"
 		            android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
-				    android:src="@drawable/bt_flashlight_auto_default"/>
+				    android:src="@drawable/bt_flashlight_auto_selector"/>
 			    
 	   		 </LinearLayout>
 	    
@@ -202,7 +202,7 @@
 			    android:scaleType="fitCenter"
    	            android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
-			    android:src="@drawable/bt_shutter" />
+			    android:src="@drawable/bt_shutter_selector" />
 	        
         </LinearLayout>
         
