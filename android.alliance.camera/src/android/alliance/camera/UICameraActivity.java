@@ -34,7 +34,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 
 	private ImageView ib0;
 	private ImageView ib1;
-	private ImageView ib2;
+	private ImageView ivShutter;
 
 	private ImageView ivResolutionDialog;
 	private ImageView ibLeft1;
@@ -77,13 +77,6 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 			useAlternativeFacing = extras.getBoolean(AllianceCamera.INTENT_KEY_USE_ALTERNATIVE_FACING, false);
 		}
 	
-//		audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-		
-		// Turn Camera capture-sound mute
-//		if(audioManager != null){
-//			audioManager.setStreamMute(AudioManager.STREAM_SYSTEM, true);	
-//		}
-		
 		setContentView(R.layout.activity_uicamera);
 
 		SurfaceView surfaceView = (SurfaceView) findViewById(R.id.sv_camera);
@@ -112,8 +105,8 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 			}
 		});
 		ib1 = (ImageView) findViewById(R.id.ib1);
-		ib2 = (ImageView) findViewById(R.id.ib2);
-		ib2.setOnClickListener(new View.OnClickListener() {
+		ivShutter = (ImageView) findViewById(R.id.ib2);
+		ivShutter.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -219,7 +212,6 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		Log.d("#", "onStop()");
 		super.onStop();
 
-//		audioManager.setStreamMute(AudioManager.STREAM_SYSTEM, false);
 		allianceCamera.camRelease();
 		setResult(activityResultCode);
 	}
@@ -242,7 +234,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		
 		rotateView(ib0, degree);
 		rotateView(ib1, degree);
-		rotateView(ib2, degree);
+		rotateView(ivShutter, degree);
 
 		// rotateView(ibLeft0, degree); // not rotated to see the difference
 		rotateView(ibLeft1, degree);
@@ -338,7 +330,4 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 			// start preview?
 		}
 	}
-	
-	
-
 }

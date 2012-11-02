@@ -200,7 +200,8 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			camRelease();
 
 			Log.e("#", "Camera failed to open: " + e.getLocalizedMessage());
-			Toast.makeText(ctx, e.getLocalizedMessage(), Toast.LENGTH_LONG);
+			Toast.makeText(ctx, "Die Kamera ist nicht verfügbar", Toast.LENGTH_LONG);
+			((Activity) ctx).finish();
 		}
 		orientationListener.setCameraId(cameraId);
 	}
@@ -398,14 +399,13 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 				}
 			}
 			
-			camera.startPreview();
-			
 			allianceCameraListener.afterPhotoTaken();
 
-			sensorAutoFocus.startAutoFocus();
-			
 			if(closeAfterShot){
 				((Activity) ctx).finish();
+			} else {
+				camera.startPreview();
+				sensorAutoFocus.startAutoFocus();
 			}
 		}
 
@@ -456,7 +456,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	 * Default is false
 	 */
 	public void setInitCloseAfterShut(boolean value){
-		this.closeAfterShot = closeAfterShot;
+		this.closeAfterShot = value;
 	}
 	
 	/**
