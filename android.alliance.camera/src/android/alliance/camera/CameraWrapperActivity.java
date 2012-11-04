@@ -1,6 +1,7 @@
 package android.alliance.camera;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
@@ -20,10 +21,10 @@ public class CameraWrapperActivity extends Activity {
 		
 		FrameLayout frameLayout = new FrameLayout(this);
 		FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+		frameLayout.setBackgroundColor(Color.RED);
 		addContentView(frameLayout, params);
 		
 		cameraWrapper = new CameraWrapper(this, frameLayout);
-		
 	}
 	
 	@Override
@@ -42,6 +43,7 @@ public class CameraWrapperActivity extends Activity {
 	protected void onResume() {
 		Log.d("#", "onResume()");
 		super.onResume();
+		cameraWrapper.onResume();
 	}
 
 	@Override
@@ -54,6 +56,7 @@ public class CameraWrapperActivity extends Activity {
 	protected void onStop() {
 		Log.d("#", "onStop()");
 		super.onStop();
+		cameraWrapper.onStop();
 	}
 	
 	@Override

@@ -143,7 +143,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 
 		sensorAutoFocus.stopAutoFocus();
 		orientationListener.disable();
-		camRelease();
+		releaseCamera();
 	}
 
 	// IAllianceOrientationChanged /////////////////////////
@@ -197,7 +197,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			}
 
 		} catch (Exception e) {
-			camRelease();
+			releaseCamera();
 
 			Log.e("#", "Camera failed to open: " + e.getLocalizedMessage());
 			Toast.makeText(ctx, "Die Kamera ist nicht verfügbar", Toast.LENGTH_LONG);
@@ -303,7 +303,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		}
 	}
 	
-	public void camRelease() {
+	public void releaseCamera() {
 		if (camera != null) {
 			camera.stopPreview();
 			camera.setPreviewCallback(null);
