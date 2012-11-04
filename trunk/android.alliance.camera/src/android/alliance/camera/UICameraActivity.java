@@ -212,7 +212,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		Log.d("#", "onStop()");
 		super.onStop();
 
-		allianceCamera.camRelease();
+		allianceCamera.releaseCamera();
 		setResult(activityResultCode);
 	}
 	

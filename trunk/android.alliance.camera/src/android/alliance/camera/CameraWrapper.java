@@ -7,7 +7,7 @@ import android.view.SurfaceView;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-public class CameraWrapper {
+public class CameraWrapper implements IAllianceCameraListener {
 
 	private Activity ctx;
 	private AllianceCamera allianceCamera;
@@ -18,8 +18,26 @@ public class CameraWrapper {
 		LayoutInflater layoutInflater = ctx.getLayoutInflater();
 		FrameLayout cameraLayout = (FrameLayout) layoutInflater.inflate(R.layout.camera_wrapper, null);
 		SurfaceView surfaceView = (SurfaceView) cameraLayout.findViewById(R.id.sv_camera);
-		
+		viewGroup.addView(cameraLayout);
 		
 		allianceCamera = new AllianceCamera(ctx, surfaceView, CameraInfo.CAMERA_FACING_BACK, false, null);
+	}
+	
+	@Override
+	public void onCameraCreated() {
+		
+	}
+	
+	public void onResume() {
+		allianceCamera.addAllianceCameraListener(this);
+	}
+	
+	public void onStop() {
+		allianceCamera.releaseCamera();
+	}
+
+	@Override
+	public void afterPhotoTaken() {
+		
 	}
 }

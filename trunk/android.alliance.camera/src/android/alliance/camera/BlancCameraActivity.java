@@ -93,7 +93,7 @@ public class BlancCameraActivity extends Activity { //implements Callback {
 		super.onStop();
 		
 		// TODO: sollte das nicht in onPause()? Ist aber schon in onSurfaceDestroyed
-		allianceCamera.camRelease();
+		allianceCamera.releaseCamera();
 	}
 	
 	@Override
