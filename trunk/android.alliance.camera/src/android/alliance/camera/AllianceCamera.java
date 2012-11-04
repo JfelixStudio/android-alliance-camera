@@ -25,9 +25,11 @@ import android.hardware.Camera.Size;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.util.Log;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 /**
@@ -62,7 +64,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 
 	/**
 	 * CameraInfo.CAMERA_FACING_BACK = 0 <br>
-	 * CameraInfo.CAMERA_FACING_FRONT = 1
+	 * CameraInfo.CAMERA_FACING_FRONT = 1 <br>
 	 * AllianceCamera.CAMERA_FACING_BACK_OR_FRONT
 	 */
 	private Integer cameraFacing = null;
@@ -80,6 +82,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	private int initPictureSize = 3000000;
 	
 	public AllianceCamera(Context ctx, SurfaceView surfaceView, int cameraFacing, boolean useAlternativeFacing, File filePath) {
+		Log.d("#", "AllianceCamera()");
 		this.ctx = ctx;
 		this.surfaceView = surfaceView;
 		this.cameraFacing = cameraFacing;
@@ -158,7 +161,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		 * camera. This affects the pictures returned from JPEG
 		 * android.hardware.Camera.PictureCallback.
 		 */
-		localParameters.setRotation(rotation);
+//		localParameters.setRotation(rotation);
 		camera.setParameters(localParameters);
 	}
 
@@ -190,8 +193,10 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			}
 
 			if (camera != null) {
+				
 				camera.setPreviewDisplay(holder);
-
+				initCameraDisplayOrientation(camera, cameraId, cameraFacing);
+				
 			} else {
 				throw new Exception();
 			}
@@ -204,6 +209,38 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			((Activity) ctx).finish();
 		}
 		orientationListener.setCameraId(cameraId);
+	}
+	
+	/**
+	 * If the Activity is not fixed to landscape this function is important.<br>
+	 * 1. degrees = the rotation of the screen from its "natural" orientation. <br>
+	 * 2. info.orientation = The orientation of the camera image. The value is the angle that the 
+	 * camera image needs to be rotated clockwise so it shows correctly on the display in its natural orientation.
+	 * @param camera
+	 */
+	private void initCameraDisplayOrientation(Camera camera, int cameraId, int camerFacing) {
+		Camera.CameraInfo info = new Camera.CameraInfo();
+	    Camera.getCameraInfo(cameraId, info);
+	     
+		WindowManager winManager = (WindowManager) ctx.getSystemService(Context.WINDOW_SERVICE);
+	    int rotation = winManager.getDefaultDisplay().getRotation();
+	    int degrees = 0;
+
+	     switch (rotation) {
+	         case Surface.ROTATION_0: degrees = 0; break;
+	         case Surface.ROTATION_90: degrees = 90; break;
+	         case Surface.ROTATION_180: degrees = 180; break;
+	         case Surface.ROTATION_270: degrees = 270; break;
+	     }
+
+	     int result;
+	     if (cameraFacing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+	         result = (info.orientation + degrees) % 360;
+	         result = (360 - result) % 360;  // compensate the mirror
+	     } else {  // back-facing
+	         result = (info.orientation - degrees + 360) % 360;
+	     }
+		camera.setDisplayOrientation(result);
 	}
 
 	/**
@@ -253,7 +290,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 				}
 			}
 		}
-
+		
 		return cam;
 	}
 
@@ -471,5 +508,9 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	 */
 	public void setInitZoomHelper(ZoomHelper zoomHelper){
 		this.zoomHelper = zoomHelper;
+	}
+	
+	public void setFilePaht(File filePath) {
+		this.filePath = filePath;
 	}
 }

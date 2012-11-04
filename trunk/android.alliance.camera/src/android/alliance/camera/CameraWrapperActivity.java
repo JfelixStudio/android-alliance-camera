@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.FrameLayout.LayoutParams;
 
 public class CameraWrapperActivity extends Activity {
@@ -24,7 +25,8 @@ public class CameraWrapperActivity extends Activity {
 		frameLayout.setBackgroundColor(Color.RED);
 		addContentView(frameLayout, params);
 		
-		cameraWrapper = new CameraWrapper(this, frameLayout);
+		android.widget.RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+		cameraWrapper = new CameraWrapper(this, frameLayout, layoutParams);
 	}
 	
 	@Override
