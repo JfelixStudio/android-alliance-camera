@@ -32,8 +32,25 @@
 			    android:src="@drawable/bt_resolution_selector" />
             
     	</LinearLayout>
-	
+    	
 	</RelativeLayout>
+	
+	<LinearLayout
+            android:id="@+id/rightMenu"
+		    android:layout_width="wrap_content"
+		    android:layout_height="match_parent" 
+		    android:layout_gravity="right"
+		    android:orientation="vertical"
+		    android:background="#44000000">
+         
+            <ImageView
+			    android:id="@+id/ibShutter"
+			    android:scaleType="fitCenter"
+   	            android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:src="@drawable/bt_shutter_selector" />
+            
+	</LinearLayout>
 	
     <android.alliance.focus.MyFocusRectangle
          android:id="@+id/focus_rectangle"
