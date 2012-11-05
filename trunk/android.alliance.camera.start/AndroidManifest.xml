@@ -37,7 +37,7 @@
         
         <activity android:name="android.alliance.camera.BlancCameraActivity" android:screenOrientation="landscape" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
 		<activity android:name="android.alliance.camera.UICameraActivity" android:screenOrientation="landscape" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
-		<activity android:name="android.alliance.camera.CameraWrapperActivity" android:screenOrientation="landscape" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
+		<activity android:name="android.alliance.camera.CameraWrapperActivity" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
 		
 		<activity android:name="android.alliance.camera.LayerActivity" android:theme="@android:style/Theme.Dialog"></activity>
     </application>
