@@ -37,31 +37,31 @@
 	    android:background="#44000000"
 	    android:visibility="invisible">
 
-	    <LinearLayout
-	        android:orientation="vertical"
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent" >
+<!-- 	    <LinearLayout -->
+<!-- 	        android:orientation="vertical" -->
+<!-- 	        android:layout_width="match_parent" -->
+<!-- 	        android:layout_height="match_parent" > -->
 
-	        <RadioButton
-	            android:id="@+id/radioButton3"
-	            android:layout_width="match_parent"
-	            android:layout_height="wrap_content"
-	            android:layout_marginBottom="20dp"
-	            android:text="RadioButton" />
-	        <RadioButton
-	            android:id="@+id/radioButton2"
-	            android:layout_width="match_parent"
-	            android:layout_height="wrap_content"
-	            android:layout_marginBottom="20dp"
-	            android:text="RadioButton" />
+<!-- 	        <RadioButton -->
+<!-- 	            android:id="@+id/radioButton3" -->
+<!-- 	            android:layout_width="match_parent" -->
+<!-- 	            android:layout_height="wrap_content" -->
+<!-- 	            android:layout_marginBottom="20dp" -->
+<!-- 	            android:text="RadioButton" /> -->
+<!-- 	        <RadioButton -->
+<!-- 	            android:id="@+id/radioButton2" -->
+<!-- 	            android:layout_width="match_parent" -->
+<!-- 	            android:layout_height="wrap_content" -->
+<!-- 	            android:layout_marginBottom="20dp" -->
+<!-- 	            android:text="RadioButton" /> -->
 
-	        <RadioButton
-	            android:id="@+id/radioButton1"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:text="RadioButton" />
+<!-- 	        <RadioButton -->
+<!-- 	            android:id="@+id/radioButton1" -->
+<!-- 	            android:layout_width="wrap_content" -->
+<!-- 	            android:layout_height="wrap_content" -->
+<!-- 	            android:text="RadioButton" /> -->
 
-	    </LinearLayout>
+<!-- 	    </LinearLayout> -->
 	</ScrollView>
 	
 </RelativeLayout>
