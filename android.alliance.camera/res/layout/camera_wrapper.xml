@@ -1,60 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-    
-    
-    <SurfaceView 
-        android:id="@+id/sv_camera"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
-    
-    
-     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	    android:layout_width="wrap_content"
-	    android:layout_height="fill_parent" 
-	    android:layout_gravity="left">
-    
-        <LinearLayout
-            android:id="@+id/leftMenu"
-		    android:layout_width="wrap_content"
-		    android:layout_height="match_parent" 
-		    android:layout_gravity="left"
-		    android:orientation="vertical"
-		    android:background="#44000000">
-		    
-            <ImageView
-			    android:id="@+id/ivResolution"
-			    android:scaleType="fitCenter"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:src="@drawable/bt_resolution_selector" />
-            
-    	</LinearLayout>
-    	
-	</RelativeLayout>
 	
 	<LinearLayout
-            android:id="@+id/rightMenu"
-		    android:layout_width="wrap_content"
-		    android:layout_height="match_parent" 
-		    android:layout_gravity="right"
-		    android:orientation="vertical"
-		    android:background="#44000000">
-         
-            <ImageView
-			    android:id="@+id/ibShutter"
-			    android:scaleType="fitCenter"
-   	            android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:src="@drawable/bt_shutter_selector" />
-            
+	    android:id="@+id/menu"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentBottom="true"
+	    android:background="#44000000"
+	    android:orientation="horizontal" >
+
+	    <ImageView
+	        android:id="@+id/ivResolution"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:scaleType="fitCenter"
+	        android:src="@drawable/bt_resolution_selector" />
+
+	    <ImageView
+	        android:id="@+id/ibShutter"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:scaleType="fitCenter"
+	        android:src="@drawable/bt_shutter_selector" />
+
 	</LinearLayout>
+
+	<ScrollView
+	    android:id="@+id/scrollView1"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_above="@+id/menu" 
+	    android:background="#44000000"
+	    android:visibility="invisible">
+
+	    <LinearLayout
+	        android:orientation="vertical"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent" >
+
+	        <RadioButton
+	            android:id="@+id/radioButton3"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_marginBottom="20dp"
+	            android:text="RadioButton" />
+	        <RadioButton
+	            android:id="@+id/radioButton2"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_marginBottom="20dp"
+	            android:text="RadioButton" />
+
+	        <RadioButton
+	            android:id="@+id/radioButton1"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="RadioButton" />
+
+	    </LinearLayout>
+	</ScrollView>
 	
-    <android.alliance.focus.MyFocusRectangle
-         android:id="@+id/focus_rectangle"
-         android:layout_width="match_parent"
-         android:layout_height="match_parent"/>
-    
-</FrameLayout>
+</RelativeLayout>

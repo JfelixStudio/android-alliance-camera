@@ -20,15 +20,15 @@ public class CameraWrapperActivity extends Activity {
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		
-		RelativeLayout frameLayout = new RelativeLayout(this);
+		RelativeLayout relativeLayout = new RelativeLayout(this);
 		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-		frameLayout.setBackgroundColor(Color.RED);
-		addContentView(frameLayout, params);
+		relativeLayout.setBackgroundColor(Color.RED);
+		addContentView(relativeLayout, params);
 		
 		RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(300, 500);
 		layoutParams.leftMargin = 100;
 		layoutParams.topMargin = 100;
-		cameraWrapper = new CameraWrapper(this, frameLayout, layoutParams);
+		cameraWrapper = new CameraWrapper(this, relativeLayout, layoutParams);
 	}
 	
 	@Override
