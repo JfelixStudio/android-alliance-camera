@@ -11,12 +11,14 @@ import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
 public class CameraWrapper implements IAllianceCameraListener {
 
-	private Activity ctx;
+	final private Activity ctx;
 	private RelativeLayout relativeLayout;
 	private RelativeLayout cameraLayout;
 	private AllianceCamera allianceCamera;
@@ -25,7 +27,7 @@ public class CameraWrapper implements IAllianceCameraListener {
 	private ImageView ivResolution;
 	private ScrollView scv;
 	
-	public CameraWrapper(Activity ctx, RelativeLayout relativeLayout, RelativeLayout.LayoutParams params) {
+	public CameraWrapper(final Activity ctx, RelativeLayout relativeLayout, RelativeLayout.LayoutParams params) {
 		this.ctx = ctx;
 		this.relativeLayout = relativeLayout;
 		
@@ -62,8 +64,34 @@ public class CameraWrapper implements IAllianceCameraListener {
 			public void onClick(View v) {
 				if(scv.getVisibility() == View.INVISIBLE) {
 					scv.setVisibility(View.VISIBLE);
+					
+					RadioGroup rg = new RadioGroup(ctx);
+					scv.addView(rg);
+					
+					RadioButton rbChecked = null;
+					String[] isoValues = allianceCamera.getIsoValues();
+					for(String isoValue : isoValues) {
+						RadioButton rb = new RadioButton(ctx);
+						rb.setText(isoValue);
+						if(isoValue.equals(allianceCamera.getIsoValue())) {
+							rbChecked = rb;
+						}
+						
+						rg.addView(rb);
+					}
+					rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+						@Override
+						public void onCheckedChanged(RadioGroup group, int checkedId) {
+							RadioButton rbc = (RadioButton) group.findViewById(checkedId);
+							allianceCamera.setIsoValue((String) rbc.getText());
+						}
+					});
+					
+					rg.check(rbChecked.getId());
+					
 				} else {
 					scv.setVisibility(View.INVISIBLE);
+					scv.removeAllViews();
 				}
 			}
 		});
