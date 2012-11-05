@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 
 public class CameraWrapper implements IAllianceCameraListener {
@@ -24,7 +25,7 @@ public class CameraWrapper implements IAllianceCameraListener {
 	
 	private ImageView ivShutter; 
 	
-	public CameraWrapper(Activity ctx, ViewGroup viewGroup, LayoutParams params) {
+	public CameraWrapper(Activity ctx, ViewGroup viewGroup, RelativeLayout.LayoutParams params) {
 		this.ctx = ctx;
 		this.viewGroup = viewGroup;
 		
