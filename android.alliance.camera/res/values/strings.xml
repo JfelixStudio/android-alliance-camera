@@ -1,4 +1,13 @@
 <resources>
     <string name="app_name">#Alliance Camera</string>
     <string name="cameraAufloesung">Auflösung auswählen</string>
+    
+    
+    <string name="whiteBalance">white balance</string>
+    <string name="auto">auto</string>
+    <string name="incandescent">incandescent</string>
+    <string name="fluorescent">fluorescent</string>
+    <string name="daylight">daylight</string>
+    <string name="cloudydaylight">cloudy daylight</string>
+    
 </resources>
