@@ -423,7 +423,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			int orientation = Exif.getOrientation(data);
 			Log.d("#", "onPictureTaken().orientation = " + orientation);
 			
-			if(orientation < 2) {
+			if(orientation > 2) {
 				
 				int rotation = 0;
 				
