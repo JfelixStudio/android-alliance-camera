@@ -85,7 +85,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	private String[] isoValues = {"auto"};
 	private String isoValue;
 	/** e.g.: auto,incandescent,fluorescent,daylight,cloudy-daylight */
-	private String[] whiteBalanceValues;
+	private String[] whiteBalanceValues = {"auto"};
 	private String whiteBalance;
 	
 	public AllianceCamera(Context ctx, SurfaceView surfaceView, int cameraFacing, boolean useAlternativeFacing, File filePath) {
