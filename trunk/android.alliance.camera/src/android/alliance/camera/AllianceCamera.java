@@ -590,7 +590,8 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	}
 	
 	/** 
-	 * e.g.: auto,incandescent,fluorescent,daylight,cloudy-daylight
+	 * e.g.: auto,incandescent,fluorescent,daylight,cloudy-daylight <br>
+	 * and : warm-fluorescent,twilight,shade
 	 * @return 
 	 */
 	public String[] getWhiteBalanceValues() {
@@ -601,7 +602,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		this.whiteBalance = whiteBalance;
 		
 		Parameters parameters = camera.getParameters();
-		parameters.set("whiteBalance", whiteBalance);
+		parameters.setWhiteBalance(whiteBalance);
 		camera.setParameters(parameters);
 	}
 	
