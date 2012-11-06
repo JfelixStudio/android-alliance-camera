@@ -25,7 +25,6 @@ import android.widget.Toast;
 import android.alliance.camera.R;
 import android.alliance.data.VOResolution;
 import android.alliance.helper.ResolutionHelper;
-import android.alliance.helper.WidgetScaler;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 
