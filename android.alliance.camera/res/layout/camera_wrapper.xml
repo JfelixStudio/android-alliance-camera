@@ -28,40 +28,22 @@
 	        android:src="@drawable/bt_shutter_selector" />
 
 	</LinearLayout>
+	
+	<View
+	    android:id="@+id/line_horizontal" 
+	    android:background="#ff33b5e5" 
+	    android:layout_width="fill_parent" 
+	    android:layout_height="1dip" 
+	    android:layout_above="@+id/menu"/>
 
 	<ScrollView
 	    android:id="@+id/scrollView1"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    android:layout_above="@+id/menu" 
+	    android:layout_above="@+id/line_horizontal" 
 	    android:background="#44000000"
 	    android:visibility="invisible">
 
-<!-- 	    <LinearLayout -->
-<!-- 	        android:orientation="vertical" -->
-<!-- 	        android:layout_width="match_parent" -->
-<!-- 	        android:layout_height="match_parent" > -->
-
-<!-- 	        <RadioButton -->
-<!-- 	            android:id="@+id/radioButton3" -->
-<!-- 	            android:layout_width="match_parent" -->
-<!-- 	            android:layout_height="wrap_content" -->
-<!-- 	            android:layout_marginBottom="20dp" -->
-<!-- 	            android:text="RadioButton" /> -->
-<!-- 	        <RadioButton -->
-<!-- 	            android:id="@+id/radioButton2" -->
-<!-- 	            android:layout_width="match_parent" -->
-<!-- 	            android:layout_height="wrap_content" -->
-<!-- 	            android:layout_marginBottom="20dp" -->
-<!-- 	            android:text="RadioButton" /> -->
-
-<!-- 	        <RadioButton -->
-<!-- 	            android:id="@+id/radioButton1" -->
-<!-- 	            android:layout_width="wrap_content" -->
-<!-- 	            android:layout_height="wrap_content" -->
-<!-- 	            android:text="RadioButton" /> -->
-
-<!-- 	    </LinearLayout> -->
 	</ScrollView>
 	
 </RelativeLayout>

@@ -10,6 +10,7 @@ import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -26,8 +27,9 @@ public class CameraWrapper implements IAllianceCameraListener {
 	private ImageView ivShutter; 
 	private ImageView ivResolution;
 	private ScrollView scv;
+	private View vLineHorizontal;
 	
-	public CameraWrapper(final Activity ctx, RelativeLayout relativeLayout, RelativeLayout.LayoutParams params) {
+	public CameraWrapper(final Activity ctx, final RelativeLayout relativeLayout, RelativeLayout.LayoutParams params) {
 		this.ctx = ctx;
 		this.relativeLayout = relativeLayout;
 		
@@ -42,6 +44,7 @@ public class CameraWrapper implements IAllianceCameraListener {
 		
 		
 		scv = (ScrollView) cameraLayout.findViewById(R.id.scrollView1);
+		vLineHorizontal = cameraLayout.findViewById(R.id.line_horizontal);
 		
 		ivShutter = (ImageView) cameraLayout.findViewById(R.id.ibShutter);
 		ivShutter.setOnClickListener(new View.OnClickListener() {
@@ -62,37 +65,7 @@ public class CameraWrapper implements IAllianceCameraListener {
 		ivResolution.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if(scv.getVisibility() == View.INVISIBLE) {
-					scv.setVisibility(View.VISIBLE);
-					
-					RadioGroup rg = new RadioGroup(ctx);
-					scv.addView(rg);
-					
-					RadioButton rbChecked = null;
-					String[] isoValues = allianceCamera.getIsoValues();
-					for(String isoValue : isoValues) {
-						RadioButton rb = new RadioButton(ctx);
-						rb.setText(isoValue);
-						if(isoValue.equals(allianceCamera.getIsoValue())) {
-							rbChecked = rb;
-						}
-						
-						rg.addView(rb);
-					}
-					rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-						@Override
-						public void onCheckedChanged(RadioGroup group, int checkedId) {
-							RadioButton rbc = (RadioButton) group.findViewById(checkedId);
-							allianceCamera.setIsoValue((String) rbc.getText());
-						}
-					});
-					
-					rg.check(rbChecked.getId());
-					
-				} else {
-					scv.setVisibility(View.INVISIBLE);
-					scv.removeAllViews();
-				}
+				onISO();
 			}
 		});
 	}
@@ -116,5 +89,62 @@ public class CameraWrapper implements IAllianceCameraListener {
 	@Override
 	public void afterPhotoTaken() {
 		
+	}
+
+	
+	
+	private void onISO() {
+		if(scv.getVisibility() == View.INVISIBLE) {
+			showMenuISO();
+		} else {
+			hideMenuISO();
+		}
+	}
+	
+	private void showMenuISO() {
+		scv.setVisibility(View.VISIBLE);
+		vLineHorizontal.setVisibility(View.VISIBLE);
+		ivResolution.setBackgroundColor(ctx.getResources().getColor(R.color.holo_blue_dark));
+		
+		LayoutParams layoutParams = scv.getLayoutParams();
+		layoutParams.height = relativeLayout.getHeight()/2;
+		scv.setLayoutParams(layoutParams);
+		
+		RadioGroup rg = new RadioGroup(ctx);
+		scv.addView(rg);
+		
+		RadioButton rbChecked = null;
+		String[] isoValues = allianceCamera.getIsoValues();
+		if(isoValues.length == 1) {
+			isoValues = new String[] {"auto", "ISO100", "ISO200", "ISO400", "ISO800", "ISO1600", "ISO3200", "ISO6400", "ISO12800"};
+		}
+		
+		for(String isoValue : isoValues) {
+			RadioButton rb = new RadioButton(ctx);
+			rb.setText(isoValue);
+			if(isoValue.equals(allianceCamera.getIsoValue())) {
+				rbChecked = rb;
+			}
+			
+			rg.addView(rb);
+		}
+		rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(RadioGroup group, int checkedId) {
+				RadioButton rbc = (RadioButton) group.findViewById(checkedId);
+				allianceCamera.setIso((String) rbc.getText());
+			}
+		});
+		
+		if(rbChecked != null) { // check for emulator
+			rg.check(rbChecked.getId());
+		}
+	}
+	
+	private void hideMenuISO() {
+		scv.setVisibility(View.INVISIBLE);
+		scv.removeAllViews();
+		vLineHorizontal.setVisibility(View.INVISIBLE);
+		ivResolution.setBackgroundColor(ctx.getResources().getColor(R.color.transparent_full));
 	}
 }
