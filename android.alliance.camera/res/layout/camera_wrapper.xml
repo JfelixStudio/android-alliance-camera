@@ -12,13 +12,21 @@
 	    android:orientation="horizontal" >
 
 	    <ImageView
-	        android:id="@+id/ivResolution"
+	        android:id="@+id/ivIso"
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
 	        android:layout_weight="1"
 	        android:scaleType="fitCenter"
 	        android:src="@drawable/bt_resolution_selector" />
-
+	    
+	    <ImageView
+	        android:id="@+id/ivFlash"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:scaleType="fitCenter"
+	        android:src="@drawable/bt_flashlight_auto_selector" />
+
 	    <ImageView
 	        android:id="@+id/ibShutter"
 	        android:layout_width="wrap_content"
@@ -27,9 +35,16 @@
 	        android:scaleType="fitCenter"
 	        android:src="@drawable/bt_shutter_selector" />
 	    
-	    
 	    <ImageView
 	        android:id="@+id/ivWhiteBalance"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:scaleType="fitCenter"
+	        android:src="@drawable/bt_platzhalter" />
+	    
+	    <ImageView
+	        android:id="@+id/ivPreferences"
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
 	        android:layout_weight="1"

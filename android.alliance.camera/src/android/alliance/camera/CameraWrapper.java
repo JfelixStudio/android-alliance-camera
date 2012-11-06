@@ -25,7 +25,7 @@ public class CameraWrapper implements IAllianceCameraListener {
 	private AllianceCamera allianceCamera;
 	
 	private ImageView ivShutter; 
-	private ImageView ivResolution;
+	private ImageView ivIso;
 	private ImageView ivWhiteBalance;
 	private ScrollView scv;
 	private View vLineHorizontal;
@@ -62,8 +62,8 @@ public class CameraWrapper implements IAllianceCameraListener {
 			}
 		});
 		
-		ivResolution = (ImageView) cameraLayout.findViewById(R.id.ivResolution);
-		ivResolution.setOnClickListener(new View.OnClickListener() {
+		ivIso = (ImageView) cameraLayout.findViewById(R.id.ivIso);
+		ivIso.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				onISO();
@@ -116,7 +116,7 @@ public class CameraWrapper implements IAllianceCameraListener {
 			
 			RadioButton rbChecked = null;
 			String[] whiteBalanceValues = allianceCamera.getWhiteBalanceValues();
-			if(whiteBalanceValues == null || whiteBalanceValues.length == 1) {
+			if(whiteBalanceValues.length == 1) {
 				whiteBalanceValues = new String[] {"auto", "incandescent", "fluorescent", "daylight", "cloudy-daylig"};
 			}
 			
@@ -141,10 +141,7 @@ public class CameraWrapper implements IAllianceCameraListener {
 				rg.check(rbChecked.getId());
 			}
 		} else {
-			scv.setVisibility(View.INVISIBLE);
-			scv.removeAllViews();
-			vLineHorizontal.setVisibility(View.INVISIBLE);
-			ivWhiteBalance.setBackgroundColor(ctx.getResources().getColor(R.color.transparent_full));
+			hideMenu(ivWhiteBalance);
 		}
 		
 	}
@@ -154,14 +151,14 @@ public class CameraWrapper implements IAllianceCameraListener {
 		if(scv.getVisibility() == View.INVISIBLE) {
 			showMenuISO();
 		} else {
-			hideMenuISO();
+			hideMenu(ivIso);
 		}
 	}
 	
 	private void showMenuISO() {
 		scv.setVisibility(View.VISIBLE);
 		vLineHorizontal.setVisibility(View.VISIBLE);
-		ivResolution.setBackgroundColor(ctx.getResources().getColor(R.color.holo_blue_dark));
+		ivIso.setBackgroundColor(ctx.getResources().getColor(R.color.holo_blue_dark));
 		
 		LayoutParams layoutParams = scv.getLayoutParams();
 		layoutParams.height = relativeLayout.getHeight()/2;
@@ -198,10 +195,10 @@ public class CameraWrapper implements IAllianceCameraListener {
 		}
 	}
 	
-	private void hideMenuISO() {
+	private void hideMenu(View view) {
 		scv.setVisibility(View.INVISIBLE);
 		scv.removeAllViews();
 		vLineHorizontal.setVisibility(View.INVISIBLE);
-		ivResolution.setBackgroundColor(ctx.getResources().getColor(R.color.transparent_full));
+		view.setBackgroundColor(ctx.getResources().getColor(R.color.transparent_full));
 	}
 }
