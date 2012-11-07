@@ -4,6 +4,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import android.alliance.data.WhiteBalance;
 import android.app.Activity;
 import android.hardware.Camera.CameraInfo;
 import android.os.Environment;
@@ -117,10 +118,11 @@ public class CameraWrapper implements IAllianceCameraListener {
 			RadioButton rbChecked = null;
 			String[] whiteBalanceValues = allianceCamera.getWhiteBalanceValues();
 			if(whiteBalanceValues.length == 1) {
-				whiteBalanceValues = new String[] {"auto", "incandescent", "fluorescent", "daylight", "cloudy-daylig"};
+				whiteBalanceValues = new String[] {"auto", "incandescent", "fluorescent", "daylight", "cloudy-daylight"};
 			}
 			
 			for(String whiteBalance : whiteBalanceValues) {
+				
 				RadioButton rb = new RadioButton(ctx);
 				rb.setText(whiteBalance);
 				if(whiteBalance.equals(allianceCamera.getWhiteBalance())) {
@@ -134,6 +136,9 @@ public class CameraWrapper implements IAllianceCameraListener {
 				public void onCheckedChanged(RadioGroup group, int checkedId) {
 					RadioButton rbc = (RadioButton) group.findViewById(checkedId);
 					allianceCamera.setWhiteBalance((String) rbc.getText());
+					
+					WhiteBalance whiteBalance = WhiteBalance.getWhiteBalance((String)rbc.getText());
+					ivWhiteBalance.setImageResource(whiteBalance.icon);
 				}
 			});
 			
