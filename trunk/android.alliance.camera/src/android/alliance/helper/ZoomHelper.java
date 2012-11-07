@@ -4,6 +4,7 @@ import android.hardware.Camera.Parameters;
 
 public class ZoomHelper {
 
+	public boolean iscreated = false;
 	public int currentZoomLevel = 0;
 	public int maxZoomLevel = 0;
 	public boolean mSmoothZoomSupported;

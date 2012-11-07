@@ -96,6 +96,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		allianceCamera.setInitCloseAfterShut(false);
 		allianceCamera.setInitFlashlightHelper(new FlashlightHelper());
 		allianceCamera.setInitZoomHelper(new ZoomHelper());
+		allianceCamera.setGps(true);
 		
 		layoutZoom = (LinearLayout) findViewById(R.id.layoutZoom);
 		
@@ -274,55 +275,59 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 	// called from AllianceCamera
 	public void createZoomButtons() {
 
-		if(allianceCamera.zoomHelper.mSmoothZoomSupported){
-			
-			SeekBar seekBar = new SeekBar(this);
-			seekBar.setThumb(getResources().getDrawable(R.drawable.bt_back));
-//			Aktueller SmoothZoomWert setzen
-//			seekbar.setProgress(new Float(xxx);
-			seekBar.setOnSeekBarChangeListener( new OnSeekBarChangeListener() {
-		        	
-	        	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-	            }
-	
-	            public void onStartTrackingTouch(SeekBar seekBar) { 
-	            }
-	
-	            public void onStopTrackingTouch(SeekBar seekBar){
-	            }
+		if(!allianceCamera.zoomHelper.iscreated){
+			if(allianceCamera.zoomHelper.mSmoothZoomSupported){
+				
+				SeekBar seekBar = new SeekBar(this);
+				seekBar.setThumb(getResources().getDrawable(R.drawable.bt_back));
+//				Aktueller SmoothZoomWert setzen
+//				seekbar.setProgress(new Float(xxx);
+				seekBar.setOnSeekBarChangeListener( new OnSeekBarChangeListener() {
+			        	
+		        	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+		            }
+		
+		            public void onStartTrackingTouch(SeekBar seekBar) { 
+		            }
+		
+		            public void onStopTrackingTouch(SeekBar seekBar){
+		            }
 
-			});
-			
-			layoutZoom.addView(seekBar);
-			
-		} else if(allianceCamera.zoomHelper.mZoomSupported){
-			
-			ivZoomIn = new ImageView(this);
-			ivZoomIn.setScaleType(ScaleType.FIT_CENTER);
-			ivZoomIn.setImageResource(R.drawable.bt_zoom_in_selector);
-			ivZoomIn.setOnClickListener(new OnClickListener() {
+				});
+				
+				layoutZoom.addView(seekBar);
+				
+			} else if(allianceCamera.zoomHelper.mZoomSupported){
+				
+				ivZoomIn = new ImageView(this);
+				ivZoomIn.setScaleType(ScaleType.FIT_CENTER);
+				ivZoomIn.setImageResource(R.drawable.bt_zoom_in_selector);
+				ivZoomIn.setOnClickListener(new OnClickListener() {
 
-				@Override
-				public void onClick(View v) {
-					Parameters param = allianceCamera.zoomHelper.zoomIn(allianceCamera.getCameraParameters()); 
-					allianceCamera.setCameraParameters(param);
-				}
-			});
-			
-			ivZoomOut = new ImageView(this);	
-			ivZoomOut.setScaleType(ScaleType.FIT_CENTER);
-			ivZoomOut.setImageResource(R.drawable.bt_zoom_out_selector);
-			ivZoomOut.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						Parameters param = allianceCamera.zoomHelper.zoomIn(allianceCamera.getCameraParameters()); 
+						allianceCamera.setCameraParameters(param);
+					}
+				});
+				
+				ivZoomOut = new ImageView(this);	
+				ivZoomOut.setScaleType(ScaleType.FIT_CENTER);
+				ivZoomOut.setImageResource(R.drawable.bt_zoom_out_selector);
+				ivZoomOut.setOnClickListener(new OnClickListener() {
 
-				@Override
-				public void onClick(View v) {
-					Parameters param = allianceCamera.zoomHelper.zoomOut(allianceCamera.getCameraParameters()); 
-					allianceCamera.setCameraParameters(param);
-				}
-			});
-			
-			layoutZoom.addView(ivZoomOut);
-			layoutZoom.addView(ivZoomIn);
+					@Override
+					public void onClick(View v) {
+						Parameters param = allianceCamera.zoomHelper.zoomOut(allianceCamera.getCameraParameters()); 
+						allianceCamera.setCameraParameters(param);
+					}
+				});
+				
+				layoutZoom.addView(ivZoomOut);
+				layoutZoom.addView(ivZoomIn);
+				
+				allianceCamera.zoomHelper.iscreated = true;
+			}	
 		}
 	}
 

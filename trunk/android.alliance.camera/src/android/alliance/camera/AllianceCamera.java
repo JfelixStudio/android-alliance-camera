@@ -5,11 +5,14 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+
 import android.alliance.focus.MyFocusRectangle;
 import android.alliance.focus.SensorAutoFocus;
+import android.alliance.helper.AllianceLocationListener;
 import android.alliance.helper.CameraPreviewSizeHelper;
 import android.alliance.helper.Exif;
 import android.alliance.helper.FlashlightHelper;
+import android.alliance.helper.GPSHelper;
 import android.alliance.helper.ResolutionHelper;
 import android.alliance.helper.ZoomHelper;
 import android.app.Activity;
@@ -23,6 +26,9 @@ import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.Size;
 import android.hardware.SensorManager;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.media.AudioManager;
 import android.util.Log;
 import android.view.Surface;
@@ -88,6 +94,10 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	private String[] whiteBalanceValues = {"auto"};
 	private String whiteBalance;
 	
+	private LocationManager locManager;
+	private LocationListener locListener;
+	private boolean gps = false;
+	
 	public AllianceCamera(Context ctx, SurfaceView surfaceView, int cameraFacing, boolean useAlternativeFacing, File filePath) {
 		Log.d("#", "AllianceCamera()");
 		this.ctx = ctx;
@@ -113,6 +123,9 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		orientationListener.addOrientationChangedListeners(this);
 	}
 
+	public void setGps(boolean value){
+		this.gps = value;
+	}
 	
 	// SurfaceHolder.Callback ////////////////////////////////
 
@@ -136,6 +149,11 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			sensorAutoFocus = new SensorAutoFocus(camera, mFocusRectangle, ctx);
 			sensorAutoFocus.startAutoFocus();
 		}
+		
+		if(gps){
+			initLocationManager();	
+		}
+		
 	}
 
 	@Override
@@ -380,6 +398,9 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		if(audioManager != null) {
 			audioManager.setStreamMute(AudioManager.STREAM_SYSTEM, false);
 		}
+		
+		removeLocationManager();
+		GPSHelper.getInstance().disableGps(ctx);
 	}
 
 	/**
@@ -589,24 +610,29 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		return isoValue;
 	}
 	
-	/** 
-	 * e.g.: auto,incandescent,fluorescent,daylight,cloudy-daylight <br>
-	 * and : warm-fluorescent,twilight,shade
-	 * @return 
-	 */
-	public String[] getWhiteBalanceValues() {
-		return whiteBalanceValues;
-	}
-	
-	public void setWhiteBalance(String whiteBalance) {
-		this.whiteBalance = whiteBalance;
+	private void initLocationManager(){
 		
-		Parameters parameters = camera.getParameters();
-		parameters.setWhiteBalance(whiteBalance);
-		camera.setParameters(parameters);
+		GPSHelper gpsHelper = GPSHelper.getInstance();
+		locManager = (LocationManager) ctx.getSystemService(Context.LOCATION_SERVICE);
+        
+        if(!locManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+        	gpsHelper.enableGps(ctx);
+        }
+        
+		long gpsBoostDistanz = 0;
+		long gpsBoostZeit = 1000;
+		
+		removeLocationManager();
+		
+		locListener = new AllianceLocationListener(camera);
+		
+		LocationProvider high= locManager.getProvider(locManager.getBestProvider(gpsHelper.getBestGpsProvider(), true));
+		locManager.requestLocationUpdates(high.getName(), gpsBoostZeit, gpsBoostDistanz, locListener);
 	}
-	
-	public String getWhiteBalance() {
-		return whiteBalance;
+
+	private void removeLocationManager() {
+		if(locManager != null && locListener != null){
+			locManager.removeUpdates(locListener);	
+		}
 	}
 }
