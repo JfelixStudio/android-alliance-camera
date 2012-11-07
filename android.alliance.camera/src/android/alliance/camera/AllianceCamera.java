@@ -635,4 +635,20 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			locManager.removeUpdates(locListener);	
 		}
 	}
+	
+	public String[] getWhiteBalanceValues() {
+		return whiteBalanceValues;
+	}
+	
+	public void setWhiteBalance(String whiteBalance) {
+		this.whiteBalance = whiteBalance;
+		
+		Parameters parameters = camera.getParameters();
+		parameters.setWhiteBalance(whiteBalance);
+		camera.setParameters(parameters);
+	}
+	
+	public String getWhiteBalance() {
+		return whiteBalance;
+	}
 }
