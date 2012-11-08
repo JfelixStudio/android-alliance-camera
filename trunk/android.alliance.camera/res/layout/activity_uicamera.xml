@@ -23,73 +23,40 @@
 		    android:layout_height="match_parent" 
 		    android:layout_gravity="left"
 		    android:orientation="vertical"
-		    android:background="#44000000">
+		    android:background="@color/transparent_light">
 	    
-          <LinearLayout
+	        <ImageView
+			    android:id="@+id/ivResolution"
+			    android:scaleType="fitCenter"
 			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content" 
-			    android:orientation="vertical"
-			    android:gravity="center_vertical"
-			    android:layout_weight="1">
-		    
+			    android:layout_height="wrap_content"
+			    android:layout_weight="1"
+			    android:src="@drawable/bt_resolution_selector" />
 	        
-	        	<ImageView
-				    android:id="@+id/ivResolution"
-				    android:scaleType="fitCenter"
-				    android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-				    android:src="@drawable/bt_resolution_selector" />
 	        
-	        </LinearLayout>
-	        
-           <LinearLayout
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content" 
-			    android:orientation="vertical"
-			    android:gravity="center_vertical"
-			    android:layout_weight="1">
-	        
-	        	<ImageView
-				    android:id="@+id/ibLeft1"
-				    android:scaleType="fitCenter"
-	   	            android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-				    android:src="@drawable/bt_platzhalter" />
+        	<ImageView
+			    android:id="@+id/ibLeft1"
+			    android:scaleType="fitCenter"
+   	            android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_weight="1"
+			    android:src="@drawable/bt_platzhalter" />
 	        	
-	        </LinearLayout>
+	        <ImageView
+			    android:id="@+id/ibLeft2"
+			    android:scaleType="fitCenter"
+   	            android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_weight="1"
+			    android:src="@drawable/bt_platzhalter" />
 	        
-            <LinearLayout
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content" 
-			    android:orientation="vertical"
-			    android:gravity="center_vertical"
-			    android:layout_weight="1">
-		        
-		        <ImageView
-				    android:id="@+id/ibLeft2"
-				    android:scaleType="fitCenter"
-	   	            android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-				    android:src="@drawable/bt_platzhalter" />
-	        
-	        </LinearLayout>
-	        
-             <LinearLayout
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content" 
-			    android:orientation="vertical"
-			    android:gravity="center_vertical"
-			    android:layout_weight="1">
-		        
-		        <ImageView
-		            android:id="@+id/ibFlashlight"
-		            android:scaleType="fitCenter"
-		            android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-				    android:src="@drawable/bt_flashlight_auto_selector"/>
-			    
-	   		 </LinearLayout>
-	    
+	        <ImageView
+	            android:id="@+id/ibFlashlight"
+	            android:scaleType="fitCenter"
+	            android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_weight="1"
+			    android:src="@drawable/bt_flashlight_auto_selector"/>
              
          </LinearLayout>
 	     
@@ -99,43 +66,26 @@
 		    android:layout_height="match_parent" 
 		    android:orientation="vertical"
     	    android:gravity="center_vertical"
-		    android:background="#66000000"
+		    android:background="@color/transparent_middle"
 		    android:layout_toRightOf="@+id/leftMenu"
 		    android:visibility="invisible">
              
-	             <LinearLayout
-				    android:layout_width="wrap_content"
-				    android:layout_height="wrap_content" 
-				    android:orientation="vertical"
-				    android:gravity="center_vertical"
-				    android:layout_weight="1">
 		        
-	                  <ImageView
-						    android:id="@+id/ibLeft11"
-						    android:scaleType="fitCenter"
-			   	            android:layout_width="wrap_content"
-						    android:layout_height="wrap_content"
-						    android:src="@drawable/bt_platzhalter" />
-	                 
-                 </LinearLayout>
-	                 
-	             
-	             <LinearLayout
-				    android:layout_width="wrap_content"
-				    android:layout_height="wrap_content" 
-				    android:orientation="vertical"
-				    android:gravity="center_vertical"
-				    android:layout_weight="1">
-		        
-	                      <ImageView
-							    android:id="@+id/ibLeft12"
-							    android:scaleType="fitCenter"
-				   	            android:layout_width="wrap_content"
-							    android:layout_height="wrap_content"
-							    android:src="@drawable/bt_platzhalter" />
-	                      
-	             </LinearLayout>
-	        
+            <ImageView
+			    android:id="@+id/ibLeft11"
+			    android:scaleType="fitCenter"
+   	            android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_weight="1"
+			    android:src="@drawable/bt_platzhalter" />
+                
+            <ImageView
+			    android:id="@+id/ibLeft12"
+			    android:scaleType="fitCenter"
+   	            android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_weight="1"
+			    android:src="@drawable/bt_platzhalter" />
 	         
 	      </LinearLayout>
 	
@@ -151,7 +101,7 @@
 	    android:layout_height="match_parent" 
 	    android:layout_gravity="right"
 	    android:orientation="vertical"
-	    android:background="#44000000">
+	    android:background="@color/transparent_light">
 
 	         <ImageView
 			    android:scaleType="fitCenter"
@@ -199,7 +149,7 @@
 	    	android:background="@null">
 	    
 	        <ImageView
-			    android:id="@+id/ib2"
+			    android:id="@+id/ivShutter"
 			    android:scaleType="fitCenter"
    	            android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"

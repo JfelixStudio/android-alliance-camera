@@ -5,8 +5,7 @@
 		     xmlns:android="http://schemas.android.com/apk/res/android"
 		     android:id="@+id/umrandungAussen"
 		     android:layout_width="fill_parent" 
-			 android:layout_height="fill_parent"
-			 android:background="@drawable/sal_round_border_innen">
+			 android:layout_height="fill_parent">
 			
 			<TableRow>
 			    
