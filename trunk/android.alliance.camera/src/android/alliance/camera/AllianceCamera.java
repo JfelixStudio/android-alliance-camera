@@ -451,32 +451,15 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			int orientation = Exif.getOrientation(data);
 			Log.d("#", "onPictureTaken().orientation = " + orientation);
 			
-			if(orientation > 2) {
-				
-				int rotation = 0;
-				
-				switch(orientation){
-					case 3:
-						rotation = 180;
-						break;
-				
-					case 6:
-						rotation = 90;
-						break;
-				
-					case 8:
-						rotation = 270;
-						break;
-				}
-				
-				if(rotation != 0){
-					Bitmap bmpSrc = BitmapFactory.decodeByteArray(data, 0, data.length);
+			if(orientation != 0) {
+
+				Bitmap bmpSrc = BitmapFactory.decodeByteArray(data, 0, data.length);
 					
 					if(bmpSrc.getWidth()*bmpSrc.getHeight() > 4000000) {
 						Toast.makeText(ctx, "image to big", Toast.LENGTH_SHORT).show();
 					}
 					
-					Bitmap bmpRotated = rotate(bmpSrc, rotation);
+					Bitmap bmpRotated = rotate(bmpSrc, orientation);
 					bmpSrc.recycle();
 					
 					try {
@@ -493,8 +476,6 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-						
-				}
 				
 			} else {
 
