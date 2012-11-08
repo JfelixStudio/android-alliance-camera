@@ -4,7 +4,7 @@
     <style name="MyActionBar_Trennstrich">
     	<item name="android:layout_height">2sp</item>
     	<item name="android:layout_width">match_parent</item>
-    	<item name="android:background">@color/orange</item>
+    	<item name="android:background">@color/holo_blue_dark</item>
     </style>
 
   <!-- MY STANDARD DIALOG -->
@@ -12,7 +12,7 @@
 		<item name="android:windowBackground">@color/transparent_light</item>
 		<item name="android:windowIsFloating">true</item>
 		<item name="android:windowNoTitle">true</item>
-	    <item name="android:textColor">@color/orange</item>
+	    <item name="android:textColor">@color/holo_blue_dark</item>
 	    <item name="android:gravity">center_horizontal</item>
 	    <item name="android:minWidth">100sp</item>
 	</style>

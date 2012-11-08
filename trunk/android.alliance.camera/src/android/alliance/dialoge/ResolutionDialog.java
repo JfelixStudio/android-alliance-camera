@@ -57,8 +57,6 @@ public class ResolutionDialog extends Dialog implements OnClickListener{
 		
 		customRadioGroup = (RadioGroup) findViewById(R.id.customRadioGroup);
 		
-		
-		
 		for(VOResolution cm : resolutionHelper.lSupportedPictureSizes) {
 			
 			final RadioButton bt = new RadioButton(ctx);
@@ -92,13 +90,7 @@ public class ResolutionDialog extends Dialog implements OnClickListener{
 				bt.setChecked(false);
 			}
 			
-			
-			View v = new View(ctx);
-			v.setBackgroundColor(ctx.getResources().getColor(R.color.transparent_light));
-			v.setLayoutParams(new TableRow.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-			
 			customRadioGroup.addView(bt);
-			customRadioGroup.addView(v);
 		}
    }
    
