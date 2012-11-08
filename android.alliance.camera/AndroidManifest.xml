@@ -27,8 +27,6 @@
 		<activity android:name=".BlancCameraActivity" android:screenOrientation="landscape" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
 		<activity android:name=".UICameraActivity" android:screenOrientation="landscape" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
 		<activity android:name=".CameraWrapperActivity" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
-		
-		<activity android:name="android.alliance.camera.LayerActivity" android:theme="@android:style/Theme.Dialog"></activity>
 	</application>
     
     

@@ -4,6 +4,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import android.alliance.dialoge.ResolutionDialog;
 import android.alliance.helper.FlashlightHelper;
 import android.alliance.helper.ResolutionHelper;
 import android.alliance.helper.ZoomHelper;
@@ -108,7 +109,8 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 			}
 		});
 		ib1 = (ImageView) findViewById(R.id.ib1);
-		ivShutter = (ImageView) findViewById(R.id.ib2);
+		
+		ivShutter = (ImageView) findViewById(R.id.ivShutter);
 		ivShutter.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -124,12 +126,8 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 			public void onClick(View v) {
 
 				if(ResolutionHelper.getInstance().lSupportedPictureSizes.size() > 0){
-//					ResolutionDialog resDialog = new ResolutionDialog(UICameraActivity.this, R.style.MyStandardAlertDialog);
-//					resDialog.show();
-					
-					Intent i = new Intent(UICameraActivity.this, LayerActivity.class);
-					UICameraActivity.this.startActivity(i);
-					
+					ResolutionDialog resDialog = new ResolutionDialog(UICameraActivity.this, R.style.MyStandardAlertDialog);
+					resDialog.show();
 				}
 			}
 		});

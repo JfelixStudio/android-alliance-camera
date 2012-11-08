@@ -63,6 +63,7 @@ public class ResolutionDialog extends Dialog implements OnClickListener{
 			
 			final RadioButton bt = new RadioButton(ctx);
 			bt.setTextColor(ctx.getResources().getColor(R.color.grau));
+			bt.setBackgroundColor(ctx.getResources().getColor(R.color.transparent_light));
 			bt.setButtonDrawable(ctx.getResources().getDrawable(R.drawable.radio_bt_selector));
 			bt.setMinWidth(40);
 			bt.setTextSize(20);
@@ -93,7 +94,7 @@ public class ResolutionDialog extends Dialog implements OnClickListener{
 			
 			
 			View v = new View(ctx);
-			v.setBackgroundDrawable(ctx.getResources().getDrawable(R.drawable.gradientline));
+			v.setBackgroundColor(ctx.getResources().getColor(R.color.transparent_light));
 			v.setLayoutParams(new TableRow.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 			
 			customRadioGroup.addView(bt);
