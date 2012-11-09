@@ -6,7 +6,6 @@ public class ZoomHelper {
 
 	public int currentZoomLevel = 0;
 	public int maxZoomLevel = 0;
-	public boolean mSmoothZoomSupported;
 	public boolean mZoomSupported;
 	
 	public Parameters zoomIn(Parameters param){
@@ -36,14 +35,9 @@ public class ZoomHelper {
 
 	// called from surfaceCreated()
 	public void initZoom(Parameters param){
-		
-		mSmoothZoomSupported = param.isSmoothZoomSupported();
 		mZoomSupported = param.isZoomSupported();
 		
-		if(mSmoothZoomSupported){
-			// init some default values
-			
-		} else if(mZoomSupported){
+		if(mZoomSupported){
 			maxZoomLevel = param.getMaxZoom();
 			currentZoomLevel = param.getZoom();
 		}
