@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-
 import android.alliance.focus.MyFocusRectangle;
 import android.alliance.focus.SensorAutoFocus;
 import android.alliance.helper.AllianceLocationListener;
@@ -27,7 +26,6 @@ import android.hardware.Camera.Size;
 import android.hardware.SensorManager;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.location.LocationProvider;
 import android.media.AudioManager;
 import android.util.Log;
 import android.view.Surface;
@@ -108,6 +106,8 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		if(audioManager != null){
 			audioManager.setStreamMute(AudioManager.STREAM_SYSTEM, true);	
 		}
+		
+//		flashlightHelper.init(ctx);
 		
 		surfaceView.getHolder().addCallback(this);
 
@@ -345,7 +345,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			}
 
 			if(flashlightHelper != null){
-				parameters.setFlashMode(flashlightHelper.getFlashlightMode());	
+				parameters.setFlashMode(flashlightHelper.flashlightStatus.flashMode);	
 			}
 			
 			// Init available resolution

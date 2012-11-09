@@ -1,7 +1,7 @@
 package android.alliance.helper;
 
 import android.alliance.camera.R;
-import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.Camera.Parameters;
 import android.widget.ImageView;
@@ -10,9 +10,9 @@ public class FlashlightHelper {
 	
 	public FlashLightStatus flashlightStatus = FlashLightStatus.FLASHLIGHT_AUTO;
 	public boolean available = false; 
-			
-	public void init(Activity activity){
-		available = activity.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
+
+	public FlashlightHelper(Context ctx) {
+		available = ctx.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
 	}
 	
 	public Parameters setFlashMode(Parameters params, ImageView imageView) {
@@ -21,19 +21,19 @@ public class FlashlightHelper {
 		return params;
 	}
 	
-	public String getFlashlightMode(){
-		
-		String flashMode = null;
-		
-		for(FlashLightStatus fls : FlashLightStatus.values()){
-			if(fls.equals(flashlightStatus)){
-				flashMode = fls.flashMode;
-				break;
-			}
-		}
-		
-		return flashMode;
-	}
+//	public String getFlashlightMode(){
+//		
+//		String flashMode = null;
+//		
+//		for(FlashLightStatus fls : FlashLightStatus.values()){
+//			if(fls.equals(flashlightStatus)){
+//				flashMode = fls.flashMode;
+//				break;
+//			}
+//		}
+//		
+//		return flashMode;
+//	}
 	
 	/*
 	 * Setting Flashlight on Click. If Flashlight: auto => set
