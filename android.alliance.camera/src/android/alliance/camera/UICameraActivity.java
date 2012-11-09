@@ -56,12 +56,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 	private LinearLayout layoutZoom;
 
 	private ImageView ivZoomOut;
-
 	private ImageView ivZoomIn;
-//	private FlashlightHelper flashlightHelper = new FlashlightHelper();
-//	private ZoomHelper zoomHelper = new ZoomHelper();
-
-//	private AudioManager audioManager;
 	
 	private int activityResultCode = RESULT_CANCELED;
 	
@@ -97,7 +92,6 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		allianceCamera.setInitCloseAfterShut(false);
 		allianceCamera.setInitFlashlightHelper(new FlashlightHelper());
 		allianceCamera.setInitZoomHelper(new ZoomHelper());
-		allianceCamera.setGps(true);
 		
 		layoutZoom = (LinearLayout) findViewById(R.id.layoutZoom);
 		
@@ -126,7 +120,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 			public void onClick(View v) {
 
 				if(ResolutionHelper.getInstance().lSupportedPictureSizes.size() > 0){
-					ResolutionDialog resDialog = new ResolutionDialog(UICameraActivity.this, R.style.MyStandardAlertDialog);
+					ResolutionDialog resDialog = new ResolutionDialog(UICameraActivity.this, R.style.MyResolutionDialog);
 					resDialog.show();
 				}
 			}
@@ -167,7 +161,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
         
 	}
 
-	private void initFlashlight() {
+	public void initFlashlight() {
 
 		allianceCamera.flashlightHelper.init(this);
 		
@@ -222,11 +216,15 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 	protected void onDestroy() {
 		Log.d("#", "onDestroy()");
 		super.onDestroy();
+		
+		allianceCamera.releaseCamera();
+		setResult(activityResultCode);
 	}
 	
 	@Override
 	public void afterPhotoTaken() {
 		activityResultCode = RESULT_OK;
+		setResult(activityResultCode);
 	}
 	
 	// remaining methods ///////////////////////////////////////////////////
@@ -259,7 +257,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 			an.setDuration(0);
 			an.setRepeatCount(0);
 			an.setFillAfter(true);
-
+			
 			view.startAnimation(an);			
 		}
 

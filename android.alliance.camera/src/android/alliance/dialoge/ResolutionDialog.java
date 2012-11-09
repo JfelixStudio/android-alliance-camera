@@ -49,9 +49,6 @@ public class ResolutionDialog extends Dialog implements OnClickListener{
 		
 		setContentView(R.layout.resolutiondialog);
 		
-		txTitle = (TextView) findViewById(R.id.title);
-		txTitle.setText("Test-Titel");
-
 		ImageView backImage = (ImageView) findViewById(R.id.backImage);
 		backImage.setOnClickListener(this);
 		
@@ -61,12 +58,10 @@ public class ResolutionDialog extends Dialog implements OnClickListener{
 			
 			final RadioButton bt = new RadioButton(ctx);
 			bt.setTextColor(ctx.getResources().getColor(R.color.grau));
-			bt.setBackgroundColor(ctx.getResources().getColor(R.color.transparent_light));
-			bt.setButtonDrawable(ctx.getResources().getDrawable(R.drawable.radio_bt_selector));
-			bt.setMinWidth(40);
-			bt.setTextSize(20);
+			bt.setButtonDrawable(ctx.getResources().getDrawable(R.drawable.bt_radio_selector));
+			bt.setTextSize(18);
 			bt.setId(cm.getId());
-			bt.setText(cm.getSize().width + "x" + cm.getSize().height);
+			bt.setText("   " + cm.getSize().width + "x" + cm.getSize().height);
 			bt.setOnClickListener(new android.view.View.OnClickListener() {
 
 				@Override

@@ -16,18 +16,23 @@ public class AllianceLocationListener implements LocationListener{
 	@Override
 	public void onLocationChanged(Location location) {
 		
-		if(camera != null){
-			Parameters param = camera.getParameters();
-			
-			param.removeGpsData();
-			
-			param.setGpsLatitude(location.getLatitude());
-			param.setGpsLongitude(location.getLongitude());
-			param.setGpsAltitude(location.getAltitude());
-			param.setGpsTimestamp(location.getTime());
-			
-			camera.setParameters(param);
+		try{
+			if(camera != null){
+				Parameters param = camera.getParameters();
+				
+				param.removeGpsData();
+				
+				param.setGpsLatitude(location.getLatitude());
+				param.setGpsLongitude(location.getLongitude());
+				param.setGpsAltitude(location.getAltitude());
+				param.setGpsTimestamp(location.getTime());
+				
+				camera.setParameters(param);
+			}	
+		} catch (Exception e){
+			// do nothing
 		}
+		
 	}
 
 	@Override

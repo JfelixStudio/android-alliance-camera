@@ -9,5 +9,6 @@
     <string name="fluorescent">fluorescent</string>
     <string name="daylight">daylight</string>
     <string name="cloudydaylight">cloudy daylight</string>
+    <string name="resolution">Resolution</string>
     
 </resources>

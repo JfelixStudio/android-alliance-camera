@@ -12,7 +12,6 @@ import android.alliance.helper.AllianceLocationListener;
 import android.alliance.helper.CameraPreviewSizeHelper;
 import android.alliance.helper.Exif;
 import android.alliance.helper.FlashlightHelper;
-import android.alliance.helper.GPSHelper;
 import android.alliance.helper.ResolutionHelper;
 import android.alliance.helper.ZoomHelper;
 import android.app.Activity;
@@ -96,7 +95,6 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	
 	private LocationManager locManager;
 	private LocationListener locListener;
-	private boolean gps = false;
 	
 	public AllianceCamera(Context ctx, SurfaceView surfaceView, int cameraFacing, boolean useAlternativeFacing, File filePath) {
 		Log.d("#", "AllianceCamera()");
@@ -123,10 +121,6 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		orientationListener.addOrientationChangedListeners(this);
 	}
 
-	public void setGps(boolean value){
-		this.gps = value;
-	}
-	
 	// SurfaceHolder.Callback ////////////////////////////////
 
 	/**
@@ -150,10 +144,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			sensorAutoFocus.startAutoFocus();
 		}
 		
-		if(gps){
-			initLocationManager();	
-		}
-		
+		initLocationManager();	
 	}
 
 	@Override
@@ -400,7 +391,6 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		}
 		
 		removeLocationManager();
-		GPSHelper.getInstance().disableGps(ctx);
 	}
 
 	/**
@@ -448,6 +438,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			 * 3, 6, 8 
 			 * 
 			 */
+			
 			int orientation = Exif.getOrientation(data);
 			Log.d("#", "onPictureTaken().orientation = " + orientation);
 			
@@ -593,12 +584,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	
 	private void initLocationManager(){
 		
-		GPSHelper gpsHelper = GPSHelper.getInstance();
 		locManager = (LocationManager) ctx.getSystemService(Context.LOCATION_SERVICE);
-        
-        if(!locManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-        	gpsHelper.enableGps(ctx);
-        }
         
 		long gpsBoostDistanz = 0;
 		long gpsBoostZeit = 1000;
@@ -607,8 +593,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		
 		locListener = new AllianceLocationListener(camera);
 		
-		LocationProvider high= locManager.getProvider(locManager.getBestProvider(gpsHelper.getBestGpsProvider(), true));
-		locManager.requestLocationUpdates(high.getName(), gpsBoostZeit, gpsBoostDistanz, locListener);
+		locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, gpsBoostZeit, gpsBoostDistanz, locListener);
 	}
 
 	private void removeLocationManager() {

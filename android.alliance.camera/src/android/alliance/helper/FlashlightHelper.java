@@ -44,24 +44,28 @@ public class FlashlightHelper {
 	public Parameters nextFlashMode(Parameters param, ImageView ivFlashlight) {
 		
 		if (flashlightStatus.equals(FlashLightStatus.FLASHLIGHT_AUTO)) {
-			flashlightStatus = FlashLightStatus.FLASHLIGHT_OFF;
-			setFlashMode(param, ivFlashlight);
-		} else if (flashlightStatus.equals(FlashLightStatus.FLASHLIGHT_ON)) {
-			flashlightStatus = FlashLightStatus.FLASHLIGHT_AUTO;
-			setFlashMode(param, ivFlashlight);
-		} else if (flashlightStatus.equals(FlashLightStatus.FLASHLIGHT_OFF)) {
 			flashlightStatus = FlashLightStatus.FLASHLIGHT_ON;
 			setFlashMode(param, ivFlashlight);
-		} 
+		} else if (flashlightStatus.equals(FlashLightStatus.FLASHLIGHT_ON)) {
+			flashlightStatus = FlashLightStatus.FLASHLIGHT_OFF;
+			setFlashMode(param, ivFlashlight);
+		} else if (flashlightStatus.equals(FlashLightStatus.FLASHLIGHT_OFF)) {
+			flashlightStatus = FlashLightStatus.FLASHLIGHT_TORCH;
+			setFlashMode(param, ivFlashlight);
+		} else if (flashlightStatus.equals(FlashLightStatus.FLASHLIGHT_TORCH)) {
+			flashlightStatus = FlashLightStatus.FLASHLIGHT_AUTO;
+			setFlashMode(param, ivFlashlight);
+		}
 		
 		return param;
 	}
 	
 	public enum FlashLightStatus {
 		
-		FLASHLIGHT_AUTO(Parameters.FLASH_MODE_ON, R.drawable.bt_flashlight_auto_selector),
-		FLASHLIGHT_ON(Parameters.FLASH_MODE_TORCH, R.drawable.bt_flashlight_on_selector),
-		FLASHLIGHT_OFF(Parameters.FLASH_MODE_OFF, R.drawable.bt_flashlight_off_selector);
+		FLASHLIGHT_AUTO(Parameters.FLASH_MODE_AUTO, R.drawable.bt_flashlight_auto_selector),
+		FLASHLIGHT_ON(Parameters.FLASH_MODE_ON, R.drawable.bt_flashlight_on_selector),
+		FLASHLIGHT_OFF(Parameters.FLASH_MODE_OFF, R.drawable.bt_flashlight_off_selector),
+		FLASHLIGHT_TORCH(Parameters.FLASH_MODE_TORCH, R.drawable.bt_flashlight_torch_selector);
 		
 		public String flashMode;
 		public int drawable;
