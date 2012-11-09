@@ -68,4 +68,12 @@ public class CameraWrapperActivity extends Activity {
 		Log.d("#", "onDestroy()");
 		super.onDestroy();
 	}
+	
+	@Override
+	public void onBackPressed() {
+		// check if the camera hase something to go back to
+		if(cameraWrapper.onBackPressed()) {
+			super.onBackPressed();
+		} 
+	}
 }

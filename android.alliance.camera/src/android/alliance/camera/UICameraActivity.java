@@ -90,7 +90,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		allianceCamera = new AllianceCamera(this, surfaceView, cameraFacing, useAlternativeFacing, filePath);
 		allianceCamera.setInitPictureSize(3000000);
 		allianceCamera.setInitCloseAfterShut(false);
-		allianceCamera.setInitFlashlightHelper(new FlashlightHelper());
+		allianceCamera.setInitFlashlightHelper(new FlashlightHelper(this));
 		allianceCamera.setInitZoomHelper(new ZoomHelper());
 		
 		layoutZoom = (LinearLayout) findViewById(R.id.layoutZoom);
@@ -162,9 +162,6 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 	}
 
 	public void initFlashlight() {
-
-		allianceCamera.flashlightHelper.init(this);
-		
 		if (!allianceCamera.flashlightHelper.available) {
 			ibFlashlight.setVisibility(View.GONE);
 		} 

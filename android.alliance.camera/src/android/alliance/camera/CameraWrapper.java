@@ -31,6 +31,8 @@ public class CameraWrapper implements IAllianceCameraListener {
 	private ScrollView scv;
 	private View vLineHorizontal;
 	
+	private ImageView activeMenuImageView = null;
+	
 	public CameraWrapper(final Activity ctx, final RelativeLayout relativeLayout, RelativeLayout.LayoutParams params) {
 		this.ctx = ctx;
 		this.relativeLayout = relativeLayout;
@@ -95,15 +97,39 @@ public class CameraWrapper implements IAllianceCameraListener {
 		
 		allianceCamera.releaseCamera();
 	}
+	
+	/**
+	 * If a menu is open, close it else return that the camera can get closed
+	 * @return
+	 */
+	public boolean onBackPressed() {
+		if(activeMenuImageView != null) {
+			hideMenu(activeMenuImageView);
+			return false;
+		} else {
+			return true;
+		}
+	}
 
 	@Override
 	public void afterPhotoTaken() {
 		
 	}
 
-	
 	private void onWhiteBalance() {
-		if(scv.getVisibility() == View.INVISIBLE) {
+		if(activeMenuImageView != null) {
+			if(activeMenuImageView == ivWhiteBalance) {
+				hideMenu(ivWhiteBalance);
+			} else {
+				hideMenu(activeMenuImageView);
+				showMenuWhiteBalance();
+			}
+		} else {
+			showMenuWhiteBalance();
+		}
+	}
+	
+	private void showMenuWhiteBalance() {
 			scv.setVisibility(View.VISIBLE);
 			vLineHorizontal.setVisibility(View.VISIBLE);
 			ivWhiteBalance.setBackgroundColor(ctx.getResources().getColor(R.color.holo_blue_dark));
@@ -145,18 +171,21 @@ public class CameraWrapper implements IAllianceCameraListener {
 			if(rbChecked != null) { // check for emulator
 				rg.check(rbChecked.getId());
 			}
-		} else {
-			hideMenu(ivWhiteBalance);
-		}
-		
+			
+			activeMenuImageView = ivWhiteBalance;
 	}
 	
 	
 	private void onISO() {
-		if(scv.getVisibility() == View.INVISIBLE) {
-			showMenuISO();
+		if(activeMenuImageView != null) {
+			if(activeMenuImageView == ivIso) {
+				hideMenu(ivIso);
+			} else {
+				hideMenu(activeMenuImageView);
+				showMenuISO();
+			}
 		} else {
-			hideMenu(ivIso);
+			showMenuISO();
 		}
 	}
 	
@@ -198,6 +227,8 @@ public class CameraWrapper implements IAllianceCameraListener {
 		if(rbChecked != null) { // check for emulator
 			rg.check(rbChecked.getId());
 		}
+		
+		activeMenuImageView = ivIso;
 	}
 	
 	private void hideMenu(View view) {
@@ -205,5 +236,6 @@ public class CameraWrapper implements IAllianceCameraListener {
 		scv.removeAllViews();
 		vLineHorizontal.setVisibility(View.INVISIBLE);
 		view.setBackgroundColor(ctx.getResources().getColor(R.color.transparent_full));
+		activeMenuImageView = null;
 	}
 }
