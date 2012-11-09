@@ -1,7 +1,5 @@
 package android.alliance.camera.start;
 
-import android.alliance.camera.start.R;
-
 import android.alliance.camera.AllianceCamera;
 import android.alliance.camera.BlancCameraActivity;
 import android.alliance.camera.UICameraActivity;
