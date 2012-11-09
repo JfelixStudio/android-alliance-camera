@@ -14,6 +14,7 @@ public class FlashlightHelper {
 	public boolean available = false; 
 	public List<FlashMode> sequence = new ArrayList<FlashMode>();
 
+	
 	public FlashlightHelper(Context ctx) {
 		available = ctx.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
 	}

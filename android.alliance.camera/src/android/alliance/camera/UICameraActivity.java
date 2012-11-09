@@ -16,7 +16,6 @@ import android.hardware.Camera.Parameters;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -25,10 +24,7 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
 
 public class UICameraActivity extends Activity implements IAllianceOrientationChanged, IAllianceCameraListener {
 
