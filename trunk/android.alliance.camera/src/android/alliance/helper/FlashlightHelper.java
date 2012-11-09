@@ -1,6 +1,8 @@
 package android.alliance.helper;
 
-import android.alliance.camera.R;
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.Camera.Parameters;
@@ -8,32 +10,19 @@ import android.widget.ImageView;
 
 public class FlashlightHelper {
 	
-	public FlashLightStatus flashlightStatus = FlashLightStatus.FLASHLIGHT_AUTO;
+	public FlashMode flashStatus = FlashMode.FLASH_AUTO;
 	public boolean available = false; 
+	public List<FlashMode> sequence = new ArrayList<FlashMode>();
 
 	public FlashlightHelper(Context ctx) {
 		available = ctx.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
 	}
 	
 	public Parameters setFlashMode(Parameters params, ImageView imageView) {
-		flashlightStatus.setFlashMode(params);
-		imageView.setImageResource(flashlightStatus.drawable);
+		flashStatus.setFlashMode(params);
+		imageView.setImageResource(flashStatus.drawable);
 		return params;
 	}
-	
-//	public String getFlashlightMode(){
-//		
-//		String flashMode = null;
-//		
-//		for(FlashLightStatus fls : FlashLightStatus.values()){
-//			if(fls.equals(flashlightStatus)){
-//				flashMode = fls.flashMode;
-//				break;
-//			}
-//		}
-//		
-//		return flashMode;
-//	}
 	
 	/*
 	 * Setting Flashlight on Click. If Flashlight: auto => set
@@ -41,38 +30,43 @@ public class FlashlightHelper {
 	 * otherwise => set status and set FlashLightType-Mode to
 	 * Camera-Parameters
 	 */
-	public Parameters nextFlashMode(Parameters param, ImageView ivFlashlight) {
-		
-		if (flashlightStatus.equals(FlashLightStatus.FLASHLIGHT_AUTO)) {
-			flashlightStatus = FlashLightStatus.FLASHLIGHT_ON;
-			setFlashMode(param, ivFlashlight);
-		} else if (flashlightStatus.equals(FlashLightStatus.FLASHLIGHT_ON)) {
-			flashlightStatus = FlashLightStatus.FLASHLIGHT_OFF;
-			setFlashMode(param, ivFlashlight);
-		} else if (flashlightStatus.equals(FlashLightStatus.FLASHLIGHT_OFF)) {
-			flashlightStatus = FlashLightStatus.FLASHLIGHT_TORCH;
-			setFlashMode(param, ivFlashlight);
-		} else if (flashlightStatus.equals(FlashLightStatus.FLASHLIGHT_TORCH)) {
-			flashlightStatus = FlashLightStatus.FLASHLIGHT_AUTO;
-			setFlashMode(param, ivFlashlight);
+	public Parameters next(Parameters param, ImageView ivFlashlight) {
+		for(int i=0; i<sequence.size(); i++) {
+			FlashMode statiAtI = sequence.get(i);
+			if(statiAtI == flashStatus) {
+				if(i == sequence.size()-1) {
+					flashStatus = sequence.get(0);
+					break;
+				} else {
+					flashStatus = sequence.get(i+1);
+					break;
+				}
+			}
 		}
-		
+		setFlashMode(param, ivFlashlight);
 		return param;
 	}
 	
-	public enum FlashLightStatus {
+	/**
+	 * To build up the individual sequence of flashlight modes 
+	 * @param stati
+	 */
+	public void addToSequence(FlashMode stati) {
+		sequence.add(stati);
+	}
+	
+	public enum FlashMode {
 		
-		FLASHLIGHT_AUTO(Parameters.FLASH_MODE_AUTO, R.drawable.bt_flashlight_auto_selector),
-		FLASHLIGHT_ON(Parameters.FLASH_MODE_ON, R.drawable.bt_flashlight_on_selector),
-		FLASHLIGHT_OFF(Parameters.FLASH_MODE_OFF, R.drawable.bt_flashlight_off_selector),
-		FLASHLIGHT_TORCH(Parameters.FLASH_MODE_TORCH, R.drawable.bt_flashlight_torch_selector);
+		FLASH_AUTO(Parameters.FLASH_MODE_AUTO),
+		FLASH_ON(Parameters.FLASH_MODE_ON),
+		FLASH_OFF(Parameters.FLASH_MODE_OFF),
+		FLASH_TORCH(Parameters.FLASH_MODE_TORCH);
 		
 		public String flashMode;
 		public int drawable;
 		
-		private FlashLightStatus(String flashMode, int drawable) {
+		private FlashMode(String flashMode) {
 			this.flashMode = flashMode;
-			this.drawable = drawable;
 		}
 		
 		public Parameters setFlashMode(Parameters params) {

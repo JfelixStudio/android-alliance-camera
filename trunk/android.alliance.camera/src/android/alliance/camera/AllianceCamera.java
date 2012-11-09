@@ -345,7 +345,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			}
 
 			if(flashlightHelper != null){
-				parameters.setFlashMode(flashlightHelper.flashlightStatus.flashMode);	
+				parameters.setFlashMode(flashlightHelper.flashStatus.flashMode);	
 			}
 			
 			// Init available resolution

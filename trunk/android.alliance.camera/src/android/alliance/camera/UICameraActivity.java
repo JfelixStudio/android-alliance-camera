@@ -6,6 +6,7 @@ import java.util.Calendar;
 
 import android.alliance.dialoge.ResolutionDialog;
 import android.alliance.helper.FlashlightHelper;
+import android.alliance.helper.FlashlightHelper.FlashMode;
 import android.alliance.helper.ResolutionHelper;
 import android.alliance.helper.ZoomHelper;
 import android.app.Activity;
@@ -90,7 +91,20 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		allianceCamera = new AllianceCamera(this, surfaceView, cameraFacing, useAlternativeFacing, filePath);
 		allianceCamera.setInitPictureSize(3000000);
 		allianceCamera.setInitCloseAfterShut(false);
-		allianceCamera.setInitFlashlightHelper(new FlashlightHelper(this));
+		
+		FlashMode.FLASH_AUTO.drawable = R.drawable.bt_flashlight_auto_selector;
+		FlashMode.FLASH_ON.drawable = R.drawable.bt_flashlight_on_selector;
+		FlashMode.FLASH_OFF.drawable = R.drawable.bt_flashlight_off_selector;
+		FlashMode.FLASH_TORCH.drawable = R.drawable.bt_flashlight_torch_selector;
+		
+		FlashlightHelper flashlightHelper = new FlashlightHelper(this);
+		flashlightHelper.addToSequence(FlashMode.FLASH_AUTO);
+		flashlightHelper.addToSequence(FlashMode.FLASH_ON);
+		flashlightHelper.addToSequence(FlashMode.FLASH_OFF);
+		flashlightHelper.addToSequence(FlashMode.FLASH_TORCH);
+		
+		allianceCamera.setInitFlashlightHelper(flashlightHelper);
+		
 		allianceCamera.setInitZoomHelper(new ZoomHelper());
 		
 		layoutZoom = (LinearLayout) findViewById(R.id.layoutZoom);
@@ -150,7 +164,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 			public void onClick(View v) {
 
 				Parameters param = allianceCamera.getCameraParameters();
-				allianceCamera.flashlightHelper.nextFlashMode(param, ibFlashlight);
+				allianceCamera.flashlightHelper.next(param, ibFlashlight);
 				allianceCamera.setCameraParameters(param);
 			}
 		});
