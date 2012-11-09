@@ -227,6 +227,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		orientationListener.setCameraId(cameraId);
 	}
 	
+	
 	/**
 	 * If the Activity is not fixed to landscape this function is important.<br>
 	 * 1. degrees = the rotation of the screen from its "natural" orientation. <br>
