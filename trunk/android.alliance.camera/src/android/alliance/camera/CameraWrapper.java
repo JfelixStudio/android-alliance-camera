@@ -5,8 +5,11 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import android.alliance.data.WhiteBalance;
+import android.alliance.helper.FlashlightHelper;
+import android.alliance.helper.FlashlightHelper.FlashMode;
 import android.app.Activity;
 import android.hardware.Camera.CameraInfo;
+import android.hardware.Camera.Parameters;
 import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
@@ -28,6 +31,8 @@ public class CameraWrapper implements IAllianceCameraListener {
 	private ImageView ivShutter; 
 	private ImageView ivIso;
 	private ImageView ivWhiteBalance;
+	private ImageView ivFlash;
+	private ImageView ivPreferences;
 	private ScrollView scv;
 	private View vLineHorizontal;
 	
@@ -45,6 +50,20 @@ public class CameraWrapper implements IAllianceCameraListener {
 		relativeLayout.addView(cameraLayout);
 		
 		allianceCamera = new AllianceCamera(ctx, surfaceView, CameraInfo.CAMERA_FACING_BACK, false, null);
+		
+		
+		FlashMode.FLASH_AUTO.drawable = R.drawable.bt_flashlight_auto_selector;
+		FlashMode.FLASH_ON.drawable = R.drawable.bt_flashlight_on_selector;
+		FlashMode.FLASH_OFF.drawable = R.drawable.bt_flashlight_off_selector;
+		FlashMode.FLASH_TORCH.drawable = R.drawable.bt_flashlight_torch_selector;
+		
+		FlashlightHelper flashlightHelper = new FlashlightHelper(ctx);
+		flashlightHelper.addToSequence(FlashMode.FLASH_AUTO);
+		flashlightHelper.addToSequence(FlashMode.FLASH_ON);
+		flashlightHelper.addToSequence(FlashMode.FLASH_OFF);
+		flashlightHelper.addToSequence(FlashMode.FLASH_TORCH);
+		
+		allianceCamera.setInitFlashlightHelper(flashlightHelper);
 		
 		
 		scv = (ScrollView) cameraLayout.findViewById(R.id.scrollView1);
@@ -80,6 +99,25 @@ public class CameraWrapper implements IAllianceCameraListener {
 				onWhiteBalance();
 			}
 		});
+		
+		ivFlash = (ImageView) cameraLayout.findViewById(R.id.ivFlash);
+		ivFlash.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				hideMenu();
+				Parameters param = allianceCamera.getCameraParameters();
+				allianceCamera.flashlightHelper.next(param, ivFlash);
+				allianceCamera.setCameraParameters(param);
+			}
+		});
+		
+		ivPreferences = (ImageView) cameraLayout.findViewById(R.id.ivPreferences);
+		ivPreferences.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				onPreferences();
+			}
+		});
 	}
 	
 	@Override
@@ -92,9 +130,7 @@ public class CameraWrapper implements IAllianceCameraListener {
 	}
 	
 	public void onStop() {
-//		relativeLayout.removeView(cameraLayout);
 		relativeLayout.removeAllViews();
-		
 		allianceCamera.releaseCamera();
 	}
 	
@@ -104,7 +140,7 @@ public class CameraWrapper implements IAllianceCameraListener {
 	 */
 	public boolean onBackPressed() {
 		if(activeMenuImageView != null) {
-			hideMenu(activeMenuImageView);
+			hideMenu();
 			return false;
 		} else {
 			return true;
@@ -119,9 +155,9 @@ public class CameraWrapper implements IAllianceCameraListener {
 	private void onWhiteBalance() {
 		if(activeMenuImageView != null) {
 			if(activeMenuImageView == ivWhiteBalance) {
-				hideMenu(ivWhiteBalance);
+				hideMenu();
 			} else {
-				hideMenu(activeMenuImageView);
+				hideMenu();
 				showMenuWhiteBalance();
 			}
 		} else {
@@ -179,9 +215,9 @@ public class CameraWrapper implements IAllianceCameraListener {
 	private void onISO() {
 		if(activeMenuImageView != null) {
 			if(activeMenuImageView == ivIso) {
-				hideMenu(ivIso);
+				hideMenu();
 			} else {
-				hideMenu(activeMenuImageView);
+				hideMenu();
 				showMenuISO();
 			}
 		} else {
@@ -231,11 +267,39 @@ public class CameraWrapper implements IAllianceCameraListener {
 		activeMenuImageView = ivIso;
 	}
 	
-	private void hideMenu(View view) {
-		scv.setVisibility(View.INVISIBLE);
-		scv.removeAllViews();
-		vLineHorizontal.setVisibility(View.INVISIBLE);
-		view.setBackgroundColor(ctx.getResources().getColor(R.color.transparent_full));
-		activeMenuImageView = null;
+	private void onPreferences() {
+		if(activeMenuImageView != null) {
+			if(activeMenuImageView == ivPreferences) {
+				hideMenu();
+			} else {
+				hideMenu();
+				showPreferences();
+			}
+		} else {
+			showPreferences();
+		}
+	}
+	
+	private void showPreferences() {
+		scv.setVisibility(View.VISIBLE);
+		vLineHorizontal.setVisibility(View.VISIBLE);
+		activeMenuImageView = ivPreferences;
+		activeMenuImageView.setBackgroundColor(ctx.getResources().getColor(R.color.holo_blue_dark));
+		
+		LayoutParams layoutParams = scv.getLayoutParams();
+		layoutParams.height = relativeLayout.getHeight()/2;
+		scv.setLayoutParams(layoutParams);
+		
+		
+	}
+	
+	private void hideMenu() {
+		if(activeMenuImageView != null) {
+			scv.setVisibility(View.INVISIBLE);
+			scv.removeAllViews();
+			vLineHorizontal.setVisibility(View.INVISIBLE);
+			activeMenuImageView.setBackgroundColor(ctx.getResources().getColor(R.color.transparent_full));
+			activeMenuImageView = null;
+		}
 	}
 }
