@@ -8,6 +8,7 @@ import android.alliance.data.WhiteBalance;
 import android.alliance.helper.FlashlightHelper;
 import android.alliance.helper.FlashlightHelper.FlashMode;
 import android.app.Activity;
+import android.graphics.RectF;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
 import android.os.Environment;
@@ -38,14 +39,18 @@ public class CameraWrapper implements IAllianceCameraListener {
 	
 	private ImageView activeMenuImageView = null;
 	
+	private RelativeLayout.LayoutParams params;
+	private SurfaceView surfaceView;
+	
 	public CameraWrapper(final Activity ctx, final RelativeLayout relativeLayout, RelativeLayout.LayoutParams params) {
 		this.ctx = ctx;
 		this.relativeLayout = relativeLayout;
 		
 		LayoutInflater layoutInflater = ctx.getLayoutInflater();
 		cameraLayout = (RelativeLayout) layoutInflater.inflate(R.layout.camera_wrapper, null);
-		SurfaceView surfaceView = new SurfaceView(ctx);
+		surfaceView = new SurfaceView(ctx);
 		
+		this.params = params;
 		relativeLayout.addView(surfaceView, params);
 		relativeLayout.addView(cameraLayout);
 		
@@ -301,5 +306,15 @@ public class CameraWrapper implements IAllianceCameraListener {
 			activeMenuImageView.setBackgroundColor(ctx.getResources().getColor(R.color.transparent_full));
 			activeMenuImageView = null;
 		}
+	}
+	
+	public void setPosition(RectF rect) {
+		params.width = (int)rect.width();
+		params.height = (int)rect.height();
+		
+		params.leftMargin = (int)rect.left+1;
+		params.topMargin = (int)rect.top;
+
+		surfaceView.setLayoutParams(params);
 	}
 }
