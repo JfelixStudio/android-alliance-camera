@@ -5,9 +5,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
-import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 import android.widget.FrameLayout.LayoutParams;
+import android.widget.RelativeLayout;
 
 public class CameraWrapperActivity extends Activity {
 

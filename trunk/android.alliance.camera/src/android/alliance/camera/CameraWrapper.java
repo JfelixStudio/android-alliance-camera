@@ -110,9 +110,7 @@ public class CameraWrapper implements IAllianceCameraListener {
 			@Override
 			public void onClick(View v) {
 				hideMenu();
-				Parameters param = allianceCamera.getCameraParameters();
-				allianceCamera.flashlightHelper.next(param, ivFlash);
-				allianceCamera.setCameraParameters(param);
+				allianceCamera.nextFlashMode(ivFlash);
 			}
 		});
 		
@@ -135,6 +133,10 @@ public class CameraWrapper implements IAllianceCameraListener {
 	}
 	
 	public void onStop() {
+		
+	}
+	
+	public void onDestroy() {
 		relativeLayout.removeAllViews();
 		allianceCamera.releaseCamera();
 	}
