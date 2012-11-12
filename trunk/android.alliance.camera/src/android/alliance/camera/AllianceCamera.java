@@ -12,6 +12,7 @@ import android.alliance.helper.CameraPreviewSizeHelper;
 import android.alliance.helper.Exif;
 import android.alliance.helper.FlashlightHelper;
 import android.alliance.helper.ResolutionHelper;
+import android.alliance.helper.RotateHelper;
 import android.alliance.helper.ZoomHelper;
 import android.app.Activity;
 import android.content.Context;
@@ -93,6 +94,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	
 	private LocationManager locManager;
 	private LocationListener locListener;
+	private boolean gps = true;
 	
 	public AllianceCamera(Context ctx, SurfaceView surfaceView, int cameraFacing, boolean useAlternativeFacing, File filePath) {
 		Log.d("#", "AllianceCamera()");
@@ -144,7 +146,9 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			sensorAutoFocus.startAutoFocus();
 		}
 		
-		initLocationManager();	
+		if(gps){
+			initLocationManager();	
+		}
 	}
 
 	@Override
@@ -435,7 +439,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 						Toast.makeText(ctx, "image to big", Toast.LENGTH_SHORT).show();
 					}
 					
-					Bitmap bmpRotated = rotate(bmpSrc, orientation);
+					Bitmap bmpRotated = RotateHelper.rotate(bmpSrc, orientation);
 					bmpSrc.recycle();
 					
 					try {
@@ -482,21 +486,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	
 	
 	
-	/**
-	 * Rotates a bitmap by some degrees. The bmpSrc stays untouched and a new rotated
-	 * Bitmap gets created.
-	 * @param bmpSrc
-	 * @param degrees	new rotated Bitmap
-	 * @return
-	 */
-	public Bitmap rotate(Bitmap bmpSrc, int degrees) {
-		int w = bmpSrc.getWidth();
-		int h = bmpSrc.getHeight();
-		Matrix mtx = new Matrix();
-		mtx.postRotate(degrees);
-		Bitmap bmpTrg = Bitmap.createBitmap(bmpSrc, 0, 0, w, h, mtx, true);
-		return bmpTrg;
-	}
+	
 
 	public Parameters getCameraParameters() {
 		return camera.getParameters();
@@ -606,5 +596,9 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	
 	public String getWhiteBalance() {
 		return whiteBalance;
+	}
+	
+	public void setGps(boolean value){
+		this.gps = value;
 	}
 }
