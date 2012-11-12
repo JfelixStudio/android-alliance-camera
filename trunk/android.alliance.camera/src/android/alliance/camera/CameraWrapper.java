@@ -10,7 +10,7 @@ import android.alliance.helper.FlashlightHelper.FlashMode;
 import android.app.Activity;
 import android.graphics.RectF;
 import android.hardware.Camera.CameraInfo;
-import android.hardware.Camera.Parameters;
+import android.hardware.Camera.PictureCallback;
 import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
@@ -41,6 +41,8 @@ public class CameraWrapper implements IAllianceCameraListener {
 	
 	private RelativeLayout.LayoutParams params;
 	private SurfaceView surfaceView;
+	
+	private PictureCallback jpegCallback;
 	
 	public CameraWrapper(final Activity ctx, final RelativeLayout relativeLayout, RelativeLayout.LayoutParams params) {
 		this.ctx = ctx;
@@ -85,7 +87,7 @@ public class CameraWrapper implements IAllianceCameraListener {
 				File filePath = new File(folderPath, fileName);
 				
 				allianceCamera.setFilePaht(filePath);
-				allianceCamera.capture();
+				allianceCamera.capture(null, null, CameraWrapper.this.jpegCallback);
 			}
 		});
 		
@@ -156,7 +158,7 @@ public class CameraWrapper implements IAllianceCameraListener {
 
 	@Override
 	public void afterPhotoTaken() {
-		
+		allianceCamera.onAfterPhotoTaken();
 	}
 
 	private void onWhiteBalance() {
@@ -318,5 +320,9 @@ public class CameraWrapper implements IAllianceCameraListener {
 		params.topMargin = (int)rect.top;
 
 		surfaceView.setLayoutParams(params);
+	}
+	
+	public void setPictureCallback(PictureCallback pictureCallback) {
+		this.jpegCallback = pictureCallback;
 	}
 }
