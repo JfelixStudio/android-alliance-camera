@@ -9,10 +9,10 @@ import android.alliance.focus.MyFocusRectangle;
 import android.alliance.focus.SensorAutoFocus;
 import android.alliance.helper.AllianceLocationListener;
 import android.alliance.helper.CameraPreviewSizeHelper;
+import android.alliance.helper.CameraUtil;
 import android.alliance.helper.Exif;
 import android.alliance.helper.FlashlightHelper;
 import android.alliance.helper.ResolutionHelper;
-import android.alliance.helper.RotateHelper;
 import android.alliance.helper.ZoomHelper;
 import android.app.Activity;
 import android.content.Context;
@@ -23,6 +23,8 @@ import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
+import android.hardware.Camera.PictureCallback;
+import android.hardware.Camera.ShutterCallback;
 import android.hardware.Camera.Size;
 import android.hardware.SensorManager;
 import android.location.LocationListener;
@@ -401,6 +403,18 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		// Turn Camera capture-sound normal
 
 	}
+	
+	public void capture(ShutterCallback shutter, PictureCallback raw, PictureCallback jpeg) {
+		if(sensorAutoFocus.isFocusing()) {
+			return;
+		} else {
+			sensorAutoFocus.stopAutoFocus();
+		}
+
+		setSelectedPictureSize();
+		
+		camera.takePicture(shutter, raw, jpeg);
+	}
 
 	private void setSelectedPictureSize(){
 		Parameters parameters = camera.getParameters();
@@ -439,7 +453,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 						Toast.makeText(ctx, "image to big", Toast.LENGTH_SHORT).show();
 					}
 					
-					Bitmap bmpRotated = RotateHelper.rotate(bmpSrc, orientation);
+					Bitmap bmpRotated = CameraUtil.rotate(bmpSrc, orientation);
 					bmpSrc.recycle();
 					
 					try {
@@ -473,18 +487,24 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 				}
 			}
 			
-			allianceCameraListener.afterPhotoTaken();
-
-			if(closeAfterShot){
-				((Activity) ctx).finish();
-			} else {
-				camera.startPreview();
-				sensorAutoFocus.startAutoFocus();
-			}
+			onAfterPhotoTaken();
 		}
 	}
 	
+	public void onAfterPhotoTaken() {
+//		if(allianceCameraListener != null) {
+//			allianceCameraListener.afterPhotoTaken();
+//		}
+		
+		if(closeAfterShot){
+			((Activity) ctx).finish();
+		} else {
+			camera.startPreview();
+			sensorAutoFocus.startAutoFocus();
+		}
+	}
 	
+
 	
 	
 
