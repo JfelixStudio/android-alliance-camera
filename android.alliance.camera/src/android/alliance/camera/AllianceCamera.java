@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import android.alliance.data.Resolution;
 import android.alliance.focus.MyFocusRectangle;
 import android.alliance.focus.SensorAutoFocus;
 import android.alliance.helper.AllianceLocationListener;
@@ -87,7 +88,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	public ZoomHelper zoomHelper;
 	private File filePath;
 	private boolean closeAfterShot = false;
-	private int initPictureSize = 3000000;
+//	private int initPictureSize = 3000000;
 	
 	/** e.g.: auto,ISO_HJR,ISO100,ISO200,ISO400,ISO800,ISO1600 */
 	private String[] isoValues = {"auto"};
@@ -349,9 +350,8 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			
 			// Init available resolution
 			resolutionHelper.initSupportedScreenSizes(parameters.getSupportedPictureSizes());
+			resolutionHelper.calculateInitialSize();
 			
-			// Setting 3 megapixel size as default
-			resolutionHelper.setMegaPixelSize(initPictureSize);
 			parameters.setPictureSize(resolutionHelper.selectedResolution.size.width, resolutionHelper.selectedResolution.size.height);
 			
 			camera.setParameters(parameters);
@@ -433,6 +433,15 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		Parameters parameters = camera.getParameters();
 		parameters.setPictureSize(resolutionHelper.selectedResolution.size.width, resolutionHelper.selectedResolution.size.height);
 		camera.setParameters(parameters);
+	}
+	
+	
+	public void setPictureSizeMegapixel(int megapixel) {
+		resolutionHelper.initalSizeMegapixel = megapixel;
+	}
+	
+	public void setPictureSizeWidth(int width) {
+		resolutionHelper.initalSizeWidth = width;
 	}
 	
 	private class PhotoCallback implements Camera.PictureCallback {
@@ -535,16 +544,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	public void addAllianceCameraListener(IAllianceCameraListener allianceCameraListener) {
 		this.allianceCameraListener = allianceCameraListener;
 	}
-	
 
-	/**
-	 * The defalt, preselected picture size. 
-	 * If not set, the default value is 3000000
-	 */
-	public void setInitPictureSize(int initPictureSize){
-		this.initPictureSize = initPictureSize;
-	}
-	
 	/**
 	 * If photo is taken. Should the camera-activity to be close?
 	 * Default is false

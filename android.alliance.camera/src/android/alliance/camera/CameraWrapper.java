@@ -11,6 +11,7 @@ import android.app.Activity;
 import android.graphics.RectF;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.PictureCallback;
+import android.hardware.Camera.Size;
 import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
@@ -324,5 +325,9 @@ public class CameraWrapper implements IAllianceCameraListener {
 	
 	public void setPictureCallback(PictureCallback pictureCallback) {
 		this.jpegCallback = pictureCallback;
+	}
+	
+	public void setPictureSize(int width) {
+		allianceCamera.setPictureSizeWidth(width);
 	}
 }
