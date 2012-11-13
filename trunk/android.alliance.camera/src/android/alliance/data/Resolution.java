@@ -2,13 +2,13 @@ package android.alliance.data;
 
 import android.hardware.Camera.Size;
 
-public class VOResolution {
+public class Resolution {
 
-	private int id;
-	private Size size;
-	private int megapixel;
+	public int id;
+	public Size size;
+	public int megapixel;
 	
-	public VOResolution(int id, Size size, int megapixel) {
+	public Resolution(int id, Size size, int megapixel) {
 		this.id = id;
 		this.size = size;
 		this.megapixel = megapixel;

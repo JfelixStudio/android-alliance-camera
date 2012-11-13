@@ -23,7 +23,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.alliance.camera.R;
-import android.alliance.data.VOResolution;
+import android.alliance.data.Resolution;
 import android.alliance.helper.ResolutionHelper;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
@@ -54,7 +54,7 @@ public class ResolutionDialog extends Dialog implements OnClickListener{
 		
 		customRadioGroup = (RadioGroup) findViewById(R.id.customRadioGroup);
 		
-		for(VOResolution cm : resolutionHelper.lSupportedPictureSizes) {
+		for(Resolution cm : resolutionHelper.supportedPictureSizes) {
 			
 			final RadioButton bt = new RadioButton(ctx);
 			bt.setTextColor(ctx.getResources().getColor(R.color.grau));
@@ -66,7 +66,7 @@ public class ResolutionDialog extends Dialog implements OnClickListener{
 
 				@Override
 				public void onClick(View v) {
-					for(VOResolution cm : resolutionHelper.lSupportedPictureSizes) {
+					for(Resolution cm : resolutionHelper.supportedPictureSizes) {
 						if(cm.getId() == bt.getId()) {
 							resolutionHelper.selectedResolution = cm.getSize();
 							

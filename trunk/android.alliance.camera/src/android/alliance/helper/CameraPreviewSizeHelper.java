@@ -14,8 +14,6 @@ public class CameraPreviewSizeHelper {
 	public static double ASPECT_TOLERANCE = 0.12;
 
 	/**
-	 * good source: http://www.java2s.com/Code/Android/Hardware/
-	 * Gettheoptimalpreviewsizeforthegivenscreensize.htm
 	 * 
 	 * @param width	of the SurfaceView
 	 * @param height of the SurfaceView
