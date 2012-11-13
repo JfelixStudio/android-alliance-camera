@@ -129,7 +129,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 			@Override
 			public void onClick(View v) {
 
-				if(ResolutionHelper.getInstance().lSupportedPictureSizes.size() > 0){
+				if(ResolutionHelper.getInstance().supportedPictureSizes.size() > 0){
 					ResolutionDialog resDialog = new ResolutionDialog(UICameraActivity.this, R.style.MyResolutionDialog);
 					resDialog.show();
 				}

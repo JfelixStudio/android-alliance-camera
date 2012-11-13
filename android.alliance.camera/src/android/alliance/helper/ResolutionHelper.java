@@ -3,13 +3,13 @@ package android.alliance.helper;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.alliance.data.VOResolution;
+import android.alliance.data.Resolution;
 import android.hardware.Camera.Size;
 
 public class ResolutionHelper {
 
 	public Size selectedResolution = null;
-	public List<VOResolution> lSupportedPictureSizes = new ArrayList<VOResolution>();
+	public List<Resolution> supportedPictureSizes = new ArrayList<Resolution>();
 	private static ResolutionHelper instance;
 	
 	public static ResolutionHelper getInstance(){
@@ -22,23 +22,23 @@ public class ResolutionHelper {
 	
 	public void initSupportedScreenSizes(List<Size> supportedSizes){
 		
-		lSupportedPictureSizes = new ArrayList<VOResolution>();
+		supportedPictureSizes = new ArrayList<Resolution>();
 		
 		int i = 0;
-		for(Size s : supportedSizes){
-			int mp = s.width * s.height;
-			VOResolution cm = new VOResolution(i, s, mp);
-			lSupportedPictureSizes.add(cm);
+		for(Size size : supportedSizes){
+			int megapixel = size.width * size.height;
+			Resolution resolution = new Resolution(i, size, megapixel);
+			supportedPictureSizes.add(resolution);
 			i++;
 		}
 	}
 	
-	public void setMegaPixelSizeOnDefault(int megapixel) {
+	public void setMegaPixelSize(int megapixel) {
 
 		int lastDiff = Integer.MAX_VALUE;
 		
-		if (lSupportedPictureSizes != null) {
-			for (VOResolution res : lSupportedPictureSizes) {
+		if (supportedPictureSizes != null) {
+			for (Resolution res : supportedPictureSizes) {
 				int diff = Math.abs(megapixel - res.getMegapixel());
 				
 				if (diff < lastDiff) {
@@ -48,4 +48,8 @@ public class ResolutionHelper {
 			}
 		}
 	}
+	
+//	public void setSize(int width, int height) {
+//		selectedResolution = CameraPreviewSizeHelper.getBestPreviewSize(width, height, supportedPictureSizes, CameraPreviewSizeHelper.ASPECT_TOLERANCE);
+//	}
 }
