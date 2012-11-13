@@ -85,7 +85,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		File filePath = new File(folderPath, fileName);
 		
 		allianceCamera = new AllianceCamera(this, surfaceView, cameraFacing, useAlternativeFacing, filePath);
-		allianceCamera.setInitPictureSize(3000000);
+		allianceCamera.setPictureSizeMegapixel(3000000);
 		allianceCamera.setInitCloseAfterShut(false);
 		
 		FlashMode.FLASH_AUTO.drawable = R.drawable.bt_flashlight_auto_selector;
