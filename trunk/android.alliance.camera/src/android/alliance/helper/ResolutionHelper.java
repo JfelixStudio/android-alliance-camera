@@ -8,7 +8,7 @@ import android.hardware.Camera.Size;
 
 public class ResolutionHelper {
 
-	public Size selectedResolution = null;
+	public Resolution selectedResolution = null;
 	public List<Resolution> supportedPictureSizes = new ArrayList<Resolution>();
 	private static ResolutionHelper instance;
 	
@@ -43,13 +43,27 @@ public class ResolutionHelper {
 				
 				if (diff < lastDiff) {
 					lastDiff = diff;
-					selectedResolution = res.getSize();
+					selectedResolution = res;
 				}
 			}
 		}
 	}
 	
-//	public void setSize(int width, int height) {
-//		selectedResolution = CameraPreviewSizeHelper.getBestPreviewSize(width, height, supportedPictureSizes, CameraPreviewSizeHelper.ASPECT_TOLERANCE);
-//	}
+	public void setSize(int width, int height) {
+		/*
+		 * if necessary, changes the values to the orientation of the camera
+		 * sensor that is always in landscape what means width > height.
+		 */
+		if (width < height) {
+			int tmpHeight = height;
+			height = width;
+			width = tmpHeight;
+		}
+		
+		for(Resolution resolution : supportedPictureSizes) {
+			if(resolution.size.width == width) {
+				selectedResolution = resolution;
+			}
+		}
+	}
 }
