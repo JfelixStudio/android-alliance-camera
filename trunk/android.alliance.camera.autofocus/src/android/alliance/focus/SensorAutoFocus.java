@@ -26,7 +26,7 @@ public class SensorAutoFocus extends AutoFocus {
 	private float[] valuesOldPeak = new float[3];
 	static final float TRESHOLD = 0.31f;
     
-	public SensorAutoFocus(Camera camera, FocusView focusView, Context ctx) {
+	public SensorAutoFocus(Context ctx, Camera camera, FocusView focusView) {
 		super(camera, focusView);
 		
 		mySensorManager = (SensorManager)ctx.getSystemService(Context.SENSOR_SERVICE);

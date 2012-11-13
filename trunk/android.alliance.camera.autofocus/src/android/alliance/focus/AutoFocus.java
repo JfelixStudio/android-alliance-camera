@@ -18,6 +18,7 @@ public abstract class AutoFocus implements Camera.AutoFocusCallback {
 	public FocusView focusView;
 	protected AsyncTask<AutoFocus, Void, AutoFocus> task;
 	
+	
 	public AutoFocus(Camera camera, FocusView focusView) {
 		this.camera = camera;
 		this.focusView = focusView;
