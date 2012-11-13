@@ -68,7 +68,7 @@ public class ResolutionDialog extends Dialog implements OnClickListener{
 				public void onClick(View v) {
 					for(Resolution cm : resolutionHelper.supportedPictureSizes) {
 						if(cm.getId() == bt.getId()) {
-							resolutionHelper.selectedResolution = cm.getSize();
+							resolutionHelper.selectedResolution = cm;
 							
 							break;
 						}
@@ -78,7 +78,7 @@ public class ResolutionDialog extends Dialog implements OnClickListener{
 				
 			});
 			
-			Size selectedRes = resolutionHelper.selectedResolution;
+			Size selectedRes = resolutionHelper.selectedResolution.size;
 			if(selectedRes != null && selectedRes == cm.getSize()){
 				bt.setChecked(true);
 			} else {

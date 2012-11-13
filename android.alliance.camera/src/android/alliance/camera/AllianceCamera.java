@@ -352,7 +352,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			
 			// Setting 3 megapixel size as default
 			resolutionHelper.setMegaPixelSize(initPictureSize);
-			parameters.setPictureSize(resolutionHelper.selectedResolution.width, resolutionHelper.selectedResolution.height);
+			parameters.setPictureSize(resolutionHelper.selectedResolution.size.width, resolutionHelper.selectedResolution.size.height);
 			
 			camera.setParameters(parameters);
 			
@@ -431,7 +431,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 
 	private void setSelectedPictureSize(){
 		Parameters parameters = camera.getParameters();
-		parameters.setPictureSize(resolutionHelper.selectedResolution.width, resolutionHelper.selectedResolution.height);
+		parameters.setPictureSize(resolutionHelper.selectedResolution.size.width, resolutionHelper.selectedResolution.size.height);
 		camera.setParameters(parameters);
 	}
 	
