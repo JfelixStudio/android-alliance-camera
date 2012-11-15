@@ -10,6 +10,10 @@ public class SensorApplication extends Application {
 	private String console = "";
 	
 	public static SensorApplication getInstance() {
+		if(instance == null){
+			instance = new SensorApplication();
+		}
+		
 		return instance;
 	}
 
