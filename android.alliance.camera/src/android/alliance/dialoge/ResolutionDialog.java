@@ -78,8 +78,7 @@ public class ResolutionDialog extends Dialog implements OnClickListener{
 				
 			});
 			
-			Size selectedRes = resolutionHelper.selectedResolution.size;
-			if(selectedRes != null && selectedRes == cm.getSize()){
+			if(resolutionHelper.selectedResolution == cm){
 				bt.setChecked(true);
 			} else {
 				bt.setChecked(false);
