@@ -40,7 +40,7 @@
    	            android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
 			    android:layout_weight="1"
-			    android:src="@drawable/bt_platzhalter" />
+			    android:src="@drawable/alliance_bt_placeholder" />
 	        	
 	        <ImageView
 			    android:id="@+id/ibLeft2"
@@ -48,7 +48,7 @@
    	            android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
 			    android:layout_weight="1"
-			    android:src="@drawable/bt_platzhalter" />
+			    android:src="@drawable/alliance_bt_placeholder" />
 	        
 	        <ImageView
 	            android:id="@+id/ibFlashlight"
@@ -77,7 +77,7 @@
    	            android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
 			    android:layout_weight="1"
-			    android:src="@drawable/bt_platzhalter" />
+			    android:src="@drawable/alliance_bt_placeholder" />
                 
             <ImageView
 			    android:id="@+id/ibLeft12"
@@ -85,7 +85,7 @@
    	            android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
 			    android:layout_weight="1"
-			    android:src="@drawable/bt_platzhalter" />
+			    android:src="@drawable/alliance_bt_placeholder" />
 	         
 	      </LinearLayout>
 	
@@ -107,7 +107,7 @@
 			    android:scaleType="fitCenter"
    	            android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
-			    android:src="@drawable/bt_platzhalter"
+			    android:src="@drawable/alliance_bt_placeholder"
 			    android:visibility="invisible" />
 	         
 	   </LinearLayout>
@@ -136,7 +136,7 @@
 			    android:scaleType="fitCenter"
    	            android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
-			    android:src="@drawable/bt_platzhalter" />
+			    android:src="@drawable/alliance_bt_placeholder" />
 	    
         </LinearLayout>
 	    
@@ -171,7 +171,7 @@
 			    android:scaleType="fitCenter"
    	            android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
-			    android:src="@drawable/bt_platzhalter" />
+			    android:src="@drawable/alliance_bt_placeholder" />
         </LinearLayout>
         
 

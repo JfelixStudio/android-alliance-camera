@@ -4,14 +4,14 @@ import android.alliance.camera.R;
 
 public enum WhiteBalance {
 
-	AUTO("auto", R.drawable.bt_daylight),
-	INCANDESCENT("incandescent", R.drawable.bt_incandescent),
-	FLUORESCENT("fluorescent", R.drawable.bt_fluorescent),
-	WARM_FLUORESCENT("warm-fluorescent", R.drawable.bt_fluorescent_warm),
-	DAYLIGHT("daylight", R.drawable.bt_daylight),
-	CLOUDY_DAYLIGHT("cloudy-daylight", R.drawable.bt_cloudy_daylight),
-	TWILIGHT("twilight", R.drawable.bt_twilight),
-	SHADE("shade", R.drawable.bt_shade);
+	AUTO("auto", R.drawable.alliance_bt_daylight),
+	INCANDESCENT("incandescent", R.drawable.alliance_bt_incandescent),
+	FLUORESCENT("fluorescent", R.drawable.alliance_bt_fluorescent),
+	WARM_FLUORESCENT("warm-fluorescent", R.drawable.alliance_bt_fluorescent_warm),
+	DAYLIGHT("daylight", R.drawable.alliance_bt_daylight),
+	CLOUDY_DAYLIGHT("cloudy-daylight", R.drawable.alliance_bt_cloudy_daylight),
+	TWILIGHT("twilight", R.drawable.alliance_bt_twilight),
+	SHADE("shade", R.drawable.alliance_bt_shade);
 	
 	public String parameter;
 	public int icon;

@@ -17,7 +17,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_weight="1"
 	        android:scaleType="fitCenter"
-	        android:src="@drawable/bt_iso" />
+	        android:src="@drawable/alliance_bt_iso" />
 	    
 	    <ImageView
 	        android:id="@+id/ivFlash"
@@ -41,7 +41,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_weight="1"
 	        android:scaleType="fitCenter"
-	        android:src="@drawable/bt_daylight" />
+	        android:src="@drawable/alliance_bt_daylight" />
 	    
 	    <ImageView
 	        android:id="@+id/ivPreferences"
@@ -49,7 +49,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_weight="1"
 	        android:scaleType="fitCenter"
-	        android:src="@drawable/bt_options" />
+	        android:src="@drawable/alliance_bt_options" />
 
 	</LinearLayout>
 	
