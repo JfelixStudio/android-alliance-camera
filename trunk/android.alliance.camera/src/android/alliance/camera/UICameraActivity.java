@@ -88,11 +88,6 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		allianceCamera.setPictureSizeMegapixel(3000000);
 		allianceCamera.setInitCloseAfterShut(false);
 		
-		FlashMode.FLASH_AUTO.drawable = R.drawable.bt_flashlight_auto_selector;
-		FlashMode.FLASH_ON.drawable = R.drawable.bt_flashlight_on_selector;
-		FlashMode.FLASH_OFF.drawable = R.drawable.bt_flashlight_off_selector;
-		FlashMode.FLASH_TORCH.drawable = R.drawable.bt_flashlight_torch_selector;
-		
 		FlashlightHelper flashlightHelper = new FlashlightHelper(this);
 		flashlightHelper.addToSequence(FlashMode.FLASH_AUTO);
 		flashlightHelper.addToSequence(FlashMode.FLASH_ON);

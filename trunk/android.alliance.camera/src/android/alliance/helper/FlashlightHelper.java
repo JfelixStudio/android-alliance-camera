@@ -3,6 +3,7 @@ package android.alliance.helper;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.alliance.camera.R;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.Camera.Parameters;
@@ -58,16 +59,17 @@ public class FlashlightHelper {
 	
 	public enum FlashMode {
 		
-		FLASH_AUTO(Parameters.FLASH_MODE_AUTO),
-		FLASH_ON(Parameters.FLASH_MODE_ON),
-		FLASH_OFF(Parameters.FLASH_MODE_OFF),
-		FLASH_TORCH(Parameters.FLASH_MODE_TORCH);
+		FLASH_AUTO(Parameters.FLASH_MODE_AUTO, R.drawable.bt_flashlight_auto_selector),
+		FLASH_ON(Parameters.FLASH_MODE_ON, R.drawable.bt_flashlight_on_selector),
+		FLASH_OFF(Parameters.FLASH_MODE_OFF, R.drawable.bt_flashlight_off_selector),
+		FLASH_TORCH(Parameters.FLASH_MODE_TORCH, R.drawable.bt_flashlight_torch_selector);
 		
 		public String flashMode;
 		public int drawable;
 		
-		private FlashMode(String flashMode) {
+		private FlashMode(String flashMode, int resId) {
 			this.flashMode = flashMode;
+			this.drawable = resId;
 		}
 		
 		public Parameters setFlashMode(Parameters params) {
