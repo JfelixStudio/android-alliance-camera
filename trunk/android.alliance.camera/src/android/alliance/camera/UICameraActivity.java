@@ -66,12 +66,18 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-		Bundle extras = getIntent().getExtras(); 
-		if(extras != null) {
-			cameraFacing = extras.getInt(AllianceCamera.INTENT_KEY_INITIAL_CAMERA_FACING, CameraInfo.CAMERA_FACING_BACK);
-			useAlternativeFacing = extras.getBoolean(AllianceCamera.INTENT_KEY_USE_ALTERNATIVE_FACING, false);
-		}
+		/**
+		 * Warum werden denn hier die Extras aus dem Intent ausgelesen?
+		 */
+//		Bundle extras = getIntent().getExtras(); 
+//		if(extras != null) {
+//			cameraFacing = extras.getInt(AllianceCamera.INTENT_KEY_INITIAL_CAMERA_FACING, CameraInfo.CAMERA_FACING_BACK);
+//			useAlternativeFacing = extras.getBoolean(AllianceCamera.INTENT_KEY_USE_ALTERNATIVE_FACING, false);
+//		}
 	
+		cameraFacing = CameraInfo.CAMERA_FACING_BACK;
+		useAlternativeFacing = true;
+		
 		setContentView(R.layout.activity_uicamera);
 
 		SurfaceView surfaceView = (SurfaceView) findViewById(R.id.sv_camera);
