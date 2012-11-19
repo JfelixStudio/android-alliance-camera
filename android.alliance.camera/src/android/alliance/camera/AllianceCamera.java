@@ -216,9 +216,11 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 				switch (cameraFacing) {
 				case CameraInfo.CAMERA_FACING_BACK:
 					camera = openCamera(CameraInfo.CAMERA_FACING_FRONT);
+					cameraFacing = CameraInfo.CAMERA_FACING_FRONT;
 					break;
 				case CameraInfo.CAMERA_FACING_FRONT:
 					camera = openCamera(CameraInfo.CAMERA_FACING_BACK);
+					cameraFacing = CameraInfo.CAMERA_FACING_BACK;
 					break;
 				}
 			}
@@ -404,7 +406,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			} else {
 				sensorAutoFocus.stopAutoFocus();
 			}
-		}
+		} 
 		
 		setSelectedPictureSize();
 		

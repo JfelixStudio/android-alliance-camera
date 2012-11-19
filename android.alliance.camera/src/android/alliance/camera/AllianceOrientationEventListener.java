@@ -61,7 +61,7 @@ public class AllianceOrientationEventListener extends OrientationEventListener {
 
 			int rotation = 0;
 			if (info.facing == CameraInfo.CAMERA_FACING_FRONT) {
-				rotation = (info.orientation - orientationType + 360) % 360;
+				rotation = (info.orientation + orientationType - 180) % 360;
 			} else { // back-facing camera
 				rotation = (info.orientation + orientationType) % 360;
 			}

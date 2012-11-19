@@ -75,8 +75,8 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 //			useAlternativeFacing = extras.getBoolean(AllianceCamera.INTENT_KEY_USE_ALTERNATIVE_FACING, false);
 //		}
 	
-		cameraFacing = CameraInfo.CAMERA_FACING_BACK;
-		useAlternativeFacing = true;
+		cameraFacing = CameraInfo.CAMERA_FACING_FRONT;
+		useAlternativeFacing = false;
 		
 		setContentView(R.layout.activity_uicamera);
 
