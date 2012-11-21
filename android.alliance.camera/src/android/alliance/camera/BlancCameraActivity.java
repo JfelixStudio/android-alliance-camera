@@ -61,6 +61,7 @@ public class BlancCameraActivity extends Activity { //implements Callback {
 		File filePath = new File(folderPath, fileName);
 		
 		allianceCamera = new AllianceCamera(this, surfaceView, cameraFacing, useAlternativeFacing, filePath);
+		allianceCamera.setPictureSizeMegapixel(3000000);
 	}
 
 	@Override
