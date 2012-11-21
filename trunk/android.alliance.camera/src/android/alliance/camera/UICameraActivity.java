@@ -37,7 +37,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 	private ImageView ivShutter;
 
 	private ImageView ivResolutionDialog;
-	private ImageView ibLeft1;
+	private ImageView ivAutofocus;
 	private ImageView ibLeft2;
 	private ImageView ibFlashlight;
 
@@ -75,8 +75,8 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 //			useAlternativeFacing = extras.getBoolean(AllianceCamera.INTENT_KEY_USE_ALTERNATIVE_FACING, false);
 //		}
 	
-		cameraFacing = CameraInfo.CAMERA_FACING_FRONT;
-		useAlternativeFacing = false;
+		cameraFacing = CameraInfo.CAMERA_FACING_BACK;
+		useAlternativeFacing = true;
 		
 		setContentView(R.layout.activity_uicamera);
 
@@ -137,8 +137,15 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 			}
 		});
 		
-		ibLeft1 = (ImageView) findViewById(R.id.ibLeft1);
-		
+		ivAutofocus = (ImageView) findViewById(R.id.ivAutofocus);
+		ivAutofocus.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+
+			}
+		});
+
 		ibLeft2 = (ImageView) findViewById(R.id.ibLeft2);
 		ibLeft2.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -169,6 +176,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		allianceCamera.addOrientationChangedListeners(this);
 
 		initFlashlight();
+		initAutoFocus();
         
 	}
 
@@ -178,7 +186,11 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		} 
 	}
 	
-	
+	public void initAutoFocus(){
+		if(!allianceCamera.autofocusHelper.available){
+			ivAutofocus.setVisibility(View.GONE);
+		}
+	}
 	
 
 	@Override
@@ -245,7 +257,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		rotateView(ivShutter, degree);
 
 		// rotateView(ibLeft0, degree); // not rotated to see the difference
-		rotateView(ibLeft1, degree);
+		rotateView(ivAutofocus, degree);
 		rotateView(ibLeft2, degree);
 		rotateView(ibFlashlight, degree);
 		rotateView(ivResolutionDialog, degree);
