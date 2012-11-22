@@ -486,9 +486,9 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			
 			if(orientation != 0) {
 
-				if(cameraFacing == CameraInfo.CAMERA_FACING_FRONT){
-					orientation = (orientation + 180) % 360;
-				}
+//				if(cameraFacing == CameraInfo.CAMERA_FACING_FRONT){
+//					orientation = (orientation + 180) % 360;
+//				}
 				
 				Bitmap bmpSrc = BitmapFactory.decodeByteArray(data, 0, data.length);
 					
