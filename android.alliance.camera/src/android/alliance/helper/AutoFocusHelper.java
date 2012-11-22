@@ -14,6 +14,12 @@ public class AutoFocusHelper {
 	
 	public AutoFocusHelper(Context ctx){
 		available = ctx.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_AUTOFOCUS);
+		
+		if(available){
+			autoFocusMode = AutoFocusMode.AUTOFOCUS_ON;
+		} else {
+			autoFocusMode = AutoFocusMode.AUTOFOCUS_OFF;
+		}
 	}
 	
 	public void setAutoFocusMode(AllianceCamera allianceCamera, ImageView ivAutofocus){
