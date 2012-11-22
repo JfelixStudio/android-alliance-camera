@@ -600,10 +600,11 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	}
 	
 	/**
-	 * Init if flashlight should be available
+	 * Init if flashlight should be available and set the first element of sequence als default
 	 */
 	public void setInitFlashlightHelper(FlashlightHelper flashlightHelper){
 		this.flashlightHelper = flashlightHelper;
+		this.flashlightHelper.flashStatus = flashlightHelper.sequence.get(0);
 	}
 	
 	public void nextFlashMode(ImageView iv) {

@@ -95,9 +95,9 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		allianceCamera.setInitCloseAfterShut(false);
 		
 		FlashlightHelper flashlightHelper = new FlashlightHelper(this);
-		flashlightHelper.addToSequence(FlashMode.FLASH_ON);
-		flashlightHelper.addToSequence(FlashMode.FLASH_AUTO);
 		flashlightHelper.addToSequence(FlashMode.FLASH_OFF);
+		flashlightHelper.addToSequence(FlashMode.FLASH_AUTO);
+		flashlightHelper.addToSequence(FlashMode.FLASH_ON);
 		flashlightHelper.addToSequence(FlashMode.FLASH_TORCH);
 		
 		allianceCamera.setInitFlashlightHelper(flashlightHelper);
@@ -183,7 +183,9 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 	public void initFlashlight() {
 		if (!allianceCamera.flashlightHelper.available) {
 			ibFlashlight.setVisibility(View.GONE);
-		} 
+		} else {
+			ibFlashlight.setImageResource(allianceCamera.flashlightHelper.flashStatus.drawable);
+		}
 	}
 	
 	public void initAutoFocus(){
