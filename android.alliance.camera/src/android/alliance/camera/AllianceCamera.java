@@ -10,6 +10,7 @@ import android.alliance.focus.MyFocusRectangle;
 import android.alliance.focus.SensorAutoFocus;
 import android.alliance.helper.AllianceLocationListener;
 import android.alliance.helper.AutoFocusHelper;
+import android.alliance.helper.AutoFocusHelper.AutoFocusMode;
 import android.alliance.helper.CameraPreviewSizeHelper;
 import android.alliance.helper.CameraUtil;
 import android.alliance.helper.Exif;
@@ -140,26 +141,31 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		Log.d("#", "surfaceCreated()");
 		initCamera(holder);
 		initCameraPreferences();
+		initAutoFokus();
 		
 		orientationListener.setCameraId(cameraId);
 		orientationListener.enable();
-		
-		if(autofocusHelper.available) {
-			if (sensorAutoFocus != null) {
-				sensorAutoFocus.setCamera(camera); // vielleicht raus?
-				sensorAutoFocus.startAutoFocus();
-			} else {
-				MyFocusRectangle mFocusRectangle = (MyFocusRectangle) ((Activity)ctx).findViewById(R.id.focus_rectangle);
-				sensorAutoFocus = new SensorAutoFocus(ctx, camera, mFocusRectangle);
-				sensorAutoFocus.startAutoFocus();
-			}
-		}
 		
 		if(gps){
 			initLocationManager();	
 		}
 	}
 
+	public void initAutoFokus(){
+		if(camera != null){
+			if(autofocusHelper.available && autofocusHelper.autoFocusMode == AutoFocusHelper.AutoFocusMode.AUTOFOCUS_ON) {
+				if (sensorAutoFocus != null) {
+					sensorAutoFocus.setCamera(camera); // vielleicht raus?
+					sensorAutoFocus.startAutoFocus();
+				} else {
+					MyFocusRectangle mFocusRectangle = (MyFocusRectangle) ((Activity)ctx).findViewById(R.id.focus_rectangle);
+					sensorAutoFocus = new SensorAutoFocus(ctx, camera, mFocusRectangle);
+					sensorAutoFocus.startAutoFocus();
+				}
+			}	
+		}
+	}
+	
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 		Log.d("#", "surfaceChanged(format=" + format + ", width=" + width + ", height=" + height + ")");
@@ -173,7 +179,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		Log.d("#", "surfaceDestroyed()");
 
-		if(autofocusHelper.available) {
+		if(autofocusHelper.available && sensorAutoFocus != null && autofocusHelper.autoFocusMode == AutoFocusHelper.AutoFocusMode.AUTOFOCUS_ON) {
 			sensorAutoFocus.stopAutoFocus();
 		}
 		orientationListener.disable();
@@ -383,9 +389,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			camera = null;
 		}
 
-		if(autofocusHelper.available && sensorAutoFocus != null){
-			sensorAutoFocus.setCamera(null);	
-		}
+		stopAutoFocus();
 		
 		if(audioManager != null) {
 			audioManager.setStreamMute(AudioManager.STREAM_SYSTEM, false);
@@ -394,13 +398,22 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		removeLocationManager();
 	}
 
+	public void stopAutoFocus(){
+		if(autofocusHelper.available && sensorAutoFocus != null){
+			sensorAutoFocus.clearFocusView();
+			sensorAutoFocus.stopAutoFocus();
+			sensorAutoFocus.setCamera(null);
+			sensorAutoFocus = null;
+		}
+	}
+	
 	/**
 	 * Captures the image. TODO: If the camera is focusing nothing happens. If
 	 * the last focus is more than ~10 seconds left, focus is triggered
 	 */
 	public void capture() {
 		
-		if(autofocusHelper.available) {
+		if(autofocusHelper.available && autofocusHelper.autoFocusMode == AutoFocusHelper.AutoFocusMode.AUTOFOCUS_ON) {
 			if(sensorAutoFocus.isFocusing()) {
 				return;
 			} else {
@@ -418,7 +431,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	
 	public void capture(ShutterCallback shutter, PictureCallback raw, PictureCallback jpeg) {
 		
-		if(autofocusHelper.available) {
+		if(autofocusHelper.available && autofocusHelper.autoFocusMode == AutoFocusHelper.AutoFocusMode.AUTOFOCUS_ON) {
 			if(sensorAutoFocus.isFocusing()) {
 				return;
 			} else {
@@ -470,9 +483,13 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			
 			int orientation = Exif.getOrientation(data);
 			Log.d("#", "onPictureTaken().orientation = " + orientation);
-
+			
 			if(orientation != 0) {
 
+				if(cameraFacing == CameraInfo.CAMERA_FACING_FRONT){
+					orientation = (orientation + 180) % 360;
+				}
+				
 				Bitmap bmpSrc = BitmapFactory.decodeByteArray(data, 0, data.length);
 					
 				if(bmpSrc.getWidth()*bmpSrc.getHeight() > 4000000) {
@@ -532,7 +549,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			((Activity) ctx).finish();
 		} else {
 			camera.startPreview();
-			if(autofocusHelper.available) {
+			if(autofocusHelper.available && autofocusHelper.autoFocusMode == AutoFocusHelper.AutoFocusMode.AUTOFOCUS_ON) {
 				sensorAutoFocus.startAutoFocus();
 			}
 		}

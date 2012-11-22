@@ -1,9 +1,11 @@
 package android.alliance.helper;
 
+import android.alliance.camera.AllianceCamera;
 import android.alliance.camera.R;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.Camera.Parameters;
+import android.widget.ImageView;
 
 public class AutoFocusHelper {
 
@@ -14,7 +16,18 @@ public class AutoFocusHelper {
 		available = ctx.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_AUTOFOCUS);
 	}
 	
-	
+	public void setAutoFocusMode(AllianceCamera allianceCamera, ImageView ivAutofocus){
+		if(autoFocusMode == AutoFocusMode.AUTOFOCUS_ON){
+			autoFocusMode = AutoFocusMode.AUTOFOCUS_OFF;
+			allianceCamera.stopAutoFocus();
+			
+		} else if (autoFocusMode == AutoFocusMode.AUTOFOCUS_OFF){
+			autoFocusMode = AutoFocusMode.AUTOFOCUS_ON;
+			allianceCamera.initAutoFokus();
+		}
+		
+		ivAutofocus.setImageResource(autoFocusMode.drawable);
+	}
 	
 	public enum AutoFocusMode {
 		
