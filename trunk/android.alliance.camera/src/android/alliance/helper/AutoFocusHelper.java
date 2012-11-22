@@ -22,7 +22,7 @@ public class AutoFocusHelper {
 		}
 	}
 	
-	public void setAutoFocusMode(AllianceCamera allianceCamera, ImageView ivAutofocus){
+	public void changeAutoFocusMode(AllianceCamera allianceCamera, ImageView ivAutofocus){
 		if(autoFocusMode == AutoFocusMode.AUTOFOCUS_ON){
 			autoFocusMode = AutoFocusMode.AUTOFOCUS_OFF;
 			allianceCamera.stopAutoFocus();

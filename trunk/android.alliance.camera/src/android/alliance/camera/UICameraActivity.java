@@ -142,7 +142,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 			
 			@Override
 			public void onClick(View v) {
-				allianceCamera.autofocusHelper.setAutoFocusMode(allianceCamera, ivAutofocus);
+				allianceCamera.autofocusHelper.changeAutoFocusMode(allianceCamera, ivAutofocus);
 			}
 		});
 
