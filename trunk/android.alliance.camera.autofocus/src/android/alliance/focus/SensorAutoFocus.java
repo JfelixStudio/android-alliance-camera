@@ -25,9 +25,12 @@ public class SensorAutoFocus extends AutoFocus {
     private float[] valuesDelta = new float[3];
 	private float[] valuesOldPeak = new float[3];
 	static final float TRESHOLD = 0.31f;
+    private FocusView focusView;
     
 	public SensorAutoFocus(Context ctx, Camera camera, FocusView focusView) {
 		super(camera, focusView);
+	
+		this.focusView = focusView;
 		
 		mySensorManager = (SensorManager)ctx.getSystemService(Context.SENSOR_SERVICE);
     	
@@ -111,5 +114,9 @@ public class SensorAutoFocus extends AutoFocus {
 		for ( int i=0; i<a.length; i++ ) {
 			delta[i] = Math.abs(a[i] - b[i]);
 		}
+	}
+	
+	public void clearFocusView(){
+		focusView.clear();
 	}
 }
