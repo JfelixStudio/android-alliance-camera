@@ -198,12 +198,33 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		 * camera. This affects the pictures returned from JPEG
 		 * android.hardware.Camera.PictureCallback.
 		 */
-		localParameters.setRotation(rotation);
+		localParameters.setRotation(frontFacingRotationFix(rotation));
 		camera.setParameters(localParameters);
 	}
 
 	public void addOrientationChangedListeners(IAllianceOrientationChanged listener) {
 		orientationListener.addOrientationChangedListeners(listener);
+	}
+	
+	// Fix the Front-Camera Rotation. When frontcamera is 90 or 270 degree, 
+	// the system will be rotate false
+	private int frontFacingRotationFix(int rotation){
+		int fixedResult = -1;
+		
+		if(cameraFacing == CameraInfo.CAMERA_FACING_FRONT){
+			switch(rotation){
+			case 90:
+			case 270:
+				fixedResult = (rotation + 180) % 360;
+				break;
+			}
+		}
+		
+		if(fixedResult == -1){
+			return rotation;
+		} else {
+			return fixedResult;
+		}
 	}
 
 	// remaining methods ///////////////////////////////////////////////////
@@ -276,7 +297,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	     int result;
 	     if (cameraFacing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
 	         result = (info.orientation + degrees) % 360;
-	         result = (360 - result) % 360;  // compensate the mirror
+	         result = (360 - result) % 360;  // compensate the mirror  TODO: Für was diese Zeile?
 	     } else {  // back-facing
 	         result = (info.orientation - degrees + 360) % 360;
 	     }
@@ -483,6 +504,8 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			
 			int orientation = Exif.getOrientation(data);
 			Log.d("#", "onPictureTaken().orientation = " + orientation);
+			
+			orientation = frontFacingRotationFix(orientation);
 			
 			if(orientation != 0) {
 

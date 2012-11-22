@@ -95,8 +95,8 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		allianceCamera.setInitCloseAfterShut(false);
 		
 		FlashlightHelper flashlightHelper = new FlashlightHelper(this);
-		flashlightHelper.addToSequence(FlashMode.FLASH_AUTO);
 		flashlightHelper.addToSequence(FlashMode.FLASH_ON);
+		flashlightHelper.addToSequence(FlashMode.FLASH_AUTO);
 		flashlightHelper.addToSequence(FlashMode.FLASH_OFF);
 		flashlightHelper.addToSequence(FlashMode.FLASH_TORCH);
 		
