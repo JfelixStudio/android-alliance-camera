@@ -80,7 +80,6 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	private Integer cameraFacing = null;
 	private boolean useAlternativeFacing = false;
 	
-//	private boolean autoFocusAvailable = false;
 	private SensorAutoFocus sensorAutoFocus;
 
 	private AudioManager audioManager;
@@ -91,7 +90,6 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	public ZoomHelper zoomHelper;
 	private File filePath;
 	private boolean closeAfterShot = false;
-//	private int initPictureSize = 3000000;
 	
 	/** e.g.: auto,ISO_HJR,ISO100,ISO200,ISO400,ISO800,ISO1600 */
 	private String[] isoValues = {"auto"};
@@ -560,9 +558,11 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	}
 	
 	public void onAfterPhotoTaken() {
-//		if(allianceCameraListener != null) {
-//			allianceCameraListener.afterPhotoTaken();
-//		}
+		
+		// Set the Activities Result
+		if(allianceCameraListener != null) {
+			allianceCameraListener.afterPhotoTaken();
+		}
 		
 		if(closeAfterShot){
 			((Activity) ctx).finish();
@@ -573,10 +573,6 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			}
 		}
 	}
-	
-
-	
-	
 
 	public Parameters getCameraParameters() {
 		return camera.getParameters();
