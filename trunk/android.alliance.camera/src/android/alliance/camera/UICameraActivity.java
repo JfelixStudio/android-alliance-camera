@@ -28,10 +28,6 @@ import android.widget.LinearLayout;
 
 public class UICameraActivity extends Activity implements IAllianceOrientationChanged, IAllianceCameraListener {
 
-//	private SurfaceView surfaceView;
-
-//	private float rotation = 0;
-
 	protected ImageView ib0;
 	protected ImageView ib1;
 	protected ImageView ivShutter;
@@ -58,8 +54,6 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 	protected int activityResultCode = RESULT_CANCELED;
 	protected SurfaceView surfaceView;
 	
-	// Activity livecycle ///////////////////////////////
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -67,17 +61,15 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-		/**
-		 * Warum werden denn hier die Extras aus dem Intent ausgelesen?
-		 */
-//		Bundle extras = getIntent().getExtras(); 
-//		if(extras != null) {
-//			cameraFacing = extras.getInt(AllianceCamera.INTENT_KEY_INITIAL_CAMERA_FACING, CameraInfo.CAMERA_FACING_BACK);
-//			useAlternativeFacing = extras.getBoolean(AllianceCamera.INTENT_KEY_USE_ALTERNATIVE_FACING, false);
-//		}
-	
-		cameraFacing = CameraInfo.CAMERA_FACING_BACK;
-		useAlternativeFacing = true;
+		Bundle extras = getIntent().getExtras(); 
+		if(extras != null) {
+			cameraFacing = extras.getInt(AllianceCamera.INTENT_KEY_INITIAL_CAMERA_FACING, CameraInfo.CAMERA_FACING_BACK);
+			useAlternativeFacing = extras.getBoolean(AllianceCamera.INTENT_KEY_USE_ALTERNATIVE_FACING, false);
+			
+		} else {
+			cameraFacing = CameraInfo.CAMERA_FACING_BACK;
+			useAlternativeFacing = true;	
+		}
 		
 		setContentView(R.layout.activity_uicamera);
 
