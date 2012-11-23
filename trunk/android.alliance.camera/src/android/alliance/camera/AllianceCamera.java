@@ -137,16 +137,23 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		Log.d("#", "surfaceCreated()");
-		initCamera(holder);
-		initCameraPreferences();
-		initAutoFokus();
+		if(camera != null){
+			initCamera(holder);
+			initCameraPreferences();
+			initAutoFokus();
+			
+			orientationListener.setCameraId(cameraId);
+			orientationListener.enable();
+			
+			if(gps){
+				initLocationManager();	
+			}	
 		
-		orientationListener.setCameraId(cameraId);
-		orientationListener.enable();
-		
-		if(gps){
-			initLocationManager();	
+		} else {
+			Toast.makeText(ctx, ctx.getResources().getString(R.string.cameraNotAvailable), Toast.LENGTH_SHORT).show();
+			((Activity) ctx).finish();
 		}
+		
 	}
 
 	public void initAutoFokus(){
@@ -510,7 +517,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 				Bitmap bmpSrc = BitmapFactory.decodeByteArray(data, 0, data.length);
 					
 				if(bmpSrc.getWidth()*bmpSrc.getHeight() > 4000000) {
-					Toast.makeText(ctx, "image to big", Toast.LENGTH_SHORT).show();
+//					Toast.makeText(ctx, "image to big", Toast.LENGTH_SHORT).show();
 					doSaveWithoutRotation = true;
 					
 				} else {
