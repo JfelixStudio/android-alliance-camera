@@ -11,4 +11,6 @@
     <string name="cloudydaylight">cloudy daylight</string>
     <string name="resolution">Resolution</string>
     
+    <string name="cameraNotAvailable">Camera not available</string>
+    
 </resources>

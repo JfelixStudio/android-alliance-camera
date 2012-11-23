@@ -137,8 +137,11 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		Log.d("#", "surfaceCreated()");
+		
+		initCamera(holder);
+		
 		if(camera != null){
-			initCamera(holder);
+			
 			initCameraPreferences();
 			initAutoFokus();
 			
@@ -213,7 +216,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	
 	// Fix the Front-Camera Rotation. When frontcamera is 90 or 270 degree, 
 	// the system will be rotate false
-	private int frontFacingRotationFix(int rotation){
+	public int frontFacingRotationFix(int rotation){
 		int fixedResult = -1;
 		
 		if(cameraFacing == CameraInfo.CAMERA_FACING_FRONT){
