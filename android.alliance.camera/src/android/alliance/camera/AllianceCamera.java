@@ -626,7 +626,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		this.zoomHelper = zoomHelper;
 	}
 	
-	public void setFilePaht(File filePath) {
+	public void setFilePath(File filePath) {
 		this.filePath = filePath;
 	}
 	

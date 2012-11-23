@@ -87,7 +87,7 @@ public class CameraWrapper implements IAllianceCameraListener {
 				String fileName = "IMG" + new SimpleDateFormat("_yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime()) + ".jpg";
 				File filePath = new File(folderPath, fileName);
 				
-				allianceCamera.setFilePaht(filePath);
+				allianceCamera.setFilePath(filePath);
 				allianceCamera.capture(null, null, CameraWrapper.this.jpegCallback);
 			}
 		});
