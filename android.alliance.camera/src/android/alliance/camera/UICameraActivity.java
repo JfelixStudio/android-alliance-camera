@@ -32,30 +32,31 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 
 //	private float rotation = 0;
 
-	private ImageView ib0;
-	private ImageView ib1;
-	private ImageView ivShutter;
+	protected ImageView ib0;
+	protected ImageView ib1;
+	protected ImageView ivShutter;
 
-	private ImageView ivResolutionDialog;
-	private ImageView ivAutofocus;
-	private ImageView ibLeft2;
-	private ImageView ibFlashlight;
+	protected ImageView ivResolutionDialog;
+	protected ImageView ivAutofocus;
+	protected ImageView ibLeft2;
+	protected ImageView ivFlashlight;
 
 	/**
 	 * CameraInfo.CAMERA_FACING_BACK = 0 <br>
 	 * CameraInfo.CAMERA_FACING_FRONT = 1
 	 */
-	private Integer cameraFacing = null;
+	protected Integer cameraFacing = null;
 
-	private boolean useAlternativeFacing = false;
+	protected boolean useAlternativeFacing = false;
 
-	private AllianceCamera allianceCamera;
-	private LinearLayout layoutZoom;
+	protected AllianceCamera allianceCamera;
+	protected LinearLayout layoutZoom;
 
-	private ImageView ivZoomOut;
-	private ImageView ivZoomIn;
+	protected ImageView ivZoomOut;
+	protected ImageView ivZoomIn;
 	
-	private int activityResultCode = RESULT_CANCELED;
+	protected int activityResultCode = RESULT_CANCELED;
+	protected SurfaceView surfaceView;
 	
 	// Activity livecycle ///////////////////////////////
 
@@ -80,7 +81,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		
 		setContentView(R.layout.activity_uicamera);
 
-		SurfaceView surfaceView = (SurfaceView) findViewById(R.id.sv_camera);
+		surfaceView = (SurfaceView) findViewById(R.id.sv_camera);
 		
 		
 		String folderPath  = Environment.getExternalStorageDirectory().getAbsolutePath() + "/CamTest/";
@@ -93,6 +94,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		allianceCamera = new AllianceCamera(this, surfaceView, cameraFacing, useAlternativeFacing, filePath);
 		allianceCamera.setPictureSizeMegapixel(3000000);
 		allianceCamera.setInitCloseAfterShut(false);
+		allianceCamera.setGps(true);
 		
 		FlashlightHelper flashlightHelper = new FlashlightHelper(this);
 		flashlightHelper.addToSequence(FlashMode.FLASH_OFF);
@@ -161,14 +163,14 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 			}
 		});
 		
-		ibFlashlight = (ImageView) findViewById(R.id.ibFlashlight);
-		ibFlashlight.setOnClickListener(new View.OnClickListener() {
+		ivFlashlight = (ImageView) findViewById(R.id.ivFlashlight);
+		ivFlashlight.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 
 				Parameters param = allianceCamera.getCameraParameters();
-				allianceCamera.flashlightHelper.next(param, ibFlashlight);
+				allianceCamera.flashlightHelper.next(param, ivFlashlight);
 				allianceCamera.setCameraParameters(param);
 			}
 		});
@@ -182,9 +184,9 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 
 	public void initFlashlight() {
 		if (!allianceCamera.flashlightHelper.available) {
-			ibFlashlight.setVisibility(View.GONE);
+			ivFlashlight.setVisibility(View.GONE);
 		} else {
-			ibFlashlight.setImageResource(allianceCamera.flashlightHelper.flashStatus.drawable);
+			ivFlashlight.setImageResource(allianceCamera.flashlightHelper.flashStatus.drawable);
 		}
 	}
 	
@@ -261,7 +263,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		// rotateView(ibLeft0, degree); // not rotated to see the difference
 		rotateView(ivAutofocus, degree);
 		rotateView(ibLeft2, degree);
-		rotateView(ibFlashlight, degree);
+		rotateView(ivFlashlight, degree);
 		rotateView(ivResolutionDialog, degree);
 		
 		rotateView(ivZoomIn, degree);
