@@ -10,7 +10,8 @@ public class ResolutionHelper {
 	
 	public int initalSizeMegapixel = 0;
 	public int initalSizeWidth = 0;
-
+	public int initialSizeHeight = 0;
+	
 	public Resolution selectedResolution = null;
 	public List<Resolution> supportedPictureSizes = new ArrayList<Resolution>();
 	private static ResolutionHelper instance;
@@ -52,11 +53,11 @@ public class ResolutionHelper {
 		}
 	}
 	
-	public void setSize(int width) {
-		
-		for(Resolution resolution : supportedPictureSizes) {
-			if(resolution.size.width == width) {
+	public void setSize(int width, int height){
+		for(Resolution resolution : supportedPictureSizes){
+			if(resolution.size.width == width && resolution.size.height == height){
 				selectedResolution = resolution;
+				break;
 			}
 		}
 	}
@@ -65,7 +66,7 @@ public class ResolutionHelper {
 		if(initalSizeMegapixel != 0) {
 			setMegaPixelSize(initalSizeMegapixel);
 		} else {
-			setSize(initalSizeWidth);
+			setSize(initalSizeWidth, initialSizeHeight);
 		}
 	}
 }

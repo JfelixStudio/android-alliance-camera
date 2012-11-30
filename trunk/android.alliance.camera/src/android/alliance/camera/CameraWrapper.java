@@ -71,7 +71,7 @@ public class CameraWrapper implements IAllianceCameraListener {
 		flashlightHelper.addToSequence(FlashMode.FLASH_OFF);
 		flashlightHelper.addToSequence(FlashMode.FLASH_TORCH);
 		
-		allianceCamera.setInitFlashlightHelper(flashlightHelper);
+		allianceCamera.setInitFlashlightHelper(flashlightHelper, -1);
 		
 		
 		scv = (ScrollView) cameraLayout.findViewById(R.id.scrollView1);
@@ -327,7 +327,7 @@ public class CameraWrapper implements IAllianceCameraListener {
 		this.jpegCallback = pictureCallback;
 	}
 	
-	public void setPictureSize(int width) {
-		allianceCamera.setPictureSizeWidth(width);
+	public void setPictureSize(int width, int height) {
+		allianceCamera.setPictureSize(width, height);
 	}
 }
