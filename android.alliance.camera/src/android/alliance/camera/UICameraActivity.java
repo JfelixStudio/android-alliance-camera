@@ -94,7 +94,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		flashlightHelper.addToSequence(FlashMode.FLASH_ON);
 		flashlightHelper.addToSequence(FlashMode.FLASH_TORCH);
 		
-		allianceCamera.setInitFlashlightHelper(flashlightHelper);
+		allianceCamera.setInitFlashlightHelper(flashlightHelper, -1);
 		
 		allianceCamera.setInitZoomHelper(new ZoomHelper());
 		
@@ -317,13 +317,5 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 				layoutZoom.addView(ivZoomIn);	
 			}
 		}	
-	}
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-		if(requestCode == 666){
-			// start preview?
-		}
 	}
 }

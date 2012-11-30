@@ -217,22 +217,16 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	// Fix the Front-Camera Rotation. When frontcamera is 90 or 270 degree, 
 	// the system will be rotate false
 	public int frontFacingRotationFix(int rotation){
-		int fixedResult = -1;
 		
 		if(cameraFacing == CameraInfo.CAMERA_FACING_FRONT){
 			switch(rotation){
 			case 90:
 			case 270:
-				fixedResult = (rotation + 180) % 360;
-				break;
+				return (rotation + 180) % 360;
 			}
 		}
 		
-		if(fixedResult == -1){
-			return rotation;
-		} else {
-			return fixedResult;
-		}
+		return rotation;
 	}
 
 	// remaining methods ///////////////////////////////////////////////////
@@ -480,12 +474,19 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	}
 	
 	
+	/*
+	 * ResolutionHelper is a singleton. Set the other values 0 
+	 */
 	public void setPictureSizeMegapixel(int megapixel) {
 		resolutionHelper.initalSizeMegapixel = megapixel;
+		resolutionHelper.initialSizeHeight = 0;
+		resolutionHelper.initalSizeWidth = 0;
 	}
 	
-	public void setPictureSizeWidth(int width) {
+	public void setPictureSize(int width, int height){
+		resolutionHelper.initialSizeHeight = height;
 		resolutionHelper.initalSizeWidth = width;
+		resolutionHelper.initalSizeMegapixel = 0;
 	}
 	
 	private class PhotoCallback implements Camera.PictureCallback {
@@ -520,7 +521,6 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 				Bitmap bmpSrc = BitmapFactory.decodeByteArray(data, 0, data.length);
 					
 				if(bmpSrc.getWidth()*bmpSrc.getHeight() > 4000000) {
-//					Toast.makeText(ctx, "image to big", Toast.LENGTH_SHORT).show();
 					doSaveWithoutRotation = true;
 					
 				} else {
@@ -607,10 +607,12 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	
 	/**
 	 * Init if flashlight should be available and set the first element of sequence als default
+	 * 
+	 * If value -1 then take first element on list. Other take element at values position
 	 */
-	public void setInitFlashlightHelper(FlashlightHelper flashlightHelper){
+	public void setInitFlashlightHelper(FlashlightHelper flashlightHelper, int value){
 		this.flashlightHelper = flashlightHelper;
-		this.flashlightHelper.flashStatus = flashlightHelper.sequence.get(0);
+		this.flashlightHelper.flashStatus = flashlightHelper.sequence.get(value == -1 ? 0 : value);
 	}
 	
 	public void nextFlashMode(ImageView iv) {
