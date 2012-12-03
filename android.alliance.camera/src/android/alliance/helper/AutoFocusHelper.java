@@ -1,7 +1,7 @@
 package android.alliance.helper;
 
 import android.alliance.camera.AllianceCamera;
-import android.alliance.camera.R;
+import alliance.camera.R;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.Camera.Parameters;

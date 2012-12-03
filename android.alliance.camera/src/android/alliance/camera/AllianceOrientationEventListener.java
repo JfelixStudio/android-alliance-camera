@@ -3,6 +3,7 @@ package android.alliance.camera;
 import java.util.ArrayList;
 import java.util.List;
 
+import alliance.camera.R;
 import android.content.Context;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;

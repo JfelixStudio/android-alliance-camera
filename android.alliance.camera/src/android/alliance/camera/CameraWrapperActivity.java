@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import alliance.camera.R;
 import android.alliance.helper.CameraUtil;
 import android.alliance.helper.Exif;
 import android.app.Activity;

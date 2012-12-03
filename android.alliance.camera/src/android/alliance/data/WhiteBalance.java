@@ -1,6 +1,6 @@
 package android.alliance.data;
 
-import android.alliance.camera.R;
+import alliance.camera.R;
 
 public enum WhiteBalance {
 

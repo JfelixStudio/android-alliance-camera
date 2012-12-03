@@ -4,6 +4,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import alliance.camera.R;
 import android.app.Activity;
 import android.content.Context;
 import android.hardware.Camera.CameraInfo;

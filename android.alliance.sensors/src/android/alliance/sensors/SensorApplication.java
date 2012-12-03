@@ -1,5 +1,6 @@
 package android.alliance.sensors;
 
+import alliance.sensors.R;
 import android.app.Application;
 import android.widget.TextView;
 

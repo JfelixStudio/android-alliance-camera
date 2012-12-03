@@ -22,7 +22,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.alliance.camera.R;
+import alliance.camera.R;
 import android.alliance.data.Resolution;
 import android.alliance.helper.ResolutionHelper;
 import android.view.View.OnClickListener;

@@ -1,5 +1,6 @@
 package android.alliance.sensors;
 
+import alliance.sensors.R;
 import android.alliance.sensors.average.IAverage;
 import android.alliance.sensors.average.LowPassAverage;
 import android.alliance.sensors.average.MovingAverage;

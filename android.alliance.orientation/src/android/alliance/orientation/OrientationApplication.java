@@ -1,5 +1,6 @@
 package android.alliance.orientation;
 
+import alliance.orientation.R;
 import android.app.Application;
 import android.widget.TextView;
 

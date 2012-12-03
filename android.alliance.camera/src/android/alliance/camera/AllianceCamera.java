@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import alliance.camera.R;
 import android.alliance.data.Resolution;
 import android.alliance.focus.MyFocusRectangle;
 import android.alliance.focus.SensorAutoFocus;
