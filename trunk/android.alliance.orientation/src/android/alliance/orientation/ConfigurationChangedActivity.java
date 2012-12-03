@@ -1,5 +1,6 @@
 package android.alliance.orientation;
 
+import alliance.orientation.R;
 import android.app.Activity;
 import android.content.res.Configuration;
 import android.hardware.Camera;

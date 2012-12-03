@@ -1,5 +1,7 @@
 package android.alliance.camera;
 
+import alliance.camera.R;
+
 /**
  * For additional life cycle callbacks that add to the UI-Activity and originate in the AllianceCamera.  
  * 

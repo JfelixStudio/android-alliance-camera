@@ -2,6 +2,7 @@ package android.alliance.sensors;
 
 import java.util.List;
 
+import alliance.sensors.R;
 import android.app.Activity;
 import android.content.Context;
 import android.hardware.Sensor;
