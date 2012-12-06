@@ -117,6 +117,8 @@ public class SensorAutoFocus extends AutoFocus {
 	}
 	
 	public void clearFocusView(){
-		focusView.clear();
+		if(focusView != null) {
+			focusView.clear();
+		}
 	}
 }
