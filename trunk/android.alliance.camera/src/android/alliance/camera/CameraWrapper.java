@@ -6,9 +6,11 @@ import java.util.Calendar;
 
 import alliance.camera.R;
 import android.alliance.data.WhiteBalance;
+import android.alliance.focus.MyFocusRectangle;
 import android.alliance.helper.FlashlightHelper;
 import android.alliance.helper.FlashlightHelper.FlashMode;
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.RectF;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.PictureCallback;
@@ -18,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -43,23 +46,33 @@ public class CameraWrapper implements IAllianceCameraListener {
 	
 	private RelativeLayout.LayoutParams params;
 	private SurfaceView surfaceView;
+	private FrameLayout flSurface;
 	
 	private PictureCallback jpegCallback;
 	
+//	public CameraWrapper(final Activity ctx, final RelativeLayout relativeLayout, FrameLayout.LayoutParams params) {
 	public CameraWrapper(final Activity ctx, final RelativeLayout relativeLayout, RelativeLayout.LayoutParams params) {
 		this.ctx = ctx;
 		this.relativeLayout = relativeLayout;
 		
 		LayoutInflater layoutInflater = ctx.getLayoutInflater();
 		cameraLayout = (RelativeLayout) layoutInflater.inflate(R.layout.camera_wrapper, null);
+		
+		flSurface = new FrameLayout(ctx);
+		
 		surfaceView = new SurfaceView(ctx);
+		flSurface.addView(surfaceView);
+		
+		MyFocusRectangle focusRect = new MyFocusRectangle(ctx);
+		focusRect.setId(R.id.focus_rectangle);
+		flSurface.addView(focusRect);
 		
 		this.params = params;
-		relativeLayout.addView(surfaceView, params);
+		relativeLayout.addView(flSurface, params);
 		relativeLayout.addView(cameraLayout);
 		
 		allianceCamera = new AllianceCamera(ctx, surfaceView, CameraInfo.CAMERA_FACING_BACK, false, null);
-		
+		allianceCamera.setPictureSizeMegapixel(3000000);
 		
 		FlashMode.FLASH_AUTO.drawable = R.drawable.bt_flashlight_auto_selector;
 		FlashMode.FLASH_ON.drawable = R.drawable.bt_flashlight_on_selector;
@@ -321,7 +334,8 @@ public class CameraWrapper implements IAllianceCameraListener {
 		params.leftMargin = (int)rect.left+1;
 		params.topMargin = (int)rect.top;
 
-		surfaceView.setLayoutParams(params);
+		flSurface.setLayoutParams(params);
+//		surfaceView.setLayoutParams(params);
 	}
 	
 	public void setPictureCallback(PictureCallback pictureCallback) {
