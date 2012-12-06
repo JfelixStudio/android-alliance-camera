@@ -10,11 +10,9 @@ import android.alliance.focus.MyFocusRectangle;
 import android.alliance.helper.FlashlightHelper;
 import android.alliance.helper.FlashlightHelper.FlashMode;
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.RectF;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.PictureCallback;
-import android.hardware.Camera.Size;
 import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
@@ -50,7 +48,6 @@ public class CameraWrapper implements IAllianceCameraListener {
 	
 	private PictureCallback jpegCallback;
 	
-//	public CameraWrapper(final Activity ctx, final RelativeLayout relativeLayout, FrameLayout.LayoutParams params) {
 	public CameraWrapper(final Activity ctx, final RelativeLayout relativeLayout, RelativeLayout.LayoutParams params) {
 		this.ctx = ctx;
 		this.relativeLayout = relativeLayout;
@@ -65,6 +62,7 @@ public class CameraWrapper implements IAllianceCameraListener {
 		
 		MyFocusRectangle focusRect = new MyFocusRectangle(ctx);
 		focusRect.setId(R.id.focus_rectangle);
+		FrameLayout.LayoutParams p = new FrameLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		flSurface.addView(focusRect);
 		
 		this.params = params;
