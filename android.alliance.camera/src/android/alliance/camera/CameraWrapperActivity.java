@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.Window;
+import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -39,6 +40,7 @@ public class CameraWrapperActivity extends Activity {
 		relativeLayout.setBackgroundColor(Color.RED);
 		addContentView(relativeLayout, params);
 		
+//		FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(300, 500);
 		RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(300, 500);
 		layoutParams.leftMargin = 100;
 		layoutParams.topMargin = 100;
