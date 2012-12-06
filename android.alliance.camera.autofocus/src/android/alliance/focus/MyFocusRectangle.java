@@ -12,6 +12,10 @@ import android.widget.FrameLayout;
 
 public class MyFocusRectangle extends View implements FocusView {
 
+	public MyFocusRectangle(Context context) {
+		super(context);
+	}
+	
     public MyFocusRectangle(Context context, AttributeSet attributeset) {
 		super(context, attributeset);
 	}
