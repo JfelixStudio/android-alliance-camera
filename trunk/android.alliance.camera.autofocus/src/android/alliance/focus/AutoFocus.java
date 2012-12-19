@@ -18,12 +18,13 @@ public abstract class AutoFocus implements Camera.AutoFocusCallback {
 	public FocusView focusView;
 	protected AsyncTask<AutoFocus, Void, AutoFocus> task;
 	
-	
+
 	public AutoFocus(Camera camera, FocusView focusView) {
 		this.camera = camera;
 		this.focusView = focusView;
 	}
 	
+	/** gets called after auto focus finishes successfully */
 	public void startAutoFocus() {
 		updateFocusIndicator();
 		startTask();
@@ -84,21 +85,28 @@ public abstract class AutoFocus implements Camera.AutoFocusCallback {
 		}
 	}
 	
+	public void onAutoFocusSuccess() {
+		
+	}
+	
+	public void onAutoFocusFailure() {
+		
+	}
+	
 	// Camera.AutoFocusCallback //////////////
 
-		@Override
-		public void onAutoFocus(boolean success, Camera camera) {
-			Log.d("#", Boolean.toString(success));
-			
-			if(success){
-	        	mFocusState = FOCUS_SUCCESS;
-	        	
-	        	startAutoFocus();
-	        } else {
-	        	mFocusState = FOCUS_FAIL;
-	        }
-	        
-			updateFocusIndicator();
-		}
+	@Override
+	public void onAutoFocus(boolean success, Camera camera) {
+		
+		if(success){
+	    	mFocusState = FOCUS_SUCCESS;
+	    	onAutoFocusSuccess();
+	    } else {
+	    	mFocusState = FOCUS_FAIL;
+	    	onAutoFocusFailure();
+	    }
+	    
+		updateFocusIndicator();
+	}
 		
 }
