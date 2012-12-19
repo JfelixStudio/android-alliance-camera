@@ -11,7 +11,6 @@ import android.alliance.helper.FlashlightHelper.FlashMode;
 import android.alliance.helper.ResolutionHelper;
 import android.alliance.helper.ZoomHelper;
 import android.app.Activity;
-import android.content.Intent;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
 import android.os.Bundle;

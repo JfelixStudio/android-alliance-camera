@@ -1,57 +1,45 @@
 package android.alliance.helper;
 
 import android.alliance.camera.AllianceCamera;
-import alliance.camera.R;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.hardware.Camera.Parameters;
 import android.widget.ImageView;
 
+/**
+ * 
+ */
 public class AutoFocusHelper {
 
+	/** is autofocus from this device supported */
 	public boolean available = false;
-	public AutoFocusMode autoFocusMode = AutoFocusMode.AUTOFOCUS_ON;
+	
+	public AutoFocusMode autoFocusMode = AutoFocusMode.OFF;
 	
 	public AutoFocusHelper(Context ctx){
 		available = ctx.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_AUTOFOCUS);
 		
-		if(available){
-			autoFocusMode = AutoFocusMode.AUTOFOCUS_ON;
+		if(available) {
+			autoFocusMode = AutoFocusMode.ON;
 		} else {
-			autoFocusMode = AutoFocusMode.AUTOFOCUS_OFF;
+			autoFocusMode = AutoFocusMode.OFF;
 		}
 	}
 	
 	public void changeAutoFocusMode(AllianceCamera allianceCamera, ImageView ivAutofocus){
-		if(autoFocusMode == AutoFocusMode.AUTOFOCUS_ON){
-			autoFocusMode = AutoFocusMode.AUTOFOCUS_OFF;
+		if(autoFocusMode == AutoFocusMode.ON){
+			autoFocusMode = AutoFocusMode.OFF;
 			allianceCamera.stopAutoFocus();
 			
-		} else if(autoFocusMode == AutoFocusMode.AUTOFOCUS_OFF){
-			autoFocusMode = AutoFocusMode.AUTOFOCUS_ON;
+		} else if(autoFocusMode == AutoFocusMode.OFF){
+			autoFocusMode = AutoFocusMode.ON;
 			allianceCamera.initAutoFokus();
 		
-		} else if(autoFocusMode == AutoFocusMode.AUTOFOCUS_MANUAL){
-			autoFocusMode = AutoFocusMode.AUTOFOCUS_ON;
+		} else if(autoFocusMode == AutoFocusMode.MANUAL){
+			autoFocusMode = AutoFocusMode.ON;
 			allianceCamera.initAutoFokus();
 		}
 		
 		ivAutofocus.setImageResource(autoFocusMode.drawable);
 	}
 	
-	public enum AutoFocusMode {
-		
-		AUTOFOCUS_ON(R.drawable.bt_autofocus_on_selector),
-		AUTOFOCUS_MANUAL(R.drawable.bt_autofocus_off_selector),
-		AUTOFOCUS_OFF(R.drawable.bt_autofocus_off_selector);
-		
-		
-		
-		public int drawable;
-		
-		private AutoFocusMode(int resId) {
-			this.drawable = resId;
-		}
-		
-	}
 }
