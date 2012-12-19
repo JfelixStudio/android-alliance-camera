@@ -111,7 +111,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		this.useAlternativeFacing = useAlternativeFacing;
 		this.filePath = filePath;
 		
-		this.autofocusHelper = new AutoFocusHelper(ctx);
+		autofocusHelper = new AutoFocusHelper(ctx);
 		
 		audioManager = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
 		if(audioManager != null){
