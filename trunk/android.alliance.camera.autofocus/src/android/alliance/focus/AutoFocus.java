@@ -2,7 +2,6 @@ package android.alliance.focus;
 
 import android.hardware.Camera;
 import android.os.AsyncTask;
-import android.util.Log;
 
 public abstract class AutoFocus implements Camera.AutoFocusCallback {
 
