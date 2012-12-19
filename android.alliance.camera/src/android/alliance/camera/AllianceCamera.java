@@ -6,10 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import alliance.camera.R;
-import android.alliance.data.Resolution;
-import android.alliance.focus.AutoFocus;
-import android.alliance.focus.MyFocusRectangle;
-import android.alliance.focus.SensorAutoFocus;
 import android.alliance.helper.AllianceLocationListener;
 import android.alliance.helper.AutoFocusHelper;
 import android.alliance.helper.AutoFocusMode;
@@ -21,11 +17,9 @@ import android.alliance.helper.ResolutionHelper;
 import android.alliance.helper.ZoomHelper;
 import android.app.Activity;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
-import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
@@ -82,8 +76,6 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	private Integer cameraFacing = null;
 	private boolean useAlternativeFacing = false;
 	
-	private AutoFocus sensorAutoFocus;
-
 	private AudioManager audioManager;
 	
 	private ResolutionHelper resolutionHelper =  ResolutionHelper.getInstance();
@@ -112,7 +104,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		this.useAlternativeFacing = useAlternativeFacing;
 		this.filePath = filePath;
 		
-		autofocusHelper = new AutoFocusHelper(ctx);
+		autofocusHelper = new AutoFocusHelper(ctx, AutoFocusMode.AUTO);
 		
 		audioManager = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
 		if(audioManager != null){
@@ -145,7 +137,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		if(camera != null){
 			
 			initCameraPreferences();
-			initAutoFokus();
+			autofocusHelper.initAutoFokus(camera);
 			
 			orientationListener.setCameraId(cameraId);
 			orientationListener.enable();
@@ -161,21 +153,6 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		
 	}
 
-	public void initAutoFokus(){
-		if(camera != null){
-			if(autofocusHelper.available && autofocusHelper.autoFocusMode == AutoFocusMode.ON) {
-				if (sensorAutoFocus != null) {
-					sensorAutoFocus.setCamera(camera); // vielleicht raus?
-					sensorAutoFocus.startAutoFocus();
-				} else {
-					MyFocusRectangle mFocusRectangle = (MyFocusRectangle) ((Activity)ctx).findViewById(R.id.focus_rectangle);
-					sensorAutoFocus = new SensorAutoFocus(ctx, camera, mFocusRectangle);
-					sensorAutoFocus.startAutoFocus();
-				}
-			}	
-		}
-	}
-	
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 		Log.d("#", "surfaceChanged(format=" + format + ", width=" + width + ", height=" + height + ")");
@@ -189,9 +166,8 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		Log.d("#", "surfaceDestroyed()");
 
-		if(autofocusHelper.available && sensorAutoFocus != null && autofocusHelper.autoFocusMode == AutoFocusMode.ON) {
-			sensorAutoFocus.stopAutoFocus();
-		}
+		autofocusHelper.stopAutoFocus();
+		
 		orientationListener.disable();
 		releaseCamera();
 	}
@@ -414,7 +390,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			camera = null;
 		}
 
-		stopAutoFocus();
+		autofocusHelper.stopAutoFocus();
 		
 		if(audioManager != null) {
 			audioManager.setStreamMute(AudioManager.STREAM_SYSTEM, false);
@@ -423,14 +399,14 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		removeLocationManager();
 	}
 
-	public void stopAutoFocus(){
-		if(autofocusHelper.available && sensorAutoFocus != null){
-			sensorAutoFocus.clearFocusView();
-			sensorAutoFocus.stopAutoFocus();
-			sensorAutoFocus.setCamera(null);
-			sensorAutoFocus = null;
-		}
-	}
+//	public void stopAutoFocus() {
+//		if(autofocusHelper.available && sensorAutoFocus != null){
+//			sensorAutoFocus.clearFocusView();
+//			sensorAutoFocus.stopAutoFocus();
+//			sensorAutoFocus.setCamera(null);
+//			sensorAutoFocus = null;
+//		}
+//	}
 	
 	/**
 	 * Captures the image. TODO: If the camera is focusing nothing happens. If
@@ -438,11 +414,11 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	 */
 	public void capture() {
 		
-		if(autofocusHelper.available && autofocusHelper.autoFocusMode == AutoFocusMode.ON) {
-			if(sensorAutoFocus.isFocusing()) {
+		if(autofocusHelper.available && autofocusHelper.autoFocusMode != AutoFocusMode.OFF) {
+			if(autofocusHelper.autoFocus.isFocusing()) {
 				return;
 			} else {
-				sensorAutoFocus.stopAutoFocus();
+				autofocusHelper.stopAutoFocus();
 			}
 		} 
 		
@@ -456,11 +432,11 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	
 	public void capture(ShutterCallback shutter, PictureCallback raw, PictureCallback jpeg) {
 		
-		if(autofocusHelper.available && autofocusHelper.autoFocusMode == AutoFocusMode.ON) {
-			if(sensorAutoFocus.isFocusing()) {
+		if(autofocusHelper.autoFocusMode != AutoFocusMode.OFF) {
+			if(autofocusHelper.isFocusing()) {
 				return;
 			} else {
-				sensorAutoFocus.stopAutoFocus();
+				autofocusHelper.stopAutoFocus();
 			}
 		}
 		
@@ -580,8 +556,8 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			((Activity) ctx).finish();
 		} else {
 			camera.startPreview();
-			if(autofocusHelper.available && autofocusHelper.autoFocusMode == AutoFocusMode.ON) {
-				sensorAutoFocus.startAutoFocus();
+			if(autofocusHelper.available && autofocusHelper.autoFocusMode != AutoFocusMode.OFF) {
+				autofocusHelper.startAutoFocus();
 			}
 		}
 	}
