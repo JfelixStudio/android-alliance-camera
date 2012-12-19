@@ -27,7 +27,11 @@ public class AutoFocusHelper {
 			autoFocusMode = AutoFocusMode.AUTOFOCUS_OFF;
 			allianceCamera.stopAutoFocus();
 			
-		} else if (autoFocusMode == AutoFocusMode.AUTOFOCUS_OFF){
+		} else if(autoFocusMode == AutoFocusMode.AUTOFOCUS_OFF){
+			autoFocusMode = AutoFocusMode.AUTOFOCUS_ON;
+			allianceCamera.initAutoFokus();
+		
+		} else if(autoFocusMode == AutoFocusMode.AUTOFOCUS_MANUAL){
 			autoFocusMode = AutoFocusMode.AUTOFOCUS_ON;
 			allianceCamera.initAutoFokus();
 		}
@@ -38,7 +42,10 @@ public class AutoFocusHelper {
 	public enum AutoFocusMode {
 		
 		AUTOFOCUS_ON(R.drawable.bt_autofocus_on_selector),
+		AUTOFOCUS_MANUAL(R.drawable.bt_autofocus_off_selector),
 		AUTOFOCUS_OFF(R.drawable.bt_autofocus_off_selector);
+		
+		
 		
 		public int drawable;
 		
