@@ -33,7 +33,10 @@ public class SensorAutoFocus extends AutoFocus {
 	
     private float[] valuesDelta = new float[3];
 	private float[] valuesOldPeak = new float[3];
-	static final float TRESHOLD = 0.31f;
+	
+	/** Threshold for the delta of the last autofocus position and the actual.
+	 * Common value for all axis. */
+	static final float THRESHOLD = 0.31f;
     
 	/**
 	 * Instantiates SensorEventListeners for the accelerometer and magnetometer 
@@ -93,6 +96,12 @@ public class SensorAutoFocus extends AutoFocus {
 		super.stopAutoFocus();
 	}
 	
+	/**
+	 * Gets called when the accelerometer has a new sensor value.
+	 * Calculates the delta between the last position of auto focus
+	 * and the actual position. <br>
+	 * Is the delta above a certain threshold the auto focus is triggerd to start. 
+	 */
 	private void calculateOrientation() {
 		
 		float R[] = new float[9];
@@ -109,8 +118,9 @@ public class SensorAutoFocus extends AutoFocus {
 			
 			delta(valuesOldPeak, mOrientation, valuesDelta);
 			
-			if(valuesDelta[0] > TRESHOLD || valuesDelta[1] > TRESHOLD || valuesDelta[2] > TRESHOLD) {
+			if(valuesDelta[0] > THRESHOLD || valuesDelta[1] > THRESHOLD || valuesDelta[2] > THRESHOLD) {
 				
+				// Starts the Autofocus!!!
 				autoFocus();
 				
 				valuesOldPeak = mOrientation.clone();
