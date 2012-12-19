@@ -78,6 +78,12 @@ public abstract class AutoFocus implements Camera.AutoFocusCallback {
 		return false;
 	}
 	
+	public void clearFocusView(){
+		if(focusView != null) {
+			focusView.clear();
+		}
+	}
+	
 	// Camera.AutoFocusCallback //////////////
 
 		@Override
