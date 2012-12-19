@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import alliance.camera.R;
 import android.alliance.data.Resolution;
+import android.alliance.focus.AutoFocus;
 import android.alliance.focus.MyFocusRectangle;
 import android.alliance.focus.SensorAutoFocus;
 import android.alliance.helper.AllianceLocationListener;
@@ -81,7 +82,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	private Integer cameraFacing = null;
 	private boolean useAlternativeFacing = false;
 	
-	private SensorAutoFocus sensorAutoFocus;
+	private AutoFocus sensorAutoFocus;
 
 	private AudioManager audioManager;
 	
