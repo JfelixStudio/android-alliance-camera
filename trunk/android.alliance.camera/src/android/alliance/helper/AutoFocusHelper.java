@@ -25,18 +25,21 @@ public class AutoFocusHelper {
 		}
 	}
 	
-	public void changeAutoFocusMode(AllianceCamera allianceCamera, ImageView ivAutofocus){
-		if(autoFocusMode == AutoFocusMode.ON){
+	public void changeAutoFocusMode(AllianceCamera allianceCamera, ImageView ivAutofocus) {
+		
+		switch(autoFocusMode) {
+		case ON:
 			autoFocusMode = AutoFocusMode.OFF;
 			allianceCamera.stopAutoFocus();
-			
-		} else if(autoFocusMode == AutoFocusMode.OFF){
+			break;
+		case OFF:
 			autoFocusMode = AutoFocusMode.ON;
 			allianceCamera.initAutoFokus();
-		
-		} else if(autoFocusMode == AutoFocusMode.MANUAL){
+			break;
+		case MANUAL:
 			autoFocusMode = AutoFocusMode.ON;
 			allianceCamera.initAutoFokus();
+			break;
 		}
 		
 		ivAutofocus.setImageResource(autoFocusMode.drawable);
