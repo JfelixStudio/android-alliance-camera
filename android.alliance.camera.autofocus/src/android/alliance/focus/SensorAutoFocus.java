@@ -9,6 +9,15 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+/**
+ * Triggers the auto focus function for a camera based 
+ * on the delta rotation movement of the device. <br>
+ * The delta is calculated from the sensors accelerometer
+ * and magnetometer. <br>
+ * <br>
+ * Start the auto focus with <code>startAutoFocus()</code> and stop it 
+ * with <code>stopAutoFocus()</code>.
+ */
 public class SensorAutoFocus extends AutoFocus {
 
 	private SensorManager mySensorManager;
@@ -17,25 +26,26 @@ public class SensorAutoFocus extends AutoFocus {
 	private Sensor sensorMagnetometer;
 	private SensorEventListener listenerMagnetometer;
 	
-	float[] mGravity = new float[3];
-    float[] mGeomagnetic = new float[3];
-    float[] mOrientation;
+	private float[] mGravity = new float[3];
+    private float[] mGeomagnetic = new float[3];
+    private float[] mOrientation;
     private IAverage averageGravity = new LowPassAverage(0.2f);
 	
     private float[] valuesDelta = new float[3];
 	private float[] valuesOldPeak = new float[3];
 	static final float TRESHOLD = 0.31f;
-    private FocusView focusView;
     
+	/**
+	 * Instantiates SensorEventListeners for the accelerometer and magnetometer 
+	 */
 	public SensorAutoFocus(Context ctx, Camera camera, FocusView focusView) {
 		super(camera, focusView);
 	
-		this.focusView = focusView;
-		
 		mySensorManager = (SensorManager)ctx.getSystemService(Context.SENSOR_SERVICE);
     	
         sensorAccelerometer = mySensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        listenerAccelerometer = new SensorEventListener(){
+        listenerAccelerometer = new SensorEventListener() {
+        	
 			public void onSensorChanged(SensorEvent event) {
 					averageGravity.getAverage(event.values, mGravity);
 					calculateOrientation();
@@ -45,7 +55,7 @@ public class SensorAutoFocus extends AutoFocus {
 			}
         };
         sensorMagnetometer = mySensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-        listenerMagnetometer = new SensorEventListener(){
+        listenerMagnetometer = new SensorEventListener() {
 
 			public void onSensorChanged(SensorEvent event) {
 				mGeomagnetic = event.values;
@@ -82,7 +92,6 @@ public class SensorAutoFocus extends AutoFocus {
 		
 		super.stopAutoFocus();
 	}
-
 	
 	private void calculateOrientation() {
 		
