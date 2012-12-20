@@ -37,9 +37,12 @@ public abstract class AutoFocus implements Camera.AutoFocusCallback {
 		if(task != null) {
 			task.cancel(true);
 		}
+		
+		mFocusState = FOCUS_NOT_STARTED;
+		updateFocusIndicator();
 	}
 	
-	public void autoFocus() {
+	public void doAutoFocus() {
 		if(mFocusState != FOCUSING) {
 			mFocusState = FOCUSING;
 			updateFocusIndicator();
@@ -108,10 +111,10 @@ public abstract class AutoFocus implements Camera.AutoFocusCallback {
 		updateFocusIndicator();
 	}
 	
-	public void setAutoFocusOff(){
-		stopAutoFocus();
-		mFocusState = FOCUS_NOT_STARTED;
-		updateFocusIndicator();
-	}
+//	public void setAutoFocusOff(){
+//		stopAutoFocus();
+//		mFocusState = FOCUS_NOT_STARTED;
+//		updateFocusIndicator();
+//	}
 		
 }

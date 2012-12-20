@@ -23,7 +23,7 @@ public class IntervalAutoFocusAsyncTask extends AsyncTask<AutoFocus, Void, AutoF
 	
 	@Override
     protected void onPostExecute(AutoFocus autoFocus) {
-		autoFocus.autoFocus();
+		autoFocus.doAutoFocus();
     }
 	
 }

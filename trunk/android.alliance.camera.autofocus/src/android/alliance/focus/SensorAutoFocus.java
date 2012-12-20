@@ -121,7 +121,7 @@ public class SensorAutoFocus extends AutoFocus {
 			if(valuesDelta[0] > THRESHOLD || valuesDelta[1] > THRESHOLD || valuesDelta[2] > THRESHOLD) {
 				
 				// Starts the Autofocus!!!
-				autoFocus();
+				doAutoFocus();
 				
 				valuesOldPeak = mOrientation.clone();
 			}
