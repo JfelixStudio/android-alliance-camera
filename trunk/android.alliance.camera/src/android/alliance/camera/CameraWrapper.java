@@ -7,6 +7,8 @@ import java.util.Calendar;
 import alliance.camera.R;
 import android.alliance.data.WhiteBalance;
 import android.alliance.focus.MyFocusRectangle;
+import android.alliance.helper.AutoFocusHelper;
+import android.alliance.helper.AutoFocusMode;
 import android.alliance.helper.FlashlightHelper;
 import android.alliance.helper.FlashlightHelper.FlashMode;
 import android.app.Activity;
@@ -84,6 +86,14 @@ public class CameraWrapper implements IAllianceCameraListener {
 		flashlightHelper.addToSequence(FlashMode.FLASH_TORCH);
 		
 		allianceCamera.setInitFlashlightHelper(flashlightHelper, -1);
+		
+		
+		AutoFocusHelper autofocusHelper = new AutoFocusHelper(ctx);
+		autofocusHelper.addToSequence(AutoFocusMode.AUTO);
+		autofocusHelper.addToSequence(AutoFocusMode.MANUAL);
+		autofocusHelper.addToSequence(AutoFocusMode.OFF);
+		
+		allianceCamera.setInitAutoFocusHelper(autofocusHelper, -1);
 		
 		
 		scv = (ScrollView) cameraLayout.findViewById(R.id.scrollView1);
