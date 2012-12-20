@@ -1,15 +1,20 @@
 package android.alliance.helper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import alliance.camera.R;
 import android.alliance.camera.AllianceCamera;
 import android.alliance.focus.AutoFocus;
 import android.alliance.focus.ManualAutoFocus;
 import android.alliance.focus.MyFocusRectangle;
 import android.alliance.focus.SensorAutoFocus;
+import android.alliance.helper.FlashlightHelper.FlashMode;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
+import android.hardware.Camera.Parameters;
 import android.widget.ImageView;
 
 /**
@@ -19,47 +24,49 @@ public class AutoFocusHelper {
 
 	/** is autofocus from this device supported */
 	public boolean available = false;
-	
 	public AutoFocusMode autoFocusMode = AutoFocusMode.OFF;
-	
 	public AutoFocus autoFocus;
-	
 	private Context ctx;
-	private Camera camera;
+	public List<AutoFocusMode> sequence = new ArrayList<AutoFocusMode>();
 	
-	public AutoFocusHelper(Context ctx, AutoFocusMode mode){
+	public AutoFocusHelper(Context ctx){
 		this.ctx = ctx;
 		available = ctx.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_AUTOFOCUS);
-		
-		if(available) {
-			autoFocusMode = mode;
-		} else {
-			autoFocusMode = AutoFocusMode.OFF;
-		}
 	}
 	
-	public void changeAutoFocusMode(AllianceCamera allianceCamera, ImageView ivAutofocus) {
-		
-		switch(autoFocusMode) {
-		case AUTO:
-			autoFocusMode = AutoFocusMode.MANUAL;
-			stopAutoFocus();
-			break;
-		case OFF:
-			autoFocusMode = AutoFocusMode.AUTO;
-			initAutoFokus(camera);
-			break;
-		case MANUAL:
-			autoFocusMode = AutoFocusMode.OFF;
-			initAutoFokus(camera);
-			break;
-		}
-		
+	public void setAutoFocusMode(Camera camera, ImageView ivAutofocus) {
+		initAutoFocus(camera);
 		ivAutofocus.setImageResource(autoFocusMode.drawable);
 	}
 	
-	public void initAutoFokus(Camera camera) {
-		this.camera = camera;
+	/**
+	 * To build up the individual sequence of autofocus modes 
+	 * @param stati
+	 */
+	public void addToSequence(AutoFocusMode stati) {
+		sequence.add(stati);
+	}
+	
+	/*
+	 * Setting Autofocus on Click
+	 */
+	public void next(Camera camera, ImageView ivFlashlight) {
+		for(int i=0; i<sequence.size(); i++) {
+			AutoFocusMode statiAtI = sequence.get(i);
+			if(statiAtI == autoFocusMode) {
+				if(i == sequence.size()-1) {
+					autoFocusMode = sequence.get(0);
+					break;
+				} else {
+					autoFocusMode = sequence.get(i+1);
+					break;
+				}
+			}
+		}
+		setAutoFocusMode(camera, ivFlashlight);
+	}
+	
+	public void initAutoFocus(Camera camera) {
 		
 		if(camera != null){
 			if(available && autoFocusMode != AutoFocusMode.OFF) {
@@ -77,7 +84,9 @@ public class AutoFocusHelper {
 				}
 				
 				autoFocus.startAutoFocus();
-			}	
+			} else {
+				autoFocus.setAutoFocusOff();
+			}
 		}
 	}
 	

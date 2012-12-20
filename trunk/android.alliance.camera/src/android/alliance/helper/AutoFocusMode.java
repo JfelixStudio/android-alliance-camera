@@ -5,7 +5,7 @@ import alliance.camera.R;
 public enum AutoFocusMode {
 	
 	AUTO(R.drawable.bt_autofocus_on_selector),
-	MANUAL(R.drawable.bt_autofocus_off_selector),
+	MANUAL(R.drawable.bt_autofocus_manual_selector),
 	OFF(R.drawable.bt_autofocus_off_selector);
 	
 	public int drawable;

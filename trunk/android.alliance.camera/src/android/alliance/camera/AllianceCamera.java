@@ -17,6 +17,7 @@ import android.alliance.helper.ResolutionHelper;
 import android.alliance.helper.ZoomHelper;
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
@@ -104,8 +105,6 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		this.useAlternativeFacing = useAlternativeFacing;
 		this.filePath = filePath;
 		
-		autofocusHelper = new AutoFocusHelper(ctx, AutoFocusMode.AUTO);
-		
 		audioManager = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
 		if(audioManager != null){
 			audioManager.setStreamMute(AudioManager.STREAM_SYSTEM, true);	
@@ -137,7 +136,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		if(camera != null){
 			
 			initCameraPreferences();
-			autofocusHelper.initAutoFokus(camera);
+			autofocusHelper.initAutoFocus(camera);
 			
 			orientationListener.setCameraId(cameraId);
 			orientationListener.enable();
@@ -566,6 +565,10 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		return camera.getParameters();
 	}
 
+	public Camera getCamera(){
+		return camera;
+	}
+	
 	public void setCameraParameters(Parameters param) {
 		camera.setParameters(param);
 		
@@ -591,6 +594,16 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	public void setInitFlashlightHelper(FlashlightHelper flashlightHelper, int value){
 		this.flashlightHelper = flashlightHelper;
 		this.flashlightHelper.flashStatus = flashlightHelper.sequence.get(value == -1 ? 0 : value);
+	}
+	
+	public void setInitAutoFocusHelper(AutoFocusHelper autofocusHelper, int value){
+		this.autofocusHelper = autofocusHelper;
+		
+		if(autofocusHelper.available){
+			this.autofocusHelper.autoFocusMode = autofocusHelper.sequence.get(value == -1 ? 0 : value);	
+		} else {
+			this.autofocusHelper.autoFocusMode = AutoFocusMode.OFF;
+		}
 	}
 	
 	public void nextFlashMode(ImageView iv) {
