@@ -64,13 +64,14 @@ public class AutoFocusHelper {
 			}
 		}
 		setAutoFocusMode(camera, ivFlashlight);
+		initAutoFocus(camera);
 	}
 	
 	public void initAutoFocus(Camera camera) {
 		
 		if(camera != null){
 			if(available && autoFocusMode != AutoFocusMode.OFF) {
-				if(autoFocus == null) {
+//				if(autoFocus == null) {
 					MyFocusRectangle mFocusRectangle = (MyFocusRectangle) ((Activity)ctx).findViewById(R.id.focus_rectangle);
 					
 					switch(autoFocusMode) {
@@ -81,11 +82,12 @@ public class AutoFocusHelper {
 						autoFocus = new ManualAutoFocus(camera, mFocusRectangle);
 						break;
 					}
-				}
+//				}
 				
 				autoFocus.startAutoFocus();
 			} else {
-				autoFocus.setAutoFocusOff();
+				autoFocus.stopAutoFocus();
+//				autoFocus.setAutoFocusOff();
 			}
 		}
 	}
@@ -104,4 +106,7 @@ public class AutoFocusHelper {
 		return autoFocus.isFocusing();
 	}
 	
+	public void doAutoFocus() {
+		autoFocus.doAutoFocus();
+	}
 }
