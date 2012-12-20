@@ -107,5 +107,11 @@ public abstract class AutoFocus implements Camera.AutoFocusCallback {
 	    
 		updateFocusIndicator();
 	}
+	
+	public void setAutoFocusOff(){
+		stopAutoFocus();
+		mFocusState = FOCUS_NOT_STARTED;
+		updateFocusIndicator();
+	}
 		
 }

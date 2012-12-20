@@ -6,6 +6,8 @@ import java.util.Calendar;
 
 import alliance.camera.R;
 import android.alliance.dialoge.ResolutionDialog;
+import android.alliance.helper.AutoFocusHelper;
+import android.alliance.helper.AutoFocusMode;
 import android.alliance.helper.FlashlightHelper;
 import android.alliance.helper.FlashlightHelper.FlashMode;
 import android.alliance.helper.ResolutionHelper;
@@ -23,10 +25,11 @@ import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
+import android.widget.Toast;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 
-public class UICameraActivity extends Activity implements IAllianceOrientationChanged, IAllianceCameraListener {
+public class UICameraActivity extends Activity implements IAllianceOrientationChanged, IAllianceCameraListener, OnClickListener {
 
 	protected ImageView ib0;
 	protected ImageView ib1;
@@ -53,6 +56,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 	
 	protected int activityResultCode = RESULT_CANCELED;
 	protected SurfaceView surfaceView;
+	private AutoFocusHelper autofocusHelper;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +79,6 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 
 		surfaceView = (SurfaceView) findViewById(R.id.sv_camera);
 		
-		
 		String folderPath  = Environment.getExternalStorageDirectory().getAbsolutePath() + "/CamTest/";
 		File x = new File(folderPath);
 		x.mkdirs();
@@ -95,6 +98,18 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		flashlightHelper.addToSequence(FlashMode.FLASH_TORCH);
 		
 		allianceCamera.setInitFlashlightHelper(flashlightHelper, -1);
+		
+		
+		autofocusHelper = new AutoFocusHelper(this);
+		autofocusHelper.addToSequence(AutoFocusMode.AUTO);
+		autofocusHelper.addToSequence(AutoFocusMode.MANUAL);
+		autofocusHelper.addToSequence(AutoFocusMode.OFF);
+		
+		// If manual autofocus is given, init a onClickListener on surfaceView
+		surfaceView.setOnClickListener(this);
+		
+		allianceCamera.setInitAutoFocusHelper(autofocusHelper, -1);
+		
 		
 		allianceCamera.setInitZoomHelper(new ZoomHelper());
 		
@@ -136,7 +151,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 			
 			@Override
 			public void onClick(View v) {
-				allianceCamera.autofocusHelper.changeAutoFocusMode(allianceCamera, ivAutofocus);
+				allianceCamera.autofocusHelper.next(allianceCamera.getCamera(), ivAutofocus);
 			}
 		});
 
@@ -317,5 +332,14 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 				layoutZoom.addView(ivZoomIn);	
 			}
 		}	
+	}
+
+	@Override
+	public void onClick(View v) {
+		if(v == surfaceView){
+			if(autofocusHelper.available && autofocusHelper.autoFocusMode == AutoFocusMode.MANUAL){
+				autofocusHelper.startAutoFocus();	
+			}
+		}
 	}
 }
