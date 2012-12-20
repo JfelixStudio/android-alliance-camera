@@ -338,7 +338,8 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 	public void onClick(View v) {
 		if(v == surfaceView){
 			if(autofocusHelper.available && autofocusHelper.autoFocusMode == AutoFocusMode.MANUAL){
-				autofocusHelper.startAutoFocus();	
+//				autofocusHelper.startAutoFocus();
+				autofocusHelper.doAutoFocus();
 			}
 		}
 	}
