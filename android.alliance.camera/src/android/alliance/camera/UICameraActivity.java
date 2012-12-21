@@ -102,13 +102,11 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		
 		autofocusHelper = new AutoFocusHelper(this);
 		autofocusHelper.addToSequence(AutoFocusMode.AUTO);
-		autofocusHelper.addToSequence(AutoFocusMode.MANUAL);
 		autofocusHelper.addToSequence(AutoFocusMode.OFF);
-		
-		// If manual autofocus is given, init a onClickListener on surfaceView
+		autofocusHelper.setStartingMode(AutoFocusMode.AUTO);
+		allianceCamera.setAutoFocusHelper(autofocusHelper);
+		// for the manual trigger of the auto focus
 		surfaceView.setOnClickListener(this);
-		
-		allianceCamera.setInitAutoFocusHelper(autofocusHelper, -1);
 		
 		
 		allianceCamera.setInitZoomHelper(new ZoomHelper());
@@ -335,10 +333,9 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 	}
 
 	@Override
-	public void onClick(View v) {
-		if(v == surfaceView){
-			if(autofocusHelper.available && autofocusHelper.autoFocusMode == AutoFocusMode.MANUAL){
-//				autofocusHelper.startAutoFocus();
+	public void onClick(View view) {
+		if(view == surfaceView){
+			if(autofocusHelper.available){
 				autofocusHelper.doAutoFocus();
 			}
 		}

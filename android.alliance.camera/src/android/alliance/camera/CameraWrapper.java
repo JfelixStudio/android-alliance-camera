@@ -90,10 +90,9 @@ public class CameraWrapper implements IAllianceCameraListener {
 		
 		AutoFocusHelper autofocusHelper = new AutoFocusHelper(ctx);
 		autofocusHelper.addToSequence(AutoFocusMode.AUTO);
-		autofocusHelper.addToSequence(AutoFocusMode.MANUAL);
 		autofocusHelper.addToSequence(AutoFocusMode.OFF);
-		
-		allianceCamera.setInitAutoFocusHelper(autofocusHelper, -1);
+		autofocusHelper.setStartingMode(AutoFocusMode.AUTO);
+		allianceCamera.setAutoFocusHelper(autofocusHelper);
 		
 		
 		scv = (ScrollView) cameraLayout.findViewById(R.id.scrollView1);
