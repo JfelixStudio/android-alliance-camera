@@ -596,14 +596,8 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		this.flashlightHelper.flashStatus = flashlightHelper.sequence.get(value == -1 ? 0 : value);
 	}
 	
-	public void setInitAutoFocusHelper(AutoFocusHelper autofocusHelper, int value){
+	public void setAutoFocusHelper(AutoFocusHelper autofocusHelper){
 		this.autofocusHelper = autofocusHelper;
-		
-		if(autofocusHelper.available){
-			this.autofocusHelper.autoFocusMode = autofocusHelper.sequence.get(value == -1 ? 0 : value);	
-		} else {
-			this.autofocusHelper.autoFocusMode = AutoFocusMode.OFF;
-		}
 	}
 	
 	public void nextFlashMode(ImageView iv) {

@@ -4,17 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import alliance.camera.R;
-import android.alliance.camera.AllianceCamera;
 import android.alliance.focus.AutoFocus;
-import android.alliance.focus.ManualAutoFocus;
 import android.alliance.focus.MyFocusRectangle;
 import android.alliance.focus.SensorAutoFocus;
-import android.alliance.helper.FlashlightHelper.FlashMode;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
-import android.hardware.Camera.Parameters;
 import android.widget.ImageView;
 
 /**
@@ -29,7 +25,7 @@ public class AutoFocusHelper {
 	private Context ctx;
 	public List<AutoFocusMode> sequence = new ArrayList<AutoFocusMode>();
 	
-	public AutoFocusHelper(Context ctx){
+	public AutoFocusHelper(Context ctx) {
 		this.ctx = ctx;
 		available = ctx.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_AUTOFOCUS);
 	}
@@ -45,6 +41,10 @@ public class AutoFocusHelper {
 	 */
 	public void addToSequence(AutoFocusMode stati) {
 		sequence.add(stati);
+	}
+	
+	public void setStartingMode(AutoFocusMode mode) {
+		autoFocusMode = mode;
 	}
 	
 	/*
@@ -67,27 +67,21 @@ public class AutoFocusHelper {
 		initAutoFocus(camera);
 	}
 	
+	/**
+	 *	called from surfaceCreated() 
+	 */
 	public void initAutoFocus(Camera camera) {
 		
-		if(camera != null){
-			if(available && autoFocusMode != AutoFocusMode.OFF) {
-//				if(autoFocus == null) {
-					MyFocusRectangle mFocusRectangle = (MyFocusRectangle) ((Activity)ctx).findViewById(R.id.focus_rectangle);
-					
-					switch(autoFocusMode) {
-					case AUTO:
-						autoFocus = new SensorAutoFocus(ctx, camera, mFocusRectangle);
-						break;
-					case MANUAL:
-						autoFocus = new ManualAutoFocus(camera, mFocusRectangle);
-						break;
-					}
-//				}
-				
+		if(camera != null && available) {
+			if(autoFocus == null) {
+				MyFocusRectangle mFocusRectangle = (MyFocusRectangle) ((Activity)ctx).findViewById(R.id.focus_rectangle);
+				autoFocus = new SensorAutoFocus(ctx, camera, mFocusRectangle);
+			}
+			
+			if(autoFocusMode == AutoFocusMode.AUTO) {
 				autoFocus.startAutoFocus();
 			} else {
 				autoFocus.stopAutoFocus();
-//				autoFocus.setAutoFocusOff();
 			}
 		}
 	}
@@ -99,6 +93,7 @@ public class AutoFocusHelper {
 	public void stopAutoFocus() {
 		if(autoFocusMode != AutoFocusMode.OFF) {
 			autoFocus.stopAutoFocus();
+			autoFocusMode = AutoFocusMode.OFF;
 		}
 	}
 	
