@@ -19,6 +19,7 @@ import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -27,7 +28,7 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
-public class CameraWrapper implements IAllianceCameraListener {
+public class CameraWrapper implements IAllianceCameraListener, OnClickListener {
 
 	final private Activity ctx;
 	private RelativeLayout relativeLayout;
@@ -91,8 +92,9 @@ public class CameraWrapper implements IAllianceCameraListener {
 		AutoFocusHelper autofocusHelper = new AutoFocusHelper(ctx);
 		autofocusHelper.addToSequence(AutoFocusMode.AUTO);
 		autofocusHelper.addToSequence(AutoFocusMode.OFF);
-		autofocusHelper.setStartingMode(AutoFocusMode.AUTO);
+		autofocusHelper.setStartingMode(AutoFocusMode.OFF);
 		allianceCamera.setAutoFocusHelper(autofocusHelper);
+		surfaceView.setOnClickListener(this);
 		
 		
 		scv = (ScrollView) cameraLayout.findViewById(R.id.scrollView1);
@@ -351,5 +353,12 @@ public class CameraWrapper implements IAllianceCameraListener {
 	
 	public void setPictureSize(int width, int height) {
 		allianceCamera.setPictureSize(width, height);
+	}
+
+	@Override
+	public void onClick(View v) {
+		if(allianceCamera.autofocusHelper.available) {
+			allianceCamera.autofocusHelper.doAutoFocus();
+		}
 	}
 }
