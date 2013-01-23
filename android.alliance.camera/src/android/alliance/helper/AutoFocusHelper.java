@@ -91,9 +91,11 @@ public class AutoFocusHelper {
 	}
 	
 	public void stopAutoFocus() {
-		if(autoFocusMode != AutoFocusMode.OFF) {
-			autoFocus.stopAutoFocus();
-			autoFocusMode = AutoFocusMode.OFF;
+		if(autoFocus != null){
+			if(autoFocusMode != AutoFocusMode.OFF) {
+				autoFocus.stopAutoFocus();
+				autoFocusMode = AutoFocusMode.OFF;
+			}	
 		}
 	}
 	
