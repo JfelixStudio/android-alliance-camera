@@ -146,10 +146,9 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			}	
 		
 		} else {
-			Toast.makeText(ctx, ctx.getResources().getString(R.string.cameraNotAvailable), Toast.LENGTH_SHORT).show();
+			Toast.makeText(ctx, ctx.getResources().getString(R.string.cameraNotAvailable), Toast.LENGTH_LONG).show();
 			((Activity) ctx).finish();
 		}
-		
 	}
 
 	@Override
@@ -177,14 +176,18 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	public void onAllianceOrientationChanged(int orientation, int orientationType, int rotation) {
 		Log.d("#", "onAllianceOrientationChanged()");
 
-		Parameters localParameters = camera.getParameters();
-		/*
-		 * Sets the rotation angle in degrees relative to the orientation of the
-		 * camera. This affects the pictures returned from JPEG
-		 * android.hardware.Camera.PictureCallback.
-		 */
-		localParameters.setRotation(frontFacingRotationFix(rotation));
-		camera.setParameters(localParameters);
+		try{
+			Parameters localParameters = camera.getParameters();
+			/*
+			 * Sets the rotation angle in degrees relative to the orientation of the
+			 * camera. This affects the pictures returned from JPEG
+			 * android.hardware.Camera.PictureCallback.
+			 */
+			localParameters.setRotation(frontFacingRotationFix(rotation));
+			camera.setParameters(localParameters);	
+		} catch(Exception e){
+			Toast.makeText(ctx, ctx.getResources().getString(R.string.errorOrientationChange), Toast.LENGTH_LONG).show();
+		}
 	}
 
 	public void addOrientationChangedListeners(IAllianceOrientationChanged listener) {
@@ -215,7 +218,6 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	private void initCamera(SurfaceHolder holder) {
 
 		try {
-
 			// Dieser Code wird unten ersetzt
 			camera = openCamera(cameraFacing);
 			if (camera == null && useAlternativeFacing) {
@@ -240,14 +242,15 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 				throw new Exception();
 			}
 
+			orientationListener.setCameraId(cameraId);
+			
 		} catch (Exception e) {
 			releaseCamera();
 
 			Log.e("#", "Camera failed to open: " + e.getLocalizedMessage());
-			Toast.makeText(ctx, "Die Kamera ist nicht verfügbar", Toast.LENGTH_LONG);
+			Toast.makeText(ctx, ctx.getResources().getString(R.string.cameraNotAvailable), Toast.LENGTH_LONG).show();
 			((Activity) ctx).finish();
 		}
-		orientationListener.setCameraId(cameraId);
 	}
 	
 	
@@ -280,7 +283,8 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	     } else {  // back-facing
 	         result = (info.orientation - degrees + 360) % 360;
 	     }
-		camera.setDisplayOrientation(result);
+
+	     camera.setDisplayOrientation(result);
 	}
 
 	/**
@@ -319,66 +323,73 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	}
 
 	private void initCameraPreferences() {
-		if (camera != null) {
+		try{
+			if (camera != null) {
 
-			camera.stopPreview();
+				camera.stopPreview();
 
-			Parameters parameters = camera.getParameters();
-			
-			// HTC Sensation: sharpness-max=30;zoom=0;scene-detect-values=off,on;zoom-supported=true;strtextures=OFF;sharpness-min=0;face-detection-values=;sharpness=10;contrast=5;whitebalance=auto;max-sharpness=30;scene-mode=auto;jpeg-quality=85;preview-format-values=yuv420sp;overlay-3d-format=0;histogram-values=enable,disable;jpeg-thumbnail-quality=70;preview-format=yuv420sp;overlay-format=33;face-detection=off;skinToneEnhancement=disable;preview-size=640x480;focal-length=4.31;auto-exposure-values=frame-average,center-weighted,spot-metering;continuous-af=caf-off;video-zoom-support=false;iso=auto;meter-mode=meter-center;record-size=;front-camera-mode=mirror;flash-mode-values=off,auto,on,torch;preview-frame-rate-values=5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31;preview-frame-rate=31;focus-mode-values=auto,infinity,normal,macro;jpeg-thumbnail-width=512;scene-mode-values=auto,landscape,snow,beach,sunset,night,portrait,backlight,sports,steadyphoto,flowers,candlelight,fireworks,party,night-portrait,theatre,action;preview-fps-range-values=(9000,30000);auto-exposure=frame-average;jpeg-thumbnail-size-values=512x288,480x288,432x288,512x384,352x288,0x0;histogram=disable;zoom-ratios=100;saturation-def=5;preview-size-values=1280x720,960x544,800x480,640x480,480x320;front_cam_sense30=1;smart-contrast=off;picture-size-values=3264x2448,3264x1952,3264x1840,2592x1952,2592x1936,2592x1728,2592x1552,2592x1456,2048x1536,2048x1360,2048x1216,2048x1152,1600x1200,1584x1056,1280x960,1280x848,1280x768,1280x720,1024x768,640x480,640x416,640x384,640x368,512x384,272x272;contrast-min=0;touch-af-aec=touch-off;preview-fps-range=9000,30000;min-exposure-compensation=-12;brightness-min=0;antibanding=off;taking-picture-zoom-min=0;saturation-min=1;contrast-max=10;vertical-view-angle=42.5;taking-picture-zoom-max=40;luma-adaptation=3;contrast-def=5;brightness-max=6;horizontal-view-angle=54.8;flip-video=-1;skinToneEnhancement-values=enable,disable;brightness=3;jpeg-thumbnail-height=384;cam-mode=0;focus-mode=auto;max-saturation=10;sharpness-def=10;max-contrast=10;preview-frame-rate-modes=frame-rate-auto,frame-rate-fixed;video-frame-format=yuv420sp;front-camera-mode-values=mirror,reverse,portrait-reverse;picture-format-values=jpeg,raw;saturation-max=10;max-exposure-compensation=12;exposure-compensation=0;exposure-compensation-step=0.166667;continuous-af-values=caf-off,caf-on;scene-detect=off;flash-mode=off;effect-values=none,mono,negative,solarize,sepia,posterize,whiteboard,aqua;picture-size=640x480;max-zoom=0;effect=none;3d-file-format=jps;saturation=5;whitebalance-values=auto,incandescent,fluorescent,daylight,cloudy-daylight;picture-format=jpeg;focus-distances=0.78,1.57,Infinity;lensshade-values=enable,disable;selectable-zone-af=auto;brightness-def=3;iso-values=auto,ISO_HJR,ISO100,ISO200,ISO400,ISO800,ISO1600;selectable-zone-af-values=auto,spot-metering,center-weighted,frame-average;lensshade=enable;antibanding-values=off,50hz,60hz,auto
-			// HTC Desire HD: sharpness-max=30;zoom=0;taking-picture-zoom=0;scene-detect-values=off,on;zoom-supported=true;strtextures=OFF;sharpness-min=0;sharpness=10;contrast=5;whitebalance=auto;scene-mode=auto;jpeg-quality=100;ola-fd-rect=;preview-format-values=yuv420sp;jpeg-thumbnail-quality=75;preview-format=yuv420sp;preview-size=640x480;focal-length=4.57;iso=auto;meter-mode=meter-center;flash-mode-values=off,auto,on,torch;preview-frame-rate-values=15;preview-frame-rate=15;focus-mode-values=auto,infinity;jpeg-thumbnail-width=640;scene-mode-values=auto,landscape,snow,beach,sunset,night,portrait,backlight,sports,steadyphoto,flowers,candlelight,fireworks,party,night-portrait,theatre,action;preview-fps-range-values=(1,200000);jpeg-thumbnail-size-values=640x480,512x384,384x288,0x0,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480;zoom-ratios=100,114,131,151,174,200;saturation-def=5;preview-size-values=1280x720,800x480,640x480,640x384;smart-contrast=off;picture-size-values=3264x2448,3264x1952,2592x1952,2592x1936,2592x1728,2592x1552,2048x1536,2048x1360,2048x1216,1600x1200,1584x1056,1280x960,1280x848,1280x768,1024x768,640x480,640x416,640x384,512x384,400x400,272x272;contrast-min=0;preview-fps-range=1,200000;min-exposure-compensation=-4;brightness-min=0;antibanding=auto;taking-picture-zoom-min=0;saturation-min=1;contrast-max=10;vertical-view-angle=40.74;taking-picture-zoom-max=40;contrast-def=5;brightness-max=6;horizontal-view-angle=52.68;brightness=3;jpeg-thumbnail-height=480;cam-mode=0;focus-mode=auto;sharpness-def=10;postview-size=640x480;video-frame-format=yuv420sp;picture-format-values=jpeg;saturation-max=10;max-exposure-compensation=4;exposure-compensation=0;exposure-compensation-step=0.5;scene-detect=off;flash-mode=off;effect-values=none,mono,negative,solarize,sepia,posterize,aqua;meter-mode-values=meter-average,meter-center,meter-spot;picture-size=3264x2448;max-zoom=5;effect=none;saturation=5;whitebalance-values=auto,incandescent,fluorescent,daylight,cloudy-daylight;picture-format=jpeg;focus-distances=0.78,1.57,Infinity;brightness-def=3;iso-values=auto,deblur,100,200,400,800,1250;antibanding-values=off,50hz,60hz,auto
-//			String flatten = parameters.flatten();
+				Parameters parameters = camera.getParameters();
+				
+				// HTC Sensation: sharpness-max=30;zoom=0;scene-detect-values=off,on;zoom-supported=true;strtextures=OFF;sharpness-min=0;face-detection-values=;sharpness=10;contrast=5;whitebalance=auto;max-sharpness=30;scene-mode=auto;jpeg-quality=85;preview-format-values=yuv420sp;overlay-3d-format=0;histogram-values=enable,disable;jpeg-thumbnail-quality=70;preview-format=yuv420sp;overlay-format=33;face-detection=off;skinToneEnhancement=disable;preview-size=640x480;focal-length=4.31;auto-exposure-values=frame-average,center-weighted,spot-metering;continuous-af=caf-off;video-zoom-support=false;iso=auto;meter-mode=meter-center;record-size=;front-camera-mode=mirror;flash-mode-values=off,auto,on,torch;preview-frame-rate-values=5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31;preview-frame-rate=31;focus-mode-values=auto,infinity,normal,macro;jpeg-thumbnail-width=512;scene-mode-values=auto,landscape,snow,beach,sunset,night,portrait,backlight,sports,steadyphoto,flowers,candlelight,fireworks,party,night-portrait,theatre,action;preview-fps-range-values=(9000,30000);auto-exposure=frame-average;jpeg-thumbnail-size-values=512x288,480x288,432x288,512x384,352x288,0x0;histogram=disable;zoom-ratios=100;saturation-def=5;preview-size-values=1280x720,960x544,800x480,640x480,480x320;front_cam_sense30=1;smart-contrast=off;picture-size-values=3264x2448,3264x1952,3264x1840,2592x1952,2592x1936,2592x1728,2592x1552,2592x1456,2048x1536,2048x1360,2048x1216,2048x1152,1600x1200,1584x1056,1280x960,1280x848,1280x768,1280x720,1024x768,640x480,640x416,640x384,640x368,512x384,272x272;contrast-min=0;touch-af-aec=touch-off;preview-fps-range=9000,30000;min-exposure-compensation=-12;brightness-min=0;antibanding=off;taking-picture-zoom-min=0;saturation-min=1;contrast-max=10;vertical-view-angle=42.5;taking-picture-zoom-max=40;luma-adaptation=3;contrast-def=5;brightness-max=6;horizontal-view-angle=54.8;flip-video=-1;skinToneEnhancement-values=enable,disable;brightness=3;jpeg-thumbnail-height=384;cam-mode=0;focus-mode=auto;max-saturation=10;sharpness-def=10;max-contrast=10;preview-frame-rate-modes=frame-rate-auto,frame-rate-fixed;video-frame-format=yuv420sp;front-camera-mode-values=mirror,reverse,portrait-reverse;picture-format-values=jpeg,raw;saturation-max=10;max-exposure-compensation=12;exposure-compensation=0;exposure-compensation-step=0.166667;continuous-af-values=caf-off,caf-on;scene-detect=off;flash-mode=off;effect-values=none,mono,negative,solarize,sepia,posterize,whiteboard,aqua;picture-size=640x480;max-zoom=0;effect=none;3d-file-format=jps;saturation=5;whitebalance-values=auto,incandescent,fluorescent,daylight,cloudy-daylight;picture-format=jpeg;focus-distances=0.78,1.57,Infinity;lensshade-values=enable,disable;selectable-zone-af=auto;brightness-def=3;iso-values=auto,ISO_HJR,ISO100,ISO200,ISO400,ISO800,ISO1600;selectable-zone-af-values=auto,spot-metering,center-weighted,frame-average;lensshade=enable;antibanding-values=off,50hz,60hz,auto
+				// HTC Desire HD: sharpness-max=30;zoom=0;taking-picture-zoom=0;scene-detect-values=off,on;zoom-supported=true;strtextures=OFF;sharpness-min=0;sharpness=10;contrast=5;whitebalance=auto;scene-mode=auto;jpeg-quality=100;ola-fd-rect=;preview-format-values=yuv420sp;jpeg-thumbnail-quality=75;preview-format=yuv420sp;preview-size=640x480;focal-length=4.57;iso=auto;meter-mode=meter-center;flash-mode-values=off,auto,on,torch;preview-frame-rate-values=15;preview-frame-rate=15;focus-mode-values=auto,infinity;jpeg-thumbnail-width=640;scene-mode-values=auto,landscape,snow,beach,sunset,night,portrait,backlight,sports,steadyphoto,flowers,candlelight,fireworks,party,night-portrait,theatre,action;preview-fps-range-values=(1,200000);jpeg-thumbnail-size-values=640x480,512x384,384x288,0x0,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480,640x480;zoom-ratios=100,114,131,151,174,200;saturation-def=5;preview-size-values=1280x720,800x480,640x480,640x384;smart-contrast=off;picture-size-values=3264x2448,3264x1952,2592x1952,2592x1936,2592x1728,2592x1552,2048x1536,2048x1360,2048x1216,1600x1200,1584x1056,1280x960,1280x848,1280x768,1024x768,640x480,640x416,640x384,512x384,400x400,272x272;contrast-min=0;preview-fps-range=1,200000;min-exposure-compensation=-4;brightness-min=0;antibanding=auto;taking-picture-zoom-min=0;saturation-min=1;contrast-max=10;vertical-view-angle=40.74;taking-picture-zoom-max=40;contrast-def=5;brightness-max=6;horizontal-view-angle=52.68;brightness=3;jpeg-thumbnail-height=480;cam-mode=0;focus-mode=auto;sharpness-def=10;postview-size=640x480;video-frame-format=yuv420sp;picture-format-values=jpeg;saturation-max=10;max-exposure-compensation=4;exposure-compensation=0;exposure-compensation-step=0.5;scene-detect=off;flash-mode=off;effect-values=none,mono,negative,solarize,sepia,posterize,aqua;meter-mode-values=meter-average,meter-center,meter-spot;picture-size=3264x2448;max-zoom=5;effect=none;saturation=5;whitebalance-values=auto,incandescent,fluorescent,daylight,cloudy-daylight;picture-format=jpeg;focus-distances=0.78,1.57,Infinity;brightness-def=3;iso-values=auto,deblur,100,200,400,800,1250;antibanding-values=off,50hz,60hz,auto
+//				String flatten = parameters.flatten();
 
-			// e.g.: auto,ISO_HJR,ISO100,ISO200,ISO400,ISO800,ISO1600
-			String values = parameters.get("iso-values");
-			if(values != null) {
-				isoValues = values.split(",");
-			}
-			isoValue = parameters.get("iso");
+				// e.g.: auto,ISO_HJR,ISO100,ISO200,ISO400,ISO800,ISO1600
+				String values = parameters.get("iso-values");
+				if(values != null) {
+					isoValues = values.split(",");
+				}
+				isoValue = parameters.get("iso");
 
-			values = parameters.get("whitebalance-values");
-			if(values != null) {
-				whiteBalanceValues = values.split(",");
-			}
-			whiteBalance = parameters.getWhiteBalance();
+				values = parameters.get("whitebalance-values");
+				if(values != null) {
+					whiteBalanceValues = values.split(",");
+				}
+				whiteBalance = parameters.getWhiteBalance();
 
-			
-			parameters.setPictureFormat(ImageFormat.JPEG);
+				
+				parameters.setPictureFormat(ImageFormat.JPEG);
 
-			Size optimalPreviewSize = CameraPreviewSizeHelper.getBestPreviewSize(surfaceView.getWidth(), surfaceView.getHeight(), parameters.getSupportedPreviewSizes(),
-					CameraPreviewSizeHelper.ASPECT_TOLERANCE);
+				Size optimalPreviewSize = CameraPreviewSizeHelper.getBestPreviewSize(surfaceView.getWidth(), surfaceView.getHeight(), parameters.getSupportedPreviewSizes(),
+						CameraPreviewSizeHelper.ASPECT_TOLERANCE);
 
-			if (optimalPreviewSize != null) {
-				parameters.setPreviewSize(optimalPreviewSize.width, optimalPreviewSize.height);
-			}
+				if (optimalPreviewSize != null) {
+					parameters.setPreviewSize(optimalPreviewSize.width, optimalPreviewSize.height);
+				}
 
-			if(flashlightHelper != null && flashlightHelper.available){
-				parameters.setFlashMode(flashlightHelper.flashStatus.flashMode);	
-			}
+				if(flashlightHelper != null && flashlightHelper.available){
+					parameters.setFlashMode(flashlightHelper.flashStatus.flashMode);	
+				}
+				
+				// Init available resolution
+				resolutionHelper.initSupportedScreenSizes(parameters.getSupportedPictureSizes());
+				resolutionHelper.calculateInitialSize();
+				
+				parameters.setPictureSize(resolutionHelper.selectedResolution.size.width, resolutionHelper.selectedResolution.size.height);
+				
+				camera.setParameters(parameters);
+				
+				/*
+				 *  Die beiden folgenden Aufrufe dieser beiden If-Anweisungen müssen an dieser Stelle
+				 *  gesetzt werden, da sonst die Zoom-Buttons zu spät generiert werden und sie erscheinen
+				 *  nicht sofort auf dem Display
+				 */
+				if(zoomHelper != null) {
+					zoomHelper.initZoom(parameters);
+				}
+				
+				if(allianceCameraListener != null) {
+					allianceCameraListener.onCameraCreated();
+				}
+				
+				camera.startPreview();
+			}	
 			
-			// Init available resolution
-			resolutionHelper.initSupportedScreenSizes(parameters.getSupportedPictureSizes());
-			resolutionHelper.calculateInitialSize();
-			
-			parameters.setPictureSize(resolutionHelper.selectedResolution.size.width, resolutionHelper.selectedResolution.size.height);
-			
-			camera.setParameters(parameters);
-			
-			/*
-			 *  Die beiden folgenden Aufrufe dieser beiden If-Anweisungen müssen an dieser Stelle
-			 *  gesetzt werden, da sonst die Zoom-Buttons zu spät generiert werden und sie erscheinen
-			 *  nicht sofort auf dem Display
-			 */
-			if(zoomHelper != null) {
-				zoomHelper.initZoom(parameters);
-			}
-			
-			if(allianceCameraListener != null) {
-				allianceCameraListener.onCameraCreated();
-			}
-			
-			camera.startPreview();
+		} catch(Exception e){
+			Toast.makeText(ctx, ctx.getResources().getString(R.string.errorLoadCameraPreview), Toast.LENGTH_SHORT).show();
 		}
+		
+		
 	}
 	
 	public void releaseCamera() {
@@ -389,7 +400,9 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			camera = null;
 		}
 
-		autofocusHelper.stopAutoFocus();
+		if(autofocusHelper != null){
+			autofocusHelper.stopAutoFocus();	
+		}
 		
 		if(audioManager != null) {
 			audioManager.setStreamMute(AudioManager.STREAM_SYSTEM, false);
@@ -413,35 +426,44 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	 */
 	public void capture() {
 		
-		if(autofocusHelper.available && autofocusHelper.autoFocusMode != AutoFocusMode.OFF) {
-			if(autofocusHelper.autoFocus.isFocusing()) {
-				return;
-			} else {
-				autofocusHelper.stopAutoFocus();
-			}
-		} 
-		
-		setSelectedPictureSize();
-		
-		camera.takePicture(null, null, new PhotoCallback());
-		
-		// Turn Camera capture-sound normal
-
+		try {
+			if(autofocusHelper.available && autofocusHelper.autoFocusMode != AutoFocusMode.OFF) {
+				if(autofocusHelper.autoFocus.isFocusing()) {
+					return;
+				} else {
+					autofocusHelper.stopAutoFocus();
+				}
+			} 
+			
+			setSelectedPictureSize();
+			
+			camera.takePicture(null, null, new PhotoCallback());
+			
+			// Turn Camera capture-sound normal
+	
+		} catch(Exception e){
+			Toast.makeText(ctx, ctx.getResources().getString(R.string.errorShotPhoto), Toast.LENGTH_LONG).show();
+		}
 	}
 	
 	public void capture(ShutterCallback shutter, PictureCallback raw, PictureCallback jpeg) {
 		
-		if(autofocusHelper.autoFocusMode != AutoFocusMode.OFF) {
-			if(autofocusHelper.isFocusing()) {
-				return;
-			} else {
-				autofocusHelper.stopAutoFocus();
+		try{
+			if(autofocusHelper.autoFocusMode != AutoFocusMode.OFF) {
+				if(autofocusHelper.isFocusing()) {
+					return;
+				} else {
+					autofocusHelper.stopAutoFocus();
+				}
 			}
+			
+			setSelectedPictureSize();
+			
+			camera.takePicture(shutter, raw, jpeg);
+			
+		} catch(Exception e){
+			Toast.makeText(ctx, ctx.getResources().getString(R.string.errorShotPhoto), Toast.LENGTH_LONG).show();
 		}
-		
-		setSelectedPictureSize();
-		
-		camera.takePicture(shutter, raw, jpeg);
 	}
 
 	private void setSelectedPictureSize(){

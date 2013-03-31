@@ -11,6 +11,9 @@
     <string name="cloudydaylight">cloudy daylight</string>
     <string name="resolution">Resolution</string>
     
+    <string name="errorLoadCameraPreview">Error when initialize the camera-preview. Please restart the smartphone!</string>
+    <string name="errorOrientationChange">Error when change the orientation!</string>
     <string name="cameraNotAvailable">Camera not available</string>
+    <string name="errorShotPhoto">Error when shooting the photo</string>
     
 </resources>
