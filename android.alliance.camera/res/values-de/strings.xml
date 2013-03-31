@@ -11,6 +11,10 @@
     <string name="cloudydaylight">cloudy daylight</string>
     <string name="resolution">Auflösung</string>
     
+    <!-- Fehler-Meldungen  -->
+    <string name="errorLoadCameraPreview">Es gab einen Fehler beim Initialisieren des Foto-Previes. Bitte starten Sie Ihr Smartphone neu!</string>
+    <string name="errorOrientationChange">Es ist ein Fehler beim Wechseln der Orientierung aufgetreten!</string>
     <string name="cameraNotAvailable">Kamera nicht verfügbar!</string>
+    <string name="errorShotPhoto">Fehler beim schießen des Fotos</string>
     
 </resources>
