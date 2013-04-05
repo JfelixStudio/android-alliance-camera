@@ -136,6 +136,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 		if(camera != null){
 			
 			initCameraPreferences();
+			
 			autofocusHelper.initAutoFocus(camera);
 			
 			orientationListener.setCameraId(cameraId);

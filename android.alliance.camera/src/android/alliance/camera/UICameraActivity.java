@@ -57,12 +57,15 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 	protected int activityResultCode = RESULT_CANCELED;
 	protected SurfaceView surfaceView;
 	private AutoFocusHelper autofocusHelper;
+	private Activity parentActivity;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d("#", "onCreate()");
 
+		this.parentActivity = this;
+		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		Bundle extras = getIntent().getExtras(); 
@@ -309,8 +312,14 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 
 					@Override
 					public void onClick(View v) {
-						Parameters param = allianceCamera.zoomHelper.zoomIn(allianceCamera.getCameraParameters()); 
-						allianceCamera.setCameraParameters(param);
+						try{
+							Parameters param = allianceCamera.zoomHelper.zoomIn(allianceCamera.getCameraParameters()); 
+							allianceCamera.setCameraParameters(param);	
+						} catch (Exception e){
+							Toast.makeText(parentActivity, parentActivity.getResources().getString(R.string.errorZoom), Toast.LENGTH_SHORT).show();
+									
+						}
+						
 					}
 				});
 				
@@ -321,8 +330,12 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 
 					@Override
 					public void onClick(View v) {
-						Parameters param = allianceCamera.zoomHelper.zoomOut(allianceCamera.getCameraParameters()); 
-						allianceCamera.setCameraParameters(param);
+						try{
+							Parameters param = allianceCamera.zoomHelper.zoomOut(allianceCamera.getCameraParameters()); 
+							allianceCamera.setCameraParameters(param);	
+						} catch(Exception e){
+							Toast.makeText(parentActivity, parentActivity.getResources().getString(R.string.errorZoom), Toast.LENGTH_SHORT).show();
+						}
 					}
 				});
 				

@@ -15,6 +15,6 @@
     <string name="errorLoadCameraPreview">Es gab einen Fehler beim Initialisieren des Foto-Previes. Bitte starten Sie Ihr Smartphone neu!</string>
     <string name="errorOrientationChange">Es ist ein Fehler beim Wechseln der Orientierung aufgetreten!</string>
     <string name="cameraNotAvailable">Kamera nicht verfügbar!</string>
-    <string name="errorShotPhoto">Fehler beim schießen des Fotos</string>
-    
+    <string name="errorShotPhoto">Fehler beim Schießen des Fotos!</string>
+    <string name="errorZoom">Fehler beim Verwenden der Zoom-Funktion!</string>    
 </resources>
