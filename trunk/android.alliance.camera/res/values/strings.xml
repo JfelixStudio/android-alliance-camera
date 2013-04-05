@@ -15,5 +15,5 @@
     <string name="errorOrientationChange">Error when change the orientation!</string>
     <string name="cameraNotAvailable">Camera not available</string>
     <string name="errorShotPhoto">Error when shooting the photo</string>
-    
+    <string name="errorZoom">Fehler when using zoom-function!</string>
 </resources>
