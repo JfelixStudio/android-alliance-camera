@@ -10,6 +10,11 @@
     <string name="daylight">daylight</string>
     <string name="cloudydaylight">cloudy daylight</string>
     <string name="resolution">Auflösung</string>
+    <string name="options">Optionen</string>
+    <string name="btSave">Speichern</string>
+    <string name="btAbort">Abbrechen</string>
+    <string name="autoFocusSensibility">AutoFokus-Sensibilität</string>
+    <string name="btDefault">Default</string>
     
     <!-- Fehler-Meldungen  -->
     <string name="exception_LoadCameraPreview">Es gab einen Fehler beim Initialisieren des Foto-Previes. Bitte starten Sie Ihr Smartphone neu!</string>

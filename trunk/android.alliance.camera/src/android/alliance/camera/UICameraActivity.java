@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import alliance.camera.R;
+import android.alliance.dialoge.OptionsDialog;
 import android.alliance.dialoge.ResolutionDialog;
 import android.alliance.exceptions.AllianceExceptionType;
 import android.alliance.exceptions.OnException;
@@ -33,7 +34,7 @@ import android.widget.LinearLayout;
 
 public class UICameraActivity extends Activity implements IAllianceOrientationChanged, IAllianceCameraListener, OnClickListener, OnException {
 
-	protected ImageView ib0;
+	protected ImageView ivOptions;
 	protected ImageView ib1;
 	protected ImageView ivShutter;
 
@@ -121,13 +122,15 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		
 		layoutZoom = (LinearLayout) findViewById(R.id.layoutZoom);
 		
-		ib0 = (ImageView) findViewById(R.id.ib0);
-		ib0.setOnClickListener(new View.OnClickListener() {
+		ivOptions = (ImageView) findViewById(R.id.settings);
+		ivOptions.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				
+				OptionsDialog optionsdialog = new OptionsDialog(UICameraActivity.this, R.style.MyResolutionDialog, autofocusHelper, allianceCamera.getCamera());
+				optionsdialog.show();
 			}
 		});
+		
 		ib1 = (ImageView) findViewById(R.id.ib1);
 		
 		ivShutter = (ImageView) findViewById(R.id.ivShutter);
@@ -272,7 +275,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 	private void orientationHasChanged(float degree) {
 		System.out.println("orientationHasChanged: " + degree);
 		
-		rotateView(ib0, degree);
+		rotateView(ivOptions, degree);
 		rotateView(ib1, degree);
 		rotateView(ivShutter, degree);
 

@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">#Alliance Camera</string>
-    <string name="cameraAufloesung">Auflösung auswählen</string>
+    <string name="cameraAufloesung">Select Resolution</string>
     
     
     <string name="whiteBalance">white balance</string>
@@ -10,6 +10,11 @@
     <string name="daylight">daylight</string>
     <string name="cloudydaylight">cloudy daylight</string>
     <string name="resolution">Resolution</string>
+    <string name="options">Options</string>
+    <string name="btSave">Save</string>
+    <string name="btAbort">Abort</string>
+    <string name="autoFocusSensibility">Autofocus-Sensibility</string>
+    <string name="btDefault">Default</string>
     
     <string name="exception_LoadCameraPreview">Error when initialize the camera-preview. Please restart the smartphone!</string>
     <string name="exception_takePicture">Error when shooting the photo</string>

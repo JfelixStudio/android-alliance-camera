@@ -18,6 +18,7 @@ import android.widget.ImageView;
  */
 public class AutoFocusHelper {
 
+	public Float THRESHOLD = null;;
 	/** is autofocus from this device supported */
 	public boolean available = false;
 	public AutoFocusMode autoFocusMode = AutoFocusMode.OFF;
@@ -75,7 +76,7 @@ public class AutoFocusHelper {
 		if(camera != null && available) {
 			if(autoFocus == null) {
 				MyFocusRectangle mFocusRectangle = (MyFocusRectangle) ((Activity)ctx).findViewById(R.id.focus_rectangle);
-				autoFocus = new SensorAutoFocus(ctx, camera, mFocusRectangle);
+				autoFocus = new SensorAutoFocus(ctx, camera, mFocusRectangle, THRESHOLD);
 			}
 			
 			if(autoFocusMode == AutoFocusMode.AUTO) {
@@ -105,5 +106,9 @@ public class AutoFocusHelper {
 	
 	public void doAutoFocus() {
 		autoFocus.doAutoFocus();
+	}
+	
+	public void setAutofocusSensibility(Float value){
+		this.THRESHOLD = value;
 	}
 }
