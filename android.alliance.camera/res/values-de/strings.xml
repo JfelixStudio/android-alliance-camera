@@ -12,9 +12,11 @@
     <string name="resolution">Auflösung</string>
     
     <!-- Fehler-Meldungen  -->
-    <string name="errorLoadCameraPreview">Es gab einen Fehler beim Initialisieren des Foto-Previes. Bitte starten Sie Ihr Smartphone neu!</string>
-    <string name="errorOrientationChange">Es ist ein Fehler beim Wechseln der Orientierung aufgetreten!</string>
-    <string name="cameraNotAvailable">Kamera nicht verfügbar!</string>
-    <string name="errorShotPhoto">Fehler beim Schießen des Fotos!</string>
-    <string name="errorZoom">Fehler beim Verwenden der Zoom-Funktion!</string>    
+    <string name="exception_LoadCameraPreview">Es gab einen Fehler beim Initialisieren des Foto-Previes. Bitte starten Sie Ihr Smartphone neu!</string>
+    <string name="exception_takePicture">Fehler beim Schießen des Fotos!</string>
+    <string name="exception_orientationChange">Es ist ein Fehler beim Wechseln der Orientierung aufgetreten!</string>
+    <string name="exception_cameraNotAvailable">Kamera nicht verfügbar!</string>
+	<string name="exception_flashlight">Fehler beim Benutzen des Blitzlichtes!</string>
+    <string name="exception_zoom">Fehler beim Verwenden der Zoom-Funktion!</string>    
+    <string name="exception_cameraCouldNotStart">Die Kamera konnte nicht gestartet werden!</string>
 </resources>

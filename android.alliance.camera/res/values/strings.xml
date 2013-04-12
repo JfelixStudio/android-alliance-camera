@@ -11,9 +11,11 @@
     <string name="cloudydaylight">cloudy daylight</string>
     <string name="resolution">Resolution</string>
     
-    <string name="errorLoadCameraPreview">Error when initialize the camera-preview. Please restart the smartphone!</string>
-    <string name="errorOrientationChange">Error when change the orientation!</string>
-    <string name="cameraNotAvailable">Camera not available</string>
-    <string name="errorShotPhoto">Error when shooting the photo</string>
-    <string name="errorZoom">Fehler when using zoom-function!</string>
+    <string name="exception_LoadCameraPreview">Error when initialize the camera-preview. Please restart the smartphone!</string>
+    <string name="exception_takePicture">Error when shooting the photo</string>
+    <string name="exception_orientationChange">Error when change the orientation!</string>
+    <string name="exception_cameraNotAvailable">Camera not available</string>
+    <string name="exception_flashlight">Error when using flashlight!</string>
+    <string name="exception_zoom">Fehler when using zoom-function!</string>
+    <string name="exception_cameraCouldNotStart">Camera could not started!</string>
 </resources>
