@@ -6,6 +6,8 @@ import java.util.Calendar;
 
 import alliance.camera.R;
 import android.alliance.data.WhiteBalance;
+import android.alliance.exceptions.AllianceExceptionType;
+import android.alliance.exceptions.OnException;
 import android.alliance.focus.MyFocusRectangle;
 import android.alliance.helper.AutoFocusHelper;
 import android.alliance.helper.AutoFocusMode;
@@ -28,7 +30,7 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
-public class CameraWrapper implements IAllianceCameraListener, OnClickListener {
+public class CameraWrapper implements IAllianceCameraListener, OnClickListener, OnException {
 
 	final private Activity ctx;
 	private RelativeLayout relativeLayout;
@@ -72,7 +74,7 @@ public class CameraWrapper implements IAllianceCameraListener, OnClickListener {
 		relativeLayout.addView(flSurface, params);
 		relativeLayout.addView(cameraLayout);
 		
-		allianceCamera = new AllianceCamera(ctx, surfaceView, CameraInfo.CAMERA_FACING_BACK, false, null);
+		allianceCamera = new AllianceCamera(ctx, surfaceView, CameraInfo.CAMERA_FACING_BACK, false, null, this);
 		allianceCamera.setPictureSizeMegapixel(3000000);
 		
 		FlashMode.FLASH_AUTO.drawable = R.drawable.bt_flashlight_auto_selector;
@@ -360,5 +362,11 @@ public class CameraWrapper implements IAllianceCameraListener, OnClickListener {
 		if(allianceCamera.autofocusHelper.available) {
 			allianceCamera.autofocusHelper.doAutoFocus();
 		}
+	}
+
+	@Override
+	public void onException(Exception exception, String message, AllianceExceptionType type) {
+		// TODO Auto-generated method stub
+		
 	}
 }

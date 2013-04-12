@@ -6,6 +6,8 @@ import java.util.Calendar;
 
 import alliance.camera.R;
 import android.alliance.dialoge.ResolutionDialog;
+import android.alliance.exceptions.AllianceExceptionType;
+import android.alliance.exceptions.OnException;
 import android.alliance.helper.AutoFocusHelper;
 import android.alliance.helper.AutoFocusMode;
 import android.alliance.helper.FlashlightHelper;
@@ -29,7 +31,7 @@ import android.widget.Toast;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 
-public class UICameraActivity extends Activity implements IAllianceOrientationChanged, IAllianceCameraListener, OnClickListener {
+public class UICameraActivity extends Activity implements IAllianceOrientationChanged, IAllianceCameraListener, OnClickListener, OnException {
 
 	protected ImageView ib0;
 	protected ImageView ib1;
@@ -58,6 +60,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 	protected SurfaceView surfaceView;
 	private AutoFocusHelper autofocusHelper;
 	private Activity parentActivity;
+	private OnException onException;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +68,8 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		Log.d("#", "onCreate()");
 
 		this.parentActivity = this;
+	
+		onException = this;
 		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
@@ -89,7 +94,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 
 		File filePath = new File(folderPath, fileName);
 		
-		allianceCamera = new AllianceCamera(this, surfaceView, cameraFacing, useAlternativeFacing, filePath);
+		allianceCamera = new AllianceCamera(this, surfaceView, cameraFacing, useAlternativeFacing, filePath, this);
 		allianceCamera.setPictureSizeMegapixel(3000000);
 		allianceCamera.setInitCloseAfterShut(false);
 		allianceCamera.setGps(true);
@@ -176,10 +181,13 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 			
 			@Override
 			public void onClick(View v) {
-
-				Parameters param = allianceCamera.getCameraParameters();
-				allianceCamera.flashlightHelper.next(param, ivFlashlight);
-				allianceCamera.setCameraParameters(param);
+				try{
+					Parameters param = allianceCamera.getCameraParameters();
+					allianceCamera.flashlightHelper.next(param, ivFlashlight);
+					allianceCamera.setCameraParameters(param);	
+				} catch (Exception e){
+					fireOnException(e, getResources().getString(R.string.exception_flashlight), AllianceExceptionType.FLASHLIGHT_EXCEPTION);
+				}
 			}
 		});
 
@@ -316,10 +324,8 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 							Parameters param = allianceCamera.zoomHelper.zoomIn(allianceCamera.getCameraParameters()); 
 							allianceCamera.setCameraParameters(param);	
 						} catch (Exception e){
-							Toast.makeText(parentActivity, parentActivity.getResources().getString(R.string.errorZoom), Toast.LENGTH_SHORT).show();
-									
+							fireOnException(e, getResources().getString(R.string.exception_zoom), AllianceExceptionType.ZOOM_EXCEPTION);
 						}
-						
 					}
 				});
 				
@@ -332,9 +338,9 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 					public void onClick(View v) {
 						try{
 							Parameters param = allianceCamera.zoomHelper.zoomOut(allianceCamera.getCameraParameters()); 
-							allianceCamera.setCameraParameters(param);	
+							allianceCamera.setCameraParameters(param);
 						} catch(Exception e){
-							Toast.makeText(parentActivity, parentActivity.getResources().getString(R.string.errorZoom), Toast.LENGTH_SHORT).show();
+							fireOnException(e, getResources().getString(R.string.exception_zoom), AllianceExceptionType.ZOOM_EXCEPTION);
 						}
 					}
 				});
@@ -351,6 +357,18 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 			if(autofocusHelper.available){
 				autofocusHelper.doAutoFocus();
 			}
+		}
+	}
+
+	@Override
+	public void onException(Exception exception, String message, AllianceExceptionType type) {
+		// TODO Auto-generated method stub
+	System.out.println("x");	
+	}
+	
+	private void fireOnException(Exception exception, String message, AllianceExceptionType type){
+		if(onException != null){
+			onException.onException(exception, message, type);
 		}
 	}
 }

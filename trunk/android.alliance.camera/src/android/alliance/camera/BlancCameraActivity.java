@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import alliance.camera.R;
+import android.alliance.exceptions.AllianceExceptionType;
+import android.alliance.exceptions.OnException;
 import android.app.Activity;
 import android.content.Context;
 import android.hardware.Camera.CameraInfo;
@@ -21,7 +23,7 @@ import android.view.WindowManager;
  * @author alliance
  *
  */
-public class BlancCameraActivity extends Activity { //implements Callback {
+public class BlancCameraActivity extends Activity implements OnException { //implements Callback {
 
 	private Context ctx;
 	private SurfaceView surfaceView;
@@ -61,7 +63,7 @@ public class BlancCameraActivity extends Activity { //implements Callback {
 
 		File filePath = new File(folderPath, fileName);
 		
-		allianceCamera = new AllianceCamera(this, surfaceView, cameraFacing, useAlternativeFacing, filePath);
+		allianceCamera = new AllianceCamera(this, surfaceView, cameraFacing, useAlternativeFacing, filePath, this);
 		allianceCamera.setPictureSizeMegapixel(3000000);
 	}
 
@@ -102,6 +104,12 @@ public class BlancCameraActivity extends Activity { //implements Callback {
 	protected void onDestroy() {
 		Log.d("#", "onDestroy()");
 		super.onDestroy();
+	}
+
+	@Override
+	public void onException(Exception exception, String message, AllianceExceptionType type) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

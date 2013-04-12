@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import alliance.camera.R;
+import android.alliance.exceptions.AllianceExceptionType;
+import android.alliance.exceptions.OnException;
 import android.alliance.helper.AllianceLocationListener;
 import android.alliance.helper.AutoFocusHelper;
 import android.alliance.helper.AutoFocusMode;
@@ -65,7 +67,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	private Camera camera;
 	private SurfaceView surfaceView;
 	private IAllianceCameraListener allianceCameraListener;
-	
+	private OnException onException;
 	
 	private AllianceOrientationEventListener orientationListener;
 
@@ -97,13 +99,14 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	private LocationListener locListener;
 	private boolean gps = true;
 	
-	public AllianceCamera(Context ctx, SurfaceView surfaceView, int cameraFacing, boolean useAlternativeFacing, File filePath) {
+	public AllianceCamera(Context ctx, SurfaceView surfaceView, int cameraFacing, boolean useAlternativeFacing, File filePath, OnException onException) {
 		Log.d("#", "AllianceCamera()");
 		this.ctx = ctx;
 		this.surfaceView = surfaceView;
 		this.cameraFacing = cameraFacing;
 		this.useAlternativeFacing = useAlternativeFacing;
 		this.filePath = filePath;
+		this.onException = onException;
 		
 		audioManager = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
 		if(audioManager != null){
@@ -147,7 +150,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			}	
 		
 		} else {
-			Toast.makeText(ctx, ctx.getResources().getString(R.string.cameraNotAvailable), Toast.LENGTH_LONG).show();
+			fireOnException(new Exception(), ctx.getResources().getString(R.string.exception_cameraNotAvailable), AllianceExceptionType.CAMERA_FAILED_TO_OPEN_EXCEPTION);
 			((Activity) ctx).finish();
 		}
 	}
@@ -187,7 +190,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			localParameters.setRotation(frontFacingRotationFix(rotation));
 			camera.setParameters(localParameters);	
 		} catch(Exception e){
-			Toast.makeText(ctx, ctx.getResources().getString(R.string.errorOrientationChange), Toast.LENGTH_LONG).show();
+			fireOnException(e, ctx.getResources().getString(R.string.exception_orientationChange), AllianceExceptionType.ORIENTATION_CHANGED_EXCEPTION);
 		}
 	}
 
@@ -247,10 +250,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			
 		} catch (Exception e) {
 			releaseCamera();
-
-			Log.e("#", "Camera failed to open: " + e.getLocalizedMessage());
-			Toast.makeText(ctx, ctx.getResources().getString(R.string.cameraNotAvailable), Toast.LENGTH_LONG).show();
-			((Activity) ctx).finish();
+			fireOnException(e, ctx.getResources().getString(R.string.exception_cameraNotAvailable), AllianceExceptionType.CAMERA_FAILED_TO_OPEN_EXCEPTION);
 		}
 	}
 	
@@ -384,10 +384,11 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 				}
 				
 				camera.startPreview();
+				
 			}	
 			
 		} catch(Exception e){
-			Toast.makeText(ctx, ctx.getResources().getString(R.string.errorLoadCameraPreview), Toast.LENGTH_SHORT).show();
+			fireOnException(e, ctx.getResources().getString(R.string.exception_LoadCameraPreview), AllianceExceptionType.PREVIEW_EXCEPTION);
 		}
 		
 		
@@ -443,7 +444,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			// Turn Camera capture-sound normal
 	
 		} catch(Exception e){
-			Toast.makeText(ctx, ctx.getResources().getString(R.string.errorShotPhoto), Toast.LENGTH_LONG).show();
+			fireOnException(e, ctx.getResources().getString(R.string.exception_takePicture), AllianceExceptionType.TAKE_PHOTO_EXCEPTION);
 		}
 	}
 	
@@ -463,7 +464,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			camera.takePicture(shutter, raw, jpeg);
 			
 		} catch(Exception e){
-			Toast.makeText(ctx, ctx.getResources().getString(R.string.errorShotPhoto), Toast.LENGTH_LONG).show();
+			fireOnException(e, ctx.getResources().getString(R.string.exception_takePicture), AllianceExceptionType.TAKE_PHOTO_EXCEPTION);
 		}
 	}
 
@@ -493,77 +494,69 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 
 		@Override
 		public void onPictureTaken(byte[] data, Camera cam) {
-			Log.d("#", "onPictureTaken()");
+			
+			try{
+				Log.d("#", "onPictureTaken()");
 
-			// TODO: gibt es eine Device das orientation in den exif-daten
-			// speichert? Ja das Samsung Galaxy 10.1n
-			/*
-			 * The camera driver may set orientation in the EXIF header without
-			 * rotating the picture. Or the driver may rotate the picture and
-			 * the EXIF thumbnail. If the Jpeg picture is rotated, the
-			 * orientation in the EXIF header will be missing or 1 (row #0 is
-			 * top and column #0 is left side).
-			 * 
-			 * 
-			 * 3, 6, 8 
-			 * 
-			 */
-			
-			boolean doSaveWithoutRotation = true;
-			
-			int orientation = Exif.getOrientation(data);
-			Log.d("#", "onPictureTaken().orientation = " + orientation);
-			
-			orientation = frontFacingRotationFix(orientation);
-			
-			if(orientation != 0) {
+				// TODO: gibt es eine Device das orientation in den exif-daten
+				// speichert? Ja das Samsung Galaxy 10.1n
+				/*
+				 * The camera driver may set orientation in the EXIF header without
+				 * rotating the picture. Or the driver may rotate the picture and
+				 * the EXIF thumbnail. If the Jpeg picture is rotated, the
+				 * orientation in the EXIF header will be missing or 1 (row #0 is
+				 * top and column #0 is left side).
+				 * 
+				 * 
+				 * 3, 6, 8 
+				 * 
+				 */
+				
+				boolean doSaveWithoutRotation = true;
+				
+				int orientation = Exif.getOrientation(data);
+				Log.d("#", "onPictureTaken().orientation = " + orientation);
+				
+				orientation = frontFacingRotationFix(orientation);
+				
+				if(orientation != 0) {
 
-				Bitmap bmpSrc = BitmapFactory.decodeByteArray(data, 0, data.length);
-					
-				if(bmpSrc.getWidth()*bmpSrc.getHeight() > 4000000) {
-					doSaveWithoutRotation = true;
-					
-				} else {
-					
-					doSaveWithoutRotation = false;
-					
-					Bitmap bmpRotated = CameraUtil.rotate(bmpSrc, orientation);
-					bmpSrc.recycle();
-
-					try {
+					Bitmap bmpSrc = BitmapFactory.decodeByteArray(data, 0, data.length);
 						
+					if(bmpSrc.getWidth()*bmpSrc.getHeight() > 4000000) {
+						doSaveWithoutRotation = true;
+						
+					} else {
+						
+						doSaveWithoutRotation = false;
+						
+						Bitmap bmpRotated = CameraUtil.rotate(bmpSrc, orientation);
+						bmpSrc.recycle();
+							
 						FileOutputStream localFileOutputStream = new FileOutputStream(filePath);
 						bmpRotated.compress(Bitmap.CompressFormat.JPEG, 90, localFileOutputStream);
 						
 						localFileOutputStream.flush();
 						localFileOutputStream.close();
 						bmpRotated.recycle();
-						
-					} catch (FileNotFoundException e) {
-						e.printStackTrace();
-					} catch (IOException e) {
-						e.printStackTrace();
+							
 					}
-				}
-			} 
-			
-			if(doSaveWithoutRotation){
-
-				try {
-	
+				} 
+				
+				if(doSaveWithoutRotation){
+		
 					FileOutputStream localFileOutputStream = new FileOutputStream(filePath);
 	
 					localFileOutputStream.write(data);
 					localFileOutputStream.flush();
 					localFileOutputStream.close();
-	
-				} catch (IOException localIOException) {
-					// TODO
-					Log.e("#",localIOException.getMessage());
 				}
+				
+				onAfterPhotoTaken();
+				
+			} catch (Exception e){
+				fireOnException(e, ctx.getResources().getString(R.string.exception_takePicture), AllianceExceptionType.ON_PICTURE_TAKEN_EXCEPTION);
 			}
-			
-			onAfterPhotoTaken();
 		}
 	}
 	
@@ -698,5 +691,17 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 	
 	public void setGps(boolean value){
 		this.gps = value;
+	}
+
+	public void setOnException(OnException onException) {
+		this.onException = onException;
+	}
+	
+	private void fireOnException(Exception exception, String message, AllianceExceptionType type){
+		if(onException != null){
+			onException.onException(exception, message, type);
+		}
+		
+		((Activity) ctx).finish();
 	}
 }

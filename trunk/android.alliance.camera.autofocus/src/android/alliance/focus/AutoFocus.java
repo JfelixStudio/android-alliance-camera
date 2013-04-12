@@ -2,6 +2,7 @@ package android.alliance.focus;
 
 import android.hardware.Camera;
 import android.os.AsyncTask;
+import android.util.Log;
 
 public abstract class AutoFocus implements Camera.AutoFocusCallback {
 
@@ -43,12 +44,17 @@ public abstract class AutoFocus implements Camera.AutoFocusCallback {
 	}
 	
 	public void doAutoFocus() {
+		
 		if(mFocusState != FOCUSING) {
 			mFocusState = FOCUSING;
 			updateFocusIndicator();
 	
 			if(camera != null) {
-				camera.autoFocus(this);
+				try{
+					camera.autoFocus(this);	
+				} catch(RuntimeException e){
+					Log.d("#", "AutoFokus: " + e.getMessage());
+				}
 			}
 		}
 	}
