@@ -36,14 +36,18 @@ public class SensorAutoFocus extends AutoFocus {
 	
 	/** Threshold for the delta of the last autofocus position and the actual.
 	 * Common value for all axis. */
-	static final float THRESHOLD = 0.31f;
+	public static float THRESHOLD = 0.31f;
     
 	/**
 	 * Instantiates SensorEventListeners for the accelerometer and magnetometer 
 	 */
-	public SensorAutoFocus(Context ctx, Camera camera, FocusView focusView) {
+	public SensorAutoFocus(Context ctx, Camera camera, FocusView focusView, Float autoFocusSensibility) {
 		super(camera, focusView);
 	
+		if(autoFocusSensibility != null){
+			THRESHOLD = autoFocusSensibility;
+		}
+		
 		mySensorManager = (SensorManager)ctx.getSystemService(Context.SENSOR_SERVICE);
     	
         sensorAccelerometer = mySensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
