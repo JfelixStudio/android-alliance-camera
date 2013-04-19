@@ -12,7 +12,7 @@ public abstract class AutoFocus implements Camera.AutoFocusCallback {
     private static final int FOCUS_SUCCESS = 3;
     private static final int FOCUS_FAIL = 4;
 
-	public int mFocusState = FOCUS_NOT_STARTED;
+	public static int mFocusState = FOCUS_NOT_STARTED;
 	
 	public Camera camera;
 	public FocusView focusView;
@@ -38,7 +38,7 @@ public abstract class AutoFocus implements Camera.AutoFocusCallback {
 		if(task != null) {
 			task.cancel(true);
 		}
-		
+
 		mFocusState = FOCUS_NOT_STARTED;
 		updateFocusIndicator();
 	}

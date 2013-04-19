@@ -8,6 +8,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.util.Log;
 
 /**
  * Triggers the auto focus function for a camera based 
@@ -36,7 +37,7 @@ public class SensorAutoFocus extends AutoFocus {
 	
 	/** Threshold for the delta of the last autofocus position and the actual.
 	 * Common value for all axis. */
-	public static float THRESHOLD = 0.31f;
+	private float THRESHOLD = 0.31f;
     
 	/**
 	 * Instantiates SensorEventListeners for the accelerometer and magnetometer 
@@ -124,10 +125,12 @@ public class SensorAutoFocus extends AutoFocus {
 			
 			if(valuesDelta[0] > THRESHOLD || valuesDelta[1] > THRESHOLD || valuesDelta[2] > THRESHOLD) {
 				
-				// Starts the Autofocus!!!
 				doAutoFocus();
 				
-				valuesOldPeak = mOrientation.clone();
+				valuesOldPeak = mOrientation.clone();	
+				// Starts the Autofocus!!!
+				
+				
 			}
 		}
 		

@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import alliance.camera.R;
-import android.alliance.dialoge.OptionsDialog;
 import android.alliance.dialoge.ResolutionDialog;
 import android.alliance.exceptions.AllianceExceptionType;
 import android.alliance.exceptions.OnException;
@@ -34,7 +33,7 @@ import android.widget.LinearLayout;
 
 public class UICameraActivity extends Activity implements IAllianceOrientationChanged, IAllianceCameraListener, OnClickListener, OnException {
 
-	protected ImageView ivOptions;
+	protected ImageView in2;
 	protected ImageView ib1;
 	protected ImageView ivShutter;
 
@@ -122,14 +121,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 		
 		layoutZoom = (LinearLayout) findViewById(R.id.layoutZoom);
 		
-		ivOptions = (ImageView) findViewById(R.id.settings);
-		ivOptions.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				OptionsDialog optionsdialog = new OptionsDialog(UICameraActivity.this, R.style.MyResolutionDialog, autofocusHelper, allianceCamera.getCamera());
-				optionsdialog.show();
-			}
-		});
+		in2 = (ImageView) findViewById(R.id.iv2);
 		
 		ib1 = (ImageView) findViewById(R.id.ib1);
 		
@@ -189,7 +181,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 					allianceCamera.flashlightHelper.next(param, ivFlashlight);
 					allianceCamera.setCameraParameters(param);	
 				} catch (Exception e){
-					fireOnException(e, getResources().getString(R.string.exception_flashlight), AllianceExceptionType.FLASHLIGHT_EXCEPTION);
+					fireOnException(e, getResources().getString(R.string.exception_flashlight) + " " + UICameraActivity.class.toString() + " ivFlashLight onClick(View v)", AllianceExceptionType.FLASHLIGHT_EXCEPTION);
 				}
 			}
 		});
@@ -275,7 +267,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 	private void orientationHasChanged(float degree) {
 		System.out.println("orientationHasChanged: " + degree);
 		
-		rotateView(ivOptions, degree);
+		rotateView(in2, degree);
 		rotateView(ib1, degree);
 		rotateView(ivShutter, degree);
 
@@ -327,7 +319,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 							Parameters param = allianceCamera.zoomHelper.zoomIn(allianceCamera.getCameraParameters()); 
 							allianceCamera.setCameraParameters(param);	
 						} catch (Exception e){
-							fireOnException(e, getResources().getString(R.string.exception_zoom), AllianceExceptionType.ZOOM_EXCEPTION);
+							fireOnException(e, getResources().getString(R.string.exception_zoom) + " " + UICameraActivity.class.toString() + " ivZoomIn - onClick(View v)", AllianceExceptionType.ZOOM_EXCEPTION);
 						}
 					}
 				});
@@ -343,7 +335,7 @@ public class UICameraActivity extends Activity implements IAllianceOrientationCh
 							Parameters param = allianceCamera.zoomHelper.zoomOut(allianceCamera.getCameraParameters()); 
 							allianceCamera.setCameraParameters(param);
 						} catch(Exception e){
-							fireOnException(e, getResources().getString(R.string.exception_zoom), AllianceExceptionType.ZOOM_EXCEPTION);
+							fireOnException(e, getResources().getString(R.string.exception_zoom) + " " + UICameraActivity.class.toString() + " ivZoomOut - onClick(View v)", AllianceExceptionType.ZOOM_EXCEPTION);
 						}
 					}
 				});

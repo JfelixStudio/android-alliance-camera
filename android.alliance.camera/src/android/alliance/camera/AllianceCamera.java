@@ -150,7 +150,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			}	
 		
 		} else {
-			fireOnException(new Exception(), ctx.getResources().getString(R.string.exception_cameraNotAvailable), AllianceExceptionType.CAMERA_FAILED_TO_OPEN_EXCEPTION);
+			fireOnException(new Exception(), ctx.getResources().getString(R.string.exception_cameraNotAvailable) + " " + AllianceCamera.class.toString() + " surfaceCreated(SurfaceHolder holder)", AllianceExceptionType.CAMERA_FAILED_TO_OPEN_EXCEPTION);
 			((Activity) ctx).finish();
 		}
 	}
@@ -190,7 +190,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			localParameters.setRotation(frontFacingRotationFix(rotation));
 			camera.setParameters(localParameters);	
 		} catch(Exception e){
-			fireOnException(e, ctx.getResources().getString(R.string.exception_orientationChange), AllianceExceptionType.ORIENTATION_CHANGED_EXCEPTION);
+			fireOnException(e, ctx.getResources().getString(R.string.exception_orientationChange) + " " + AllianceCamera.class.toString() + " onAllianceOrientationChanged(int orientation, int orientationType, int rotation)", AllianceExceptionType.ORIENTATION_CHANGED_EXCEPTION);
 		}
 	}
 
@@ -250,7 +250,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			
 		} catch (Exception e) {
 			releaseCamera();
-			fireOnException(e, ctx.getResources().getString(R.string.exception_cameraNotAvailable), AllianceExceptionType.CAMERA_FAILED_TO_OPEN_EXCEPTION);
+			fireOnException(e, ctx.getResources().getString(R.string.exception_cameraNotAvailable) + " " + AllianceCamera.class.toString() + " initCamera(SurfaceHolder holder)", AllianceExceptionType.CAMERA_FAILED_TO_OPEN_EXCEPTION);
 		}
 	}
 	
@@ -388,7 +388,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			}	
 			
 		} catch(Exception e){
-			fireOnException(e, ctx.getResources().getString(R.string.exception_LoadCameraPreview), AllianceExceptionType.PREVIEW_EXCEPTION);
+			fireOnException(e, ctx.getResources().getString(R.string.exception_LoadCameraPreview) + " " + AllianceCamera.class.toString() + " initCameraPreferences()", AllianceExceptionType.PREVIEW_EXCEPTION);
 		}
 		
 		
@@ -444,7 +444,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			// Turn Camera capture-sound normal
 	
 		} catch(Exception e){
-			fireOnException(e, ctx.getResources().getString(R.string.exception_takePicture), AllianceExceptionType.TAKE_PHOTO_EXCEPTION);
+			fireOnException(e, ctx.getResources().getString(R.string.exception_takePicture) + " " + AllianceCamera.class.toString() + " capture()", AllianceExceptionType.TAKE_PHOTO_EXCEPTION);
 		}
 	}
 	
@@ -464,7 +464,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 			camera.takePicture(shutter, raw, jpeg);
 			
 		} catch(Exception e){
-			fireOnException(e, ctx.getResources().getString(R.string.exception_takePicture), AllianceExceptionType.TAKE_PHOTO_EXCEPTION);
+			fireOnException(e, ctx.getResources().getString(R.string.exception_takePicture) + " " + AllianceCamera.class.toString() + " capture(ShutterCallback shutter, PictureCallback raw, PictureCallback jpeg)", AllianceExceptionType.TAKE_PHOTO_EXCEPTION);
 		}
 	}
 
@@ -555,7 +555,7 @@ public class AllianceCamera implements Callback, IAllianceOrientationChanged {
 				onAfterPhotoTaken();
 				
 			} catch (Exception e){
-				fireOnException(e, ctx.getResources().getString(R.string.exception_takePicture), AllianceExceptionType.ON_PICTURE_TAKEN_EXCEPTION);
+				fireOnException(e, ctx.getResources().getString(R.string.exception_takePicture) + " " + AllianceCamera.class.toString() + " onPictureTaken(byte[] data, Camera cam)", AllianceExceptionType.ON_PICTURE_TAKEN_EXCEPTION);
 			}
 		}
 	}
