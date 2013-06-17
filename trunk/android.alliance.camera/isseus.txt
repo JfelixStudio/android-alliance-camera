@@ -1,0 +1,68 @@
+
+
+
+###################################################
+
+BUG 3:
+
+Beschreibung:
+
+Fehler beim Benutzen des Blitzlichtes! 
+class de.crimescenetracker.camera.DroidspiritCameraUI ivFlashlight onClick(View v)
+
+Foto-Pfad: /storage/sdcard0/Android/data/de.crimescenetracker/files/Tatorte/Fall nano/Tatorte#Fall nano#zu nah#2#16.06.2013.jpg
+
+Stacktrace:
+
+java.lang.RuntimeException: setParameters failed
+	at android.hardware.Camera.native_setParameters(Native Method)
+	at android.hardware.Camera.setParameters(Camera.java:1410)
+	at android.alliance.a.a.a(Unknown Source)
+	at de.crimescenetracker.camera.c.onClick(Unknown Source)
+	at android.view.View.performClick(View.java:4103)
+	at android.view.View$PerformClick.run(View.java:17117)
+	at android.os.Handler.handleCallback(Handler.java:615)
+	at android.os.Handler.dispatchMessage(Handler.java:92)
+	at android.os.Looper.loop(Looper.java:137)
+	at android.app.ActivityThread.main(ActivityThread.java:4744)
+	at java.lang.reflect.Method.invokeNative(Native Method)
+	at java.lang.reflect.Method.invoke(Method.java:511)
+	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:786)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:553)
+	at dalvik.system.NativeStart.main(Native Method)
+
+
+Geräte: 
+
+Sony Xperia Go ST27i (Android 4-1)
+
+
+###################################################
+
+BUG 2:
+
+Beschreibung:	
+
+Kein Zoom möglich, obwohl Zoom available
+
+
+
+Geräte: 	
+
+Motorola Defy (Android 2.3)
+
+###################################################
+
+BUG 1:
+
+Beschreibung:
+
+Beim Klick auf die Buttons werden diese um 90° gedreht
+
+
+Geräte:
+
+Nexus 7 (Android 4.2), 
+Nexus 4 (Android 4.2)
+
+###################################################

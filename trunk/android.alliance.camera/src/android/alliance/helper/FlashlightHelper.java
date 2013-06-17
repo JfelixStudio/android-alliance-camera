@@ -26,6 +26,29 @@ public class FlashlightHelper {
 		return params;
 	}
 	
+	public void checkAvailableFlashModes(Parameters param){
+		List<String> pList = param.getSupportedFlashModes();
+		
+		if(pList != null){
+			if(!pList.contains(new String("on"))){
+				sequence.remove(FlashMode.FLASH_ON);
+			}
+			
+			if(!pList.contains(new String("off"))){
+				sequence.remove(FlashMode.FLASH_OFF);
+			}
+			
+			if(!pList.contains(new String("auto"))){
+				sequence.remove(FlashMode.FLASH_AUTO);
+				flashStatus = FlashMode.FLASH_OFF;
+			}
+			
+			if(!pList.contains(new String("torch"))){
+				sequence.remove(FlashMode.FLASH_TORCH);
+			}
+		}
+	}
+	
 	/*
 	 * Setting Flashlight on Click. If Flashlight: auto => set
 	 * status. Check the mode in AllianceCamera on photo capture()
@@ -33,6 +56,9 @@ public class FlashlightHelper {
 	 * Camera-Parameters
 	 */
 	public Parameters next(Parameters param, ImageView ivFlashlight) {
+		
+		
+		
 		for(int i=0; i<sequence.size(); i++) {
 			FlashMode statiAtI = sequence.get(i);
 			if(statiAtI == flashStatus) {
@@ -54,11 +80,11 @@ public class FlashlightHelper {
 	 * @param stati
 	 */
 	public void addToSequence(FlashMode stati) {
-		sequence.add(stati);
+		sequence.add(stati);	
 	}
 	
 	public enum FlashMode {
-		
+		  
 		FLASH_AUTO(Parameters.FLASH_MODE_AUTO, R.drawable.bt_flashlight_auto_selector),
 		FLASH_ON(Parameters.FLASH_MODE_ON, R.drawable.bt_flashlight_on_selector),
 		FLASH_OFF(Parameters.FLASH_MODE_OFF, R.drawable.bt_flashlight_off_selector),
